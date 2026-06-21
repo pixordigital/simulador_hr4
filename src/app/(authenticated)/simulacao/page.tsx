@@ -1,8 +1,34 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Info, ChevronDown, ChevronUp, AlertTriangle, Plus, Trash2 } from 'lucide-react'
-import DicaTooltip from '@/components/DicaTooltip'
+import {
+  Calculator, Clock, FileText, Users, Settings, LogOut, Sun, Moon, Info,
+  ChevronDown, ChevronUp, AlertTriangle, Plus, Trash2, Search, Filter,
+  DollarSign, ArrowLeft, Play, Edit3, Save, Check, X, GripVertical,
+  Sparkles
+} from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import {
+  Card, CardContent, CardHeader, CardTitle, CardDescription
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Alert, AlertDescription, AlertTitle
+} from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import {
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger
+} from '@/components/ui/accordion'
+import {
+  Tooltip, TooltipContent, TooltipProvider, TooltipTrigger
+} from '@/components/ui/tooltip'
+import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from '@/components/ui/select'
 
 type Parada = {
   id: string
@@ -286,429 +312,487 @@ export default function SimulacaoPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Nova Simulação</h1>
-      </div>
-
-      <div className="flex gap-2">
-        <button
-          onClick={() => setTipo('regular')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            tipo === 'regular'
-              ? 'bg-blue-600 text-white'
-              : 'bg-[var(--color-muted)] text-[var(--color-muted-fg)] hover:bg-blue-100 dark:hover:bg-blue-900/30'
-          }`}
-        >
-          Entrega Regular
-        </button>
-        <button
-          onClick={() => setTipo('dedicada')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            tipo === 'dedicada'
-              ? 'bg-blue-600 text-white'
-              : 'bg-[var(--color-muted)] text-[var(--color-muted-fg)] hover:bg-blue-100 dark:hover:bg-blue-900/30'
-          }`}
-        >
-          Entrega Dedicada
-        </button>
-      </div>
-
-      {/* Opção de veículo / motorista */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
-        <h2 className="text-lg font-semibold">Veículo / Motorista</h2>
-
-        <div className="grid grid-cols-3 gap-4">
-          {OPCOES_VEICULO.map(op => (
-            <button
-              key={op}
-              onClick={() => setOpcaoVeiculo(op)}
-              className={`p-4 rounded-lg border-2 text-center transition-all ${
-                opcaoVeiculo === op
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-[var(--color-border)] hover:border-blue-300'
-              }`}
-            >
-              <span className="font-medium">{op}</span>
-            </button>
-          ))}
+    <TooltipProvider>
+      <div className="max-w-5xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Nova Simulação</h1>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Entregas no dia
-              <DicaTooltip texto="Número de entregas que o motorista fará no dia" />
-            </label>
-            <input
-              type="number"
-              value={numeroEntregas}
-              onChange={(e) => setNumeroEntregas(e.target.value)}
-              className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-              min="1"
-            />
-          </div>
-
-          {opcaoVeiculo === 'Freelancer' && tipo === 'regular' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Taxa negociada (R$)
-                <DicaTooltip texto="Valor único para o trabalho inteiro, não por parada" />
-              </label>
-              <input
-                type="number"
-                value={taxaFreelancer}
-                onChange={(e) => setTaxaFreelancer(e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-                step="0.01"
-                min="0"
-              />
+        {/* Tipo de entrega toggle */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex gap-2">
+              <Button
+                variant={tipo === 'regular' ? 'default' : 'outline'}
+                onClick={() => setTipo('regular')}
+              >
+                Entrega Regular
+              </Button>
+              <Button
+                variant={tipo === 'dedicada' ? 'default' : 'outline'}
+                onClick={() => setTipo('dedicada')}
+              >
+                Entrega Dedicada
+              </Button>
             </div>
-          )}
+          </CardContent>
+        </Card>
 
-          {tipo === 'dedicada' && (
-            <>
-              <div>
-                <label className="block text-sm font-medium mb-1">Dias</label>
-                <input
+        {/* Veículo / Motorista */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Veículo / Motorista</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              {OPCOES_VEICULO.map(op => (
+                <Button
+                  key={op}
+                  variant={opcaoVeiculo === op ? 'default' : 'outline'}
+                  className="h-auto py-4 text-center"
+                  onClick={() => setOpcaoVeiculo(op)}
+                >
+                  <span className="font-medium">{op}</span>
+                </Button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="entregas-dia" className="flex items-center gap-1">
+                  Entregas no dia
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info size={14} className="text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Número de entregas que o motorista fará no dia</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </Label>
+                <Input
+                  id="entregas-dia"
                   type="number"
-                  value={diasDedicada}
-                  onChange={(e) => setDiasDedicada(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                  value={numeroEntregas}
+                  onChange={(e) => setNumeroEntregas(e.target.value)}
                   min="1"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Km estimado da rota
-                  <DicaTooltip texto="Distância total estimada do trabalho" />
-                </label>
-                <input
-                  type="number"
-                  value={kmEstimado}
-                  onChange={(e) => setKmEstimado(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-                  step="0.1"
-                  min="0"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="ajudante"
-                  checked={ajudante}
-                  onChange={(e) => setAjudante(e.target.checked)}
-                  className="rounded border-[var(--color-border)]"
-                />
-                <label htmlFor="ajudante" className="text-sm font-medium">
-                  Ajudante / auxiliar
-                </label>
-              </div>
-            </>
-          )}
-        </div>
-      </section>
 
-      {/* Paradas (regular) */}
-      {tipo === 'regular' && (
-        <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Paradas</h2>
-            <button
-              onClick={adicionarParada}
-              className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
-            >
-              <Plus size={16} /> Adicionar parada
-            </button>
-          </div>
+              {opcaoVeiculo === 'Freelancer' && tipo === 'regular' && (
+                <div className="space-y-2">
+                  <Label htmlFor="taxa-freelancer" className="flex items-center gap-1">
+                    Taxa negociada (R$)
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Info size={14} className="text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Valor único para o trabalho inteiro, não por parada</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </Label>
+                  <Input
+                    id="taxa-freelancer"
+                    type="number"
+                    value={taxaFreelancer}
+                    onChange={(e) => setTaxaFreelancer(e.target.value)}
+                    step="0.01"
+                    min="0"
+                  />
+                </div>
+              )}
 
-          {paradas.map((parada, idx) => (
-            <div key={parada.id} className="p-4 bg-[var(--color-muted)] rounded-lg space-y-3">
+              {tipo === 'dedicada' && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="dias-dedicada">Dias</Label>
+                    <Input
+                      id="dias-dedicada"
+                      type="number"
+                      value={diasDedicada}
+                      onChange={(e) => setDiasDedicada(e.target.value)}
+                      min="1"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="km-estimado" className="flex items-center gap-1">
+                      Km estimado da rota
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info size={14} className="text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Distância total estimada do trabalho</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </Label>
+                    <Input
+                      id="km-estimado"
+                      type="number"
+                      value={kmEstimado}
+                      onChange={(e) => setKmEstimado(e.target.value)}
+                      step="0.1"
+                      min="0"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 pt-2">
+                    <Checkbox
+                      id="ajudante"
+                      checked={ajudante}
+                      onCheckedChange={(checked) => setAjudante(checked === true)}
+                    />
+                    <Label htmlFor="ajudante" className="font-medium cursor-pointer">
+                      Ajudante / auxiliar
+                    </Label>
+                  </div>
+                </>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Paradas (regular) */}
+        {tipo === 'regular' && (
+          <Card>
+            <CardHeader>
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">Parada {idx + 1}</h3>
-                {paradas.length > 1 && (
-                  <button
-                    onClick={() => removerParada(parada.id)}
-                    className="text-red-500 hover:text-red-600"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                )}
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div>
-                  <label className="block text-xs font-medium mb-1">Zona</label>
-                  <select
-                    value={parada.zona}
-                    onChange={(e) => atualizarParada(parada.id, 'zona', e.target.value)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  >
-                    <option value="">Selecione</option>
-                    {ZONAS.map(z => (
-                      <option key={z} value={z}>{z}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1">Peso real (kg)</label>
-                  <input
-                    type="number"
-                    value={parada.pesoReal || ''}
-                    onChange={(e) => atualizarParada(parada.id, 'pesoReal', parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    step="0.1"
-                    min="0"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1">
-                    Cx (m) <DicaTooltip texto="Comprimento da caixa em metros" />
-                  </label>
-                  <input
-                    type="number"
-                    value={parada.comprimento}
-                    onChange={(e) => atualizarParada(parada.id, 'comprimento', e.target.value)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1">Lg (m)</label>
-                  <input
-                    type="number"
-                    value={parada.largura}
-                    onChange={(e) => atualizarParada(parada.id, 'largura', e.target.value)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1">Alt (m)</label>
-                  <input
-                    type="number"
-                    value={parada.altura}
-                    onChange={(e) => atualizarParada(parada.id, 'altura', e.target.value)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1">
-                    Valor NF (R$) <DicaTooltip texto="Opcional. Necessário para GRIS e Ad-Valorem" />
-                  </label>
-                  <input
-                    type="number"
-                    value={parada.valorNF}
-                    onChange={(e) => atualizarParada(parada.id, 'valorNF', e.target.value)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
-
-      {/* Agendada */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
-        <div className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            id="agendada"
-            checked={agendada}
-            onChange={(e) => setAgendada(e.target.checked)}
-            className="rounded border-[var(--color-border)]"
-          />
-          <label htmlFor="agendada" className="text-lg font-semibold">
-            Entrega Agendada
-          </label>
-          <span className="text-xs text-[var(--color-muted-fg)]">Serviço de horário garantido</span>
-        </div>
-
-        {agendada && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pl-7">
-            <div>
-              <label className="block text-sm font-medium mb-1">Data</label>
-              <input
-                type="date"
-                value={dataAgendamento}
-                onChange={(e) => setDataAgendamento(e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Horário</label>
-              <input
-                type="time"
-                value={horarioAgendado}
-                onChange={(e) => setHorarioAgendado(e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Acréscimo (R$)</label>
-              <input
-                type="number"
-                value={acrescimoAgendamento}
-                onChange={(e) => setAcrescimoAgendamento(e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-                step="0.01"
-                min="0"
-              />
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Margem */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6">
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <label className="block text-sm font-medium mb-1">
-              Margem (%)
-              <DicaTooltip texto="Margem de lucro aplicada sobre o custo total" />
-            </label>
-            <input
-              type="number"
-              value={margem}
-              onChange={(e) => setMargem(e.target.value)}
-              className="w-full max-w-xs px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
-              step="0.5"
-              min="0"
-            />
-          </div>
-          <button
-            onClick={calcular}
-            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-          >
-            Calcular
-          </button>
-        </div>
-      </section>
-
-      {erro && (
-        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg text-sm">
-          {erro}
-        </div>
-      )}
-
-      {/* Resultado */}
-      {resultadoVisible && (
-        <section className="space-y-4">
-          {alertaBreakEven && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 rounded-xl flex items-start gap-3">
-              <AlertTriangle className="text-red-500 shrink-0 mt-0.5" size={20} />
-              <div>
-                <p className="font-medium text-red-700 dark:text-red-400">
-                  Atenção: o preço sugerido está abaixo do seu custo.
-                </p>
-                <p className="text-sm text-red-600 dark:text-red-300 mt-1">
-                  Você terá prejuízo de {formatarMoeda(valorPrejuizo)} nesta entrega.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {avisoSemNF && (
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 p-3 rounded-lg text-sm text-yellow-700 dark:text-yellow-400">
-              <Info size={16} className="inline mr-1" />
-              GRIS e Ad-Valorem não incluídos — informe o valor da NF para cálculo completo
-            </div>
-          )}
-
-          {/* Opções lado a lado */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {opcoes.map((opcao, idx) => {
-              const isMaisBarata = opcao.custoTotal === opcaoMaisBarata
-              const isSelecionada = opcao.rotulo === opcaoVeiculo || (idx === 0 && opcaoVeiculo !== 'Freelancer')
-
-              return (
-                <div
-                  key={opcao.rotulo}
-                  className={`rounded-xl p-5 border-2 transition-all ${
-                    isSelecionada
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-[var(--color-border)]'
-                  } ${isMaisBarata ? 'ring-2 ring-[var(--color-accent)]' : ''}`}
+                <CardTitle>Paradas</CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={adicionarParada}
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-base">{opcao.rotulo}</h3>
-                    {isMaisBarata && (
-                      <span className="text-xs bg-[var(--color-accent)] text-white px-2 py-0.5 rounded-full">
-                        Mais barato
-                      </span>
+                  <Plus size={16} className="mr-1" /> Adicionar parada
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {paradas.map((parada, idx) => (
+                <div key={parada.id} className="p-4 bg-muted/50 rounded-lg space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-medium">Parada {idx + 1}</h3>
+                    {paradas.length > 1 && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removerParada(parada.id)}
+                        className="text-red-500 hover:text-red-600 h-8 w-8"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
                     )}
                   </div>
 
-                  <p className="text-2xl font-bold mb-4">
-                    {formatarMoeda(opcao.custoTotal)}
-                  </p>
-
-                  {isSelecionada && !isMaisBarata && opcaoMaisBarata < opcao.custoTotal && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
-                      ℹ️ Existe uma opção {formatarMoeda(opcao.custoTotal - opcaoMaisBarata)} mais barata disponível
-                    </p>
-                  )}
-
-                  {/* Detalhamento colapsável por parada */}
-                  {opcao.custoPorParada.map((cp, pIdx) => (
-                    <div key={pIdx} className="border-t border-[var(--color-border)] pt-2 mt-2">
-                      <button
-                        onClick={() => toggleDetalhe(idx * 100 + pIdx)}
-                        className="flex items-center justify-between w-full text-sm"
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs">Zona</Label>
+                      <Select
+                        value={parada.zona}
+                        onValueChange={(val) => atualizarParada(parada.id, 'zona', val ?? '')}
                       >
-                        <span>{cp.zona} — {formatarMoeda(cp.total)}</span>
-                        {(detalhesAbertos[idx * 100 + pIdx] ? <ChevronUp size={14} /> : <ChevronDown size={14} />)}
-                      </button>
-
-                      {detalhesAbertos[idx * 100 + pIdx] && (
-                        <div className="mt-2 space-y-1 text-xs text-[var(--color-muted-fg)]">
-                          {cp.pesoTaxavel > 0 && <p>Peso taxável: {cp.pesoTaxavel.toFixed(2)} kg</p>}
-                          {cp.componentes.salarioParcela > 0 && <p>Salário: {formatarMoeda(cp.componentes.salarioParcela)}</p>}
-                          {cp.componentes.valeParcela > 0 && <p>Vale alimentação: {formatarMoeda(cp.componentes.valeParcela)}</p>}
-                          {cp.componentes.combustivelParcela > 0 && <p>Combustível: {formatarMoeda(cp.componentes.combustivelParcela)}</p>}
-                          {cp.componentes.manutencaoParcela > 0 && <p>Manutenção: {formatarMoeda(cp.componentes.manutencaoParcela)}</p>}
-                          {cp.componentes.seguroParcela > 0 && <p>Seguro: {formatarMoeda(cp.componentes.seguroParcela)}</p>}
-                          {cp.componentes.depreciacaoParcela > 0 && <p>Depreciação: {formatarMoeda(cp.componentes.depreciacaoParcela)}</p>}
-                          {cp.componentes.taxaFaixaPeso > 0 && <p>Taxa faixa de peso: {formatarMoeda(cp.componentes.taxaFaixaPeso)}</p>}
-                          {cp.componentes.gris > 0 && <p>GRIS: {formatarMoeda(cp.componentes.gris)}</p>}
-                          {cp.componentes.adValorem > 0 && <p>Ad-Valorem: {formatarMoeda(cp.componentes.adValorem)}</p>}
-                          {cp.componentes.acrescimoAgendamento > 0 && <p>Acréscimo agendamento: {formatarMoeda(cp.componentes.acrescimoAgendamento)}</p>}
-                        </div>
-                      )}
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ZONAS.map(z => (
+                            <SelectItem key={z} value={z}>{z}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
-                  ))}
+                    <div className="space-y-1">
+                      <Label className="text-xs">Peso real (kg)</Label>
+                      <Input
+                        type="number"
+                        value={parada.pesoReal || ''}
+                        onChange={(e) => atualizarParada(parada.id, 'pesoReal', parseFloat(e.target.value) || 0)}
+                        className="text-sm"
+                        step="0.1"
+                        min="0"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs flex items-center gap-1">
+                        Cx (m)
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Info size={12} className="text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Comprimento da caixa em metros</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </Label>
+                      <Input
+                        type="number"
+                        value={parada.comprimento}
+                        onChange={(e) => atualizarParada(parada.id, 'comprimento', e.target.value)}
+                        className="text-sm"
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Lg (m)</Label>
+                      <Input
+                        type="number"
+                        value={parada.largura}
+                        onChange={(e) => atualizarParada(parada.id, 'largura', e.target.value)}
+                        className="text-sm"
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Alt (m)</Label>
+                      <Input
+                        type="number"
+                        value={parada.altura}
+                        onChange={(e) => atualizarParada(parada.id, 'altura', e.target.value)}
+                        className="text-sm"
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs flex items-center gap-1">
+                        Valor NF (R$)
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Info size={12} className="text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Opcional. Necessário para GRIS e Ad-Valorem</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </Label>
+                      <Input
+                        type="number"
+                        value={parada.valorNF}
+                        onChange={(e) => atualizarParada(parada.id, 'valorNF', e.target.value)}
+                        className="text-sm"
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                  </div>
                 </div>
-              )
-            })}
-          </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
-          {/* Resumo geral */}
-          <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
-            <h2 className="text-lg font-semibold">Resumo Geral</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <p className="text-sm text-[var(--color-muted-fg)]">Custo total</p>
-                <p className="text-xl font-bold">{formatarMoeda(totalGeral)}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[var(--color-muted-fg)]">Margem</p>
-                <p className="text-xl font-bold">{margem}%</p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-sm text-[var(--color-muted-fg)]">Preço sugerido ao cliente</p>
-                <p className="text-3xl font-bold text-[var(--color-accent)]">{formatarMoeda(precoSugerido)}</p>
-              </div>
+        {/* Entrega Agendada */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <Checkbox
+                id="agendada"
+                checked={agendada}
+                onCheckedChange={(checked) => setAgendada(checked === true)}
+              />
+              <Label htmlFor="agendada" className="text-lg font-semibold cursor-pointer">
+                Entrega Agendada
+              </Label>
+              <span className="text-xs text-muted-foreground">Serviço de horário garantido</span>
             </div>
+          </CardHeader>
+          {agendada && (
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pl-7">
+                <div className="space-y-2">
+                  <Label htmlFor="data-agendamento">Data</Label>
+                  <Input
+                    id="data-agendamento"
+                    type="date"
+                    value={dataAgendamento}
+                    onChange={(e) => setDataAgendamento(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="horario-agendado">Horário</Label>
+                  <Input
+                    id="horario-agendado"
+                    type="time"
+                    value={horarioAgendado}
+                    onChange={(e) => setHorarioAgendado(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="acrescimo-agendamento">Acréscimo (R$)</Label>
+                  <Input
+                    id="acrescimo-agendamento"
+                    type="number"
+                    value={acrescimoAgendamento}
+                    onChange={(e) => setAcrescimoAgendamento(e.target.value)}
+                    step="0.01"
+                    min="0"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          )}
+        </Card>
+
+        {/* Margem + Calcular */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-end gap-3">
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="margem" className="flex items-center gap-1">
+                  Margem (%)
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info size={14} className="text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Margem de lucro aplicada sobre o custo total</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </Label>
+                <Input
+                  id="margem"
+                  type="number"
+                  value={margem}
+                  onChange={(e) => setMargem(e.target.value)}
+                  className="max-w-xs"
+                  step="0.5"
+                  min="0"
+                />
+              </div>
+              <Button onClick={calcular} size="lg">
+                <Calculator size={18} className="mr-2" /> Calcular
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Erro */}
+        {erro && (
+          <Alert variant="destructive">
+            <AlertTriangle size={16} />
+            <AlertTitle>Erro</AlertTitle>
+            <AlertDescription>{erro}</AlertDescription>
+          </Alert>
+        )}
+
+        {/* Resultado */}
+        {resultadoVisible && (
+          <div className="space-y-4">
+            {/* Alerta break-even */}
+            {alertaBreakEven && (
+              <Alert variant="destructive">
+                <AlertTriangle size={16} />
+                <AlertTitle>Atenção: o preço sugerido está abaixo do seu custo.</AlertTitle>
+                <AlertDescription>
+                  Você terá prejuízo de {formatarMoeda(valorPrejuizo)} nesta entrega.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* Aviso sem NF */}
+            {avisoSemNF && (
+              <Alert variant="default" className="border-yellow-500/50 text-yellow-800 dark:text-yellow-300 bg-yellow-50 dark:bg-yellow-950">
+                <Info size={16} className="text-yellow-600 dark:text-yellow-400" />
+                <AlertTitle>NF não informada</AlertTitle>
+                <AlertDescription>
+                  GRIS e Ad-Valorem não incluídos — informe o valor da NF para cálculo completo
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* Opções lado a lado */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {opcoes.map((opcao, idx) => {
+                const isMaisBarata = opcao.custoTotal === opcaoMaisBarata
+                const isSelecionada = opcao.rotulo === opcaoVeiculo || (idx === 0 && opcaoVeiculo !== 'Freelancer')
+
+                return (
+                  <Card
+                    key={opcao.rotulo}
+                    className={`relative ${isSelecionada ? 'border-primary' : ''} ${isMaisBarata ? 'ring-2 ring-primary' : ''}`}
+                  >
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base">{opcao.rotulo}</CardTitle>
+                        {isMaisBarata && (
+                          <Badge variant="default">
+                            <Sparkles size={12} className="mr-1" /> Mais barato
+                          </Badge>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-2xl font-bold">
+                        {formatarMoeda(opcao.custoTotal)}
+                      </p>
+
+                      {isSelecionada && !isMaisBarata && opcaoMaisBarata < opcao.custoTotal && (
+                        <p className="text-xs text-muted-foreground">
+                          Existe uma opção {formatarMoeda(opcao.custoTotal - opcaoMaisBarata)} mais barata disponível
+                        </p>
+                      )}
+
+                      <Separator />
+
+                      {/* Detalhamento por parada com Accordion */}
+                      <Accordion className="w-full">
+                        {opcao.custoPorParada.map((cp, pIdx) => (
+                          <AccordionItem key={pIdx} value={`${idx}-${pIdx}`}>
+                            <AccordionTrigger className="text-sm py-2">
+                              <span>{cp.zona} — {formatarMoeda(cp.total)}</span>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className="space-y-1 text-sm text-muted-foreground">
+                                {cp.pesoTaxavel > 0 && <p>Peso taxável: {cp.pesoTaxavel.toFixed(2)} kg</p>}
+                                {cp.componentes.salarioParcela > 0 && <p>Salário: {formatarMoeda(cp.componentes.salarioParcela)}</p>}
+                                {cp.componentes.valeParcela > 0 && <p>Vale alimentação: {formatarMoeda(cp.componentes.valeParcela)}</p>}
+                                {cp.componentes.combustivelParcela > 0 && <p>Combustível: {formatarMoeda(cp.componentes.combustivelParcela)}</p>}
+                                {cp.componentes.manutencaoParcela > 0 && <p>Manutenção: {formatarMoeda(cp.componentes.manutencaoParcela)}</p>}
+                                {cp.componentes.seguroParcela > 0 && <p>Seguro: {formatarMoeda(cp.componentes.seguroParcela)}</p>}
+                                {cp.componentes.depreciacaoParcela > 0 && <p>Depreciação: {formatarMoeda(cp.componentes.depreciacaoParcela)}</p>}
+                                {cp.componentes.taxaFaixaPeso > 0 && <p>Taxa faixa de peso: {formatarMoeda(cp.componentes.taxaFaixaPeso)}</p>}
+                                {cp.componentes.gris > 0 && <p>GRIS: {formatarMoeda(cp.componentes.gris)}</p>}
+                                {cp.componentes.adValorem > 0 && <p>Ad-Valorem: {formatarMoeda(cp.componentes.adValorem)}</p>}
+                                {cp.componentes.acrescimoAgendamento > 0 && <p>Acréscimo agendamento: {formatarMoeda(cp.componentes.acrescimoAgendamento)}</p>}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+
+            {/* Resumo Geral */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Resumo Geral</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Custo total</p>
+                    <p className="text-xl font-bold">{formatarMoeda(totalGeral)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Margem</p>
+                    <p className="text-xl font-bold">{margem}%</p>
+                  </div>
+                  <div className="col-span-2">
+                    <p className="text-sm text-muted-foreground">Preço sugerido ao cliente</p>
+                    <p className="text-3xl font-bold text-primary">{formatarMoeda(precoSugerido)}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </section>
-      )}
-    </div>
+        )}
+      </div>
+    </TooltipProvider>
   )
 }

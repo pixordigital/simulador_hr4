@@ -3,6 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Plus, Search, Edit3, Trash2, DollarSign } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
 
 type Motorista = {
   id: string
@@ -52,118 +56,101 @@ export default function MotoristasPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Motoristas Freelancers</h1>
-        <Link
-          href="/motoristas/novo"
-          className="flex items-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
-        >
-          <Plus size={16} /> Novo Motorista
+        <Link href="/motoristas/novo">
+          <Button><Plus className="mr-1 h-4 w-4" /> Novo Motorista</Button>
         </Link>
       </div>
 
       <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]" />
-        <input
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
           type="text"
           value={busca}
           onChange={e => setBusca(e.target.value)}
           placeholder="Buscar motorista..."
-          className="w-full pl-9 pr-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+          className="pl-9"
         />
       </div>
 
       {filtrados.length === 0 ? (
-        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-12 text-center">
-          <p className="text-[var(--color-muted-fg)]">Nenhum motorista encontrado</p>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center">Nenhum motorista encontrado</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center text-sm text-muted-foreground">
             Cadastre motoristas freelancers para usar nas simulações.
-          </p>
-        </div>
+          </CardContent>
+        </Card>
       ) : (
         <div className="space-y-3">
           {filtrados.map(motorista => (
-            <div
-              key={motorista.id}
-              className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-4"
-            >
-              {editando === motorista.id ? (
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    value={formNome}
-                    onChange={e => setFormNome(e.target.value)}
-                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Nome do motorista"
-                  />
-                  <div className="grid grid-cols-2 gap-3">
+            <Card key={motorista.id}>
+              <CardContent className="p-4">
+                {editando === motorista.id ? (
+                  <div className="space-y-3">
+                    <Input
+                      type="text"
+                      value={formNome}
+                      onChange={e => setFormNome(e.target.value)}
+                      placeholder="Nome do motorista"
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium">Taxa padrão (R$)</label>
+                        <Input
+                          type="number"
+                          value={formTaxa}
+                          onChange={e => setFormTaxa(e.target.value)}
+                          step="0.01"
+                          min="0"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium">Observações</label>
+                        <Input
+                          type="text"
+                          value={formObs}
+                          onChange={e => setFormObs(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={() => salvarEdicao(motorista.id)}>
+                        Salvar
+                      </Button>
+                      <Button variant="outline" onClick={() => setEditando(null)}>
+                        Cancelar
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between">
                     <div>
-                      <label className="block text-xs font-medium mb-1">Taxa padrão (R$)</label>
-                      <input
-                        type="number"
-                        value={formTaxa}
-                        onChange={e => setFormTaxa(e.target.value)}
-                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                        step="0.01"
-                        min="0"
-                      />
+                      <p className="font-medium">{motorista.nome}</p>
+                      <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
+                        {motorista.taxaPadrao > 0 ? (
+                          <span>Taxa padrão: R$ {motorista.taxaPadrao.toFixed(2)}</span>
+                        ) : (
+                          <Badge variant="secondary">A definir</Badge>
+                        )}
+                        {motorista.observacoes && <span>{motorista.observacoes}</span>}
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium mb-1">Observações</label>
-                      <input
-                        type="text"
-                        value={formObs}
-                        onChange={e => setFormObs(e.target.value)}
-                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => salvarEdicao(motorista.id)}
-                      className="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-medium"
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      onClick={() => setEditando(null)}
-                      className="px-4 py-1.5 bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 rounded-lg text-xs font-medium"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{motorista.nome}</p>
-                    <div className="flex gap-4 mt-1 text-sm text-[var(--color-muted-fg)]">
-                      <span>Taxa padrão: {motorista.taxaPadrao > 0 ? `R$ ${motorista.taxaPadrao.toFixed(2)}` : 'A definir'}</span>
-                      {motorista.observacoes && <span>{motorista.observacoes}</span>}
+                    <div className="flex items-center gap-1">
+                      <Link href={`/motoristas/${motorista.id}/pagamentos`} title="Ver pagamentos">
+                        <Button variant="ghost" size="icon"><DollarSign className="h-4 w-4 text-blue-600" /></Button>
+                      </Link>
+                      <Button variant="ghost" size="icon" onClick={() => iniciarEdicao(motorista)} title="Editar">
+                        <Edit3 className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => excluirMotorista(motorista.id)} title="Excluir">
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href={`/motoristas/${motorista.id}/pagamentos`}
-                      className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                      title="Ver pagamentos"
-                    >
-                      <DollarSign size={16} />
-                    </Link>
-                    <button
-                      onClick={() => iniciarEdicao(motorista)}
-                      className="p-2 text-[var(--color-muted-fg)] hover:bg-[var(--color-muted)] rounded-lg transition-colors"
-                    >
-                      <Edit3 size={16} />
-                    </button>
-                    <button
-                      onClick={() => excluirMotorista(motorista.id)}
-                      className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}

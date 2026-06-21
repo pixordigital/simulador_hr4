@@ -1,26 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronDown, ChevronUp, Save, AlertTriangle, Check } from 'lucide-react'
+import { Save, AlertTriangle, Check } from 'lucide-react'
 
-type SecaoCollapsible = {
-  id: string
-  titulo: string
-  aberto: boolean
-}
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Separator } from "@/components/ui/separator"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 export default function ConfiguracoesPage() {
-  const [secoes, setSecoes] = useState<SecaoCollapsible[]>([
-    { id: 'geral', titulo: 'Geral', aberto: true },
-    { id: 'combustivel', titulo: 'Combustível', aberto: true },
-    { id: 'motoristas', titulo: 'Motoristas Próprios', aberto: false },
-    { id: 'veiculoKangoo', titulo: 'Veículo: KANGOO', aberto: false },
-    { id: 'veiculo8160', titulo: 'Veículo: 8-160', aberto: false },
-    { id: 'dedicadaKangoo', titulo: 'Entrega Dedicada — KANGOO', aberto: false },
-    { id: 'dedicada8160', titulo: 'Entrega Dedicada — 8-160', aberto: false },
-    { id: 'taxas', titulo: 'Tabela de Preços por Zona', aberto: false },
-  ])
-
   const [salvando, setSalvando] = useState(false)
   const [mensagem, setMensagem] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null)
 
@@ -128,10 +119,6 @@ export default function ConfiguracoesPage() {
     }
   }
 
-  const toggleSecao = (id: string) => {
-    setSecoes(secoes.map(s => s.id === id ? { ...s, aberto: !s.aberto } : s))
-  }
-
   async function salvarTudo() {
     setSalvando(true)
     setMensagem(null)
@@ -224,148 +211,294 @@ export default function ConfiguracoesPage() {
       <h1 className="text-2xl font-bold">Configurações</h1>
 
       {mensagem && (
-        <div className={`p-4 rounded-xl flex items-center gap-2 text-sm ${
-          mensagem.tipo === 'sucesso'
-            ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
-            : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800'
-        }`}>
-          {mensagem.tipo === 'sucesso' ? <Check size={18} /> : <AlertTriangle size={18} />}
-          {mensagem.texto}
-        </div>
+        <Alert variant={mensagem.tipo === 'sucesso' ? 'default' : 'destructive'}>
+          {mensagem.tipo === 'sucesso' ? <Check className="h-4 w-4" /> : <AlertTriangle className="h-4 w-4" />}
+          <AlertTitle>{mensagem.tipo === 'sucesso' ? 'Sucesso' : 'Erro'}</AlertTitle>
+          <AlertDescription>{mensagem.texto}</AlertDescription>
+        </Alert>
       )}
 
-      {/* Seção: Geral + Combustível (sempre visíveis, destaque) */}
-      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-blue-600 dark:text-blue-400">Geral</h2>
-        <p className="text-xs text-[var(--color-muted-fg)]">Campos alterados com frequência mensal</p>
-
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Margem padrão (%)</label>
-            <input type="number" value={margemPadrao} onChange={e => setMargemPadrao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.5" min="0" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Entregas/dia padrão</label>
-            <input type="number" value={entregasPorDia} onChange={e => setEntregasPorDia(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="1" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Acréscimo agendamento (R$)</label>
-            <input type="number" value={acrescimoAgendamento} onChange={e => setAcrescimoAgendamento(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-blue-600 dark:text-blue-400">Combustível</h2>
-        <p className="text-xs text-[var(--color-muted-fg)]">Alterado mensalmente conforme variação de preço</p>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">KANGOO — Preço do litro (R$)</label>
-            <input type="number" value={kangooPrecoLitro} onChange={e => setKangooPrecoLitro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">8-160 — Preço do litro (R$)</label>
-            <input type="number" value={oitoPrecoLitro} onChange={e => setOitoPrecoLitro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">KANGOO — Consumo (km/L)</label>
-            <input type="number" value={kangooConsumo} onChange={e => setKangooConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">8-160 — Consumo (km/L)</label>
-            <input type="number" value={oitoConsumo} onChange={e => setOitoConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" />
-          </div>
-        </div>
-      </div>
-
-      {/* Seções colapsáveis */}
-      {secoes.filter(s => !['geral', 'combustivel'].includes(s.id)).map(secao => (
-        <div key={secao.id} className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl overflow-hidden">
-          <button
-            onClick={() => toggleSecao(secao.id)}
-            className="w-full flex items-center justify-between p-4 hover:bg-[var(--color-muted)] transition-colors"
-          >
-            <h2 className="text-base font-semibold">{secao.titulo}</h2>
-            {secao.aberto ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </button>
-
-          {secao.aberto && (
-            <div className="p-6 pt-0 space-y-4">
-              {secao.id === 'motoristas' && (
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Salário mensal (R$)</label>
-                    <input type="number" value={salario} onChange={e => setSalario(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Dias úteis/mês</label>
-                    <input type="number" value={diasUteis} onChange={e => setDiasUteis(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="1" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Vale alimentação (R$/mês)</label>
-                    <input type="number" value={vale} onChange={e => setVale(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
-                  </div>
-                </div>
-              )}
-
-              {secao.id === 'veiculoKangoo' && (
-                <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Combustível mensal (R$)</label><input type="number" value={kangooCombustivel} onChange={e => setKangooCombustivel(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção mensal (R$)</label><input type="number" value={kangooManutencao} onChange={e => setKangooManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Seguro mensal (R$)</label><input type="number" value={kangooSeguro} onChange={e => setKangooSeguro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Depreciação mensal (R$)</label><input type="number" value={kangooDepreciacao} onChange={e => setKangooDepreciacao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                </div>
-              )}
-
-              {secao.id === 'veiculo8160' && (
-                <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Combustível mensal (R$)</label><input type="number" value={oitoCombustivel} onChange={e => setOitoCombustivel(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção mensal (R$)</label><input type="number" value={oitoManutencao} onChange={e => setOitoManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Seguro mensal (R$)</label><input type="number" value={oitoSeguro} onChange={e => setOitoSeguro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Depreciação mensal (R$)</label><input type="number" value={oitoDepreciacao} onChange={e => setOitoDepreciacao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                </div>
-              )}
-
-              {secao.id === 'dedicadaKangoo' && (
-                <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Km incluídos na diária</label><input type="number" value={dedKangooKm} onChange={e => setDedKangooKm(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Custo fixo mensal (R$)</label><input type="number" value={dedKangooCustoFixo} onChange={e => setDedKangooCustoFixo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção por km (R$)</label><input type="number" value={dedKangooManutencao} onChange={e => setDedKangooManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Ajudante diária (R$)</label><input type="number" value={dedKangooAjudante} onChange={e => setDedKangooAjudante(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Preço litro (R$)</label><input type="number" value={dedKangooLitros} onChange={e => setDedKangooLitros(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Consumo (km/L)</label><input type="number" value={dedKangooConsumo} onChange={e => setDedKangooConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" /></div>
-                </div>
-              )}
-
-              {secao.id === 'dedicada8160' && (
-                <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Km incluídos na diária</label><input type="number" value={dedOitoKm} onChange={e => setDedOitoKm(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Custo fixo mensal (R$)</label><input type="number" value={dedOitoCustoFixo} onChange={e => setDedOitoCustoFixo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção por km (R$)</label><input type="number" value={dedOitoManutencao} onChange={e => setDedOitoManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Ajudante diária (R$)</label><input type="number" value={dedOitoAjudante} onChange={e => setDedOitoAjudante(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Preço litro (R$)</label><input type="number" value={dedOitoLitros} onChange={e => setDedOitoLitros(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Consumo (km/L)</label><input type="number" value={dedOitoConsumo} onChange={e => setDedOitoConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" /></div>
-                </div>
-              )}
-
-              {secao.id === 'taxas' && (
-                <p className="text-sm text-[var(--color-muted-fg)] italic">
-                  Edite o arquivo <code className="text-xs bg-[var(--color-muted)] px-1.5 py-0.5 rounded">data/rates/taxas-regioes.json</code> para configurar as faixas de preço por zona.
-                </p>
-              )}
+      {/* Geral */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Geral</CardTitle>
+          <CardDescription>Campos alterados com frequência mensal</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="margemPadrao">Margem padrão (%)</Label>
+              <Input
+                id="margemPadrao"
+                type="number"
+                value={margemPadrao}
+                onChange={e => setMargemPadrao(e.target.value)}
+                step="0.5"
+                min="0"
+              />
             </div>
-          )}
-        </div>
-      ))}
+            <div className="space-y-2">
+              <Label htmlFor="entregasPorDia">Entregas/dia padrão</Label>
+              <Input
+                id="entregasPorDia"
+                type="number"
+                value={entregasPorDia}
+                onChange={e => setEntregasPorDia(e.target.value)}
+                min="1"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="acrescimoAgendamento">Acréscimo agendamento (R$)</Label>
+              <Input
+                id="acrescimoAgendamento"
+                type="number"
+                value={acrescimoAgendamento}
+                onChange={e => setAcrescimoAgendamento(e.target.value)}
+                step="0.01"
+                min="0"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-      <button
+      {/* Combustível */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Combustível</CardTitle>
+          <CardDescription>Alterado mensalmente conforme variação de preço</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="kangooPrecoLitro">KANGOO — Preço do litro (R$)</Label>
+              <Input
+                id="kangooPrecoLitro"
+                type="number"
+                value={kangooPrecoLitro}
+                onChange={e => setKangooPrecoLitro(e.target.value)}
+                step="0.01"
+                min="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="oitoPrecoLitro">8-160 — Preço do litro (R$)</Label>
+              <Input
+                id="oitoPrecoLitro"
+                type="number"
+                value={oitoPrecoLitro}
+                onChange={e => setOitoPrecoLitro(e.target.value)}
+                step="0.01"
+                min="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="kangooConsumo">KANGOO — Consumo (km/L)</Label>
+              <Input
+                id="kangooConsumo"
+                type="number"
+                value={kangooConsumo}
+                onChange={e => setKangooConsumo(e.target.value)}
+                step="0.1"
+                min="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="oitoConsumo">8-160 — Consumo (km/L)</Label>
+              <Input
+                id="oitoConsumo"
+                type="number"
+                value={oitoConsumo}
+                onChange={e => setOitoConsumo(e.target.value)}
+                step="0.1"
+                min="0"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Separator />
+
+      {/* Accordion sections */}
+      <Accordion multiple defaultValue={[]}>
+        {/* Motoristas Próprios */}
+        <AccordionItem value="motoristas">
+          <AccordionTrigger className="text-base font-semibold">Motoristas Próprios</AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-3 gap-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="salario">Salário mensal (R$)</Label>
+                <Input
+                  id="salario"
+                  type="number"
+                  value={salario}
+                  onChange={e => setSalario(e.target.value)}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="diasUteis">Dias úteis/mês</Label>
+                <Input
+                  id="diasUteis"
+                  type="number"
+                  value={diasUteis}
+                  onChange={e => setDiasUteis(e.target.value)}
+                  min="1"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vale">Vale alimentação (R$/mês)</Label>
+                <Input
+                  id="vale"
+                  type="number"
+                  value={vale}
+                  onChange={e => setVale(e.target.value)}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Veículo: KANGOO */}
+        <AccordionItem value="veiculoKangoo">
+          <AccordionTrigger className="text-base font-semibold">Veículo: KANGOO</AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-3 gap-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="kangooCombustivel">Combustível mensal (R$)</Label>
+                <Input id="kangooCombustivel" type="number" value={kangooCombustivel} onChange={e => setKangooCombustivel(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="kangooManutencao">Manutenção mensal (R$)</Label>
+                <Input id="kangooManutencao" type="number" value={kangooManutencao} onChange={e => setKangooManutencao(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="kangooSeguro">Seguro mensal (R$)</Label>
+                <Input id="kangooSeguro" type="number" value={kangooSeguro} onChange={e => setKangooSeguro(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="kangooDepreciacao">Depreciação mensal (R$)</Label>
+                <Input id="kangooDepreciacao" type="number" value={kangooDepreciacao} onChange={e => setKangooDepreciacao(e.target.value)} step="0.01" min="0" />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Veículo: 8-160 */}
+        <AccordionItem value="veiculo8160">
+          <AccordionTrigger className="text-base font-semibold">Veículo: 8-160</AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-3 gap-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="oitoCombustivel">Combustível mensal (R$)</Label>
+                <Input id="oitoCombustivel" type="number" value={oitoCombustivel} onChange={e => setOitoCombustivel(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="oitoManutencao">Manutenção mensal (R$)</Label>
+                <Input id="oitoManutencao" type="number" value={oitoManutencao} onChange={e => setOitoManutencao(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="oitoSeguro">Seguro mensal (R$)</Label>
+                <Input id="oitoSeguro" type="number" value={oitoSeguro} onChange={e => setOitoSeguro(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="oitoDepreciacao">Depreciação mensal (R$)</Label>
+                <Input id="oitoDepreciacao" type="number" value={oitoDepreciacao} onChange={e => setOitoDepreciacao(e.target.value)} step="0.01" min="0" />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Entrega Dedicada — KANGOO */}
+        <AccordionItem value="dedicadaKangoo">
+          <AccordionTrigger className="text-base font-semibold">Entrega Dedicada — KANGOO</AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-3 gap-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="dedKangooKm">Km incluídos na diária</Label>
+                <Input id="dedKangooKm" type="number" value={dedKangooKm} onChange={e => setDedKangooKm(e.target.value)} min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedKangooCustoFixo">Custo fixo mensal (R$)</Label>
+                <Input id="dedKangooCustoFixo" type="number" value={dedKangooCustoFixo} onChange={e => setDedKangooCustoFixo(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedKangooManutencao">Manutenção por km (R$)</Label>
+                <Input id="dedKangooManutencao" type="number" value={dedKangooManutencao} onChange={e => setDedKangooManutencao(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedKangooAjudante">Ajudante diária (R$)</Label>
+                <Input id="dedKangooAjudante" type="number" value={dedKangooAjudante} onChange={e => setDedKangooAjudante(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedKangooLitros">Preço litro (R$)</Label>
+                <Input id="dedKangooLitros" type="number" value={dedKangooLitros} onChange={e => setDedKangooLitros(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedKangooConsumo">Consumo (km/L)</Label>
+                <Input id="dedKangooConsumo" type="number" value={dedKangooConsumo} onChange={e => setDedKangooConsumo(e.target.value)} step="0.1" min="0" />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Entrega Dedicada — 8-160 */}
+        <AccordionItem value="dedicada8160">
+          <AccordionTrigger className="text-base font-semibold">Entrega Dedicada — 8-160</AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-3 gap-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="dedOitoKm">Km incluídos na diária</Label>
+                <Input id="dedOitoKm" type="number" value={dedOitoKm} onChange={e => setDedOitoKm(e.target.value)} min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedOitoCustoFixo">Custo fixo mensal (R$)</Label>
+                <Input id="dedOitoCustoFixo" type="number" value={dedOitoCustoFixo} onChange={e => setDedOitoCustoFixo(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedOitoManutencao">Manutenção por km (R$)</Label>
+                <Input id="dedOitoManutencao" type="number" value={dedOitoManutencao} onChange={e => setDedOitoManutencao(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedOitoAjudante">Ajudante diária (R$)</Label>
+                <Input id="dedOitoAjudante" type="number" value={dedOitoAjudante} onChange={e => setDedOitoAjudante(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedOitoLitros">Preço litro (R$)</Label>
+                <Input id="dedOitoLitros" type="number" value={dedOitoLitros} onChange={e => setDedOitoLitros(e.target.value)} step="0.01" min="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dedOitoConsumo">Consumo (km/L)</Label>
+                <Input id="dedOitoConsumo" type="number" value={dedOitoConsumo} onChange={e => setDedOitoConsumo(e.target.value)} step="0.1" min="0" />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Tabela de Preços por Zona */}
+        <AccordionItem value="taxas">
+          <AccordionTrigger className="text-base font-semibold">Tabela de Preços por Zona</AccordionTrigger>
+          <AccordionContent>
+            <p className="text-sm text-muted-foreground italic">
+              Edite o arquivo <code className="text-xs bg-muted px-1.5 py-0.5 rounded">data/rates/taxas-regioes.json</code> para configurar as faixas de preço por zona.
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Button
         onClick={salvarTudo}
         disabled={salvando}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-xl transition-colors"
+        className="w-full"
+        size="lg"
       >
-        <Save size={18} />
+        <Save className="mr-2 h-4 w-4" />
         {salvando ? 'Salvando...' : 'Salvar Todas as Configurações'}
-      </button>
+      </Button>
     </div>
   )
 }
