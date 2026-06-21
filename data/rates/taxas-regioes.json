@@ -1,0 +1,98 @@
+[
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "João Pessoa",
+    "taxaMinima": 0,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 0 },
+      { "min": 20, "max": 35, "precoPorKg": 0 },
+      { "min": 35, "max": 50, "precoPorKg": 0 },
+      { "min": 50, "max": 70, "precoPorKg": 0 },
+      { "min": 70, "max": 100, "precoPorKg": 0 },
+      { "min": 100, "max": 300, "precoPorKg": 0 },
+      { "min": 300, "max": 500, "precoPorKg": 0 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Cabedelo",
+    "taxaMinima": 0,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 0 },
+      { "min": 20, "max": 35, "precoPorKg": 0 },
+      { "min": 35, "max": 50, "precoPorKg": 0 },
+      { "min": 50, "max": 70, "precoPorKg": 0 },
+      { "min": 70, "max": 100, "precoPorKg": 0 },
+      { "min": 100, "max": 300, "precoPorKg": 0 },
+      { "min": 300, "max": 500, "precoPorKg": 0 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Conde",
+    "taxaMinima": 0,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 0 },
+      { "min": 20, "max": 35, "precoPorKg": 0 },
+      { "min": 35, "max": 50, "precoPorKg": 0 },
+      { "min": 50, "max": 70, "precoPorKg": 0 },
+      { "min": 70, "max": 100, "precoPorKg": 0 },
+      { "min": 100, "max": 300, "precoPorKg": 0 },
+      { "min": 300, "max": 500, "precoPorKg": 0 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Santa Rita",
+    "taxaMinima": 0,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 0 },
+      { "min": 20, "max": 35, "precoPorKg": 0 },
+      { "min": 35, "max": 50, "precoPorKg": 0 },
+      { "min": 50, "max": 70, "precoPorKg": 0 },
+      { "min": 70, "max": 100, "precoPorKg": 0 },
+      { "min": 100, "max": 300, "precoPorKg": 0 },
+      { "min": 300, "max": 500, "precoPorKg": 0 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Bayeux",
+    "taxaMinima": 0,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 0 },
+      { "min": 20, "max": 35, "precoPorKg": 0 },
+      { "min": 35, "max": 50, "precoPorKg": 0 },
+      { "min": 50, "max": 70, "precoPorKg": 0 },
+      { "min": 70, "max": 100, "precoPorKg": 0 },
+      { "min": 100, "max": 300, "precoPorKg": 0 },
+      { "min": 300, "max": 500, "precoPorKg": 0 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Alhandra",
+    "taxaMinima": 0,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 0 },
+      { "min": 20, "max": 35, "precoPorKg": 0 },
+      { "min": 35, "max": 50, "precoPorKg": 0 },
+      { "min": 50, "max": 70, "precoPorKg": 0 },
+      { "min": 70, "max": 100, "precoPorKg": 0 },
+      { "min": 100, "max": 300, "precoPorKg": 0 },
+      { "min": 300, "max": 500, "precoPorKg": 0 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+    ]
+  }
+]

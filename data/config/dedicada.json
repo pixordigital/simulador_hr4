@@ -1,0 +1,18 @@
+{
+  "KANGOO": {
+    "kmInclusosNaDiaria": 50,
+    "custoFixoMensal": 500,
+    "precoCombustivelLitro": 6.20,
+    "consumoKmPorLitro": 10.0,
+    "manutencaoPorKm": 0.15,
+    "ajudanteDiaria": 50
+  },
+  "8-160": {
+    "kmInclusosNaDiaria": 50,
+    "custoFixoMensal": 800,
+    "precoCombustivelLitro": 6.20,
+    "consumoKmPorLitro": 7.0,
+    "manutencaoPorKm": 0.25,
+    "ajudanteDiaria": 50
+  }
+}

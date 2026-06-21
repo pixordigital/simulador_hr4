@@ -1,0 +1,23 @@
+{
+  "salarioMensal": 1964.63,
+  "diasUteisPorMes": 22,
+  "valeAlimentacao": 738.00,
+  "veiculos": {
+    "KANGOO": {
+      "combustivelMensal": 1704.78,
+      "manutencaoMensal": 184.00,
+      "seguroMensal": 589.15,
+      "depreciacaoMensal": 0,
+      "precoCombustivelLitro": 6.20,
+      "consumoKmPorLitro": 10.0
+    },
+    "8-160": {
+      "combustivelMensal": 3397.51,
+      "manutencaoMensal": 1944.37,
+      "seguroMensal": 1767.46,
+      "depreciacaoMensal": 0,
+      "precoCombustivelLitro": 6.20,
+      "consumoKmPorLitro": 7.0
+    }
+  }
+}
