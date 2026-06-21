@@ -21,20 +21,20 @@ export default function NovoMotoristaPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/motoristas" className="p-2 hover:bg-[rgb(var(--muted))] rounded-lg transition-colors">
+        <Link href="/motoristas" className="p-2 hover:bg-[var(--color-muted)] rounded-lg transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <h1 className="text-2xl font-bold">Novo Motorista</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+      <form onSubmit={handleSubmit} className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1">Nome completo</label>
           <input
             type="text"
             value={nome}
             onChange={e => setNome(e.target.value)}
-            className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -44,7 +44,7 @@ export default function NovoMotoristaPage() {
             type="number"
             value={taxaPadrao}
             onChange={e => setTaxaPadrao(e.target.value)}
-            className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
             step="0.01"
             min="0"
           />
@@ -54,7 +54,7 @@ export default function NovoMotoristaPage() {
           <textarea
             value={observacoes}
             onChange={e => setObservacoes(e.target.value)}
-            className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             rows={3}
           />
         </div>

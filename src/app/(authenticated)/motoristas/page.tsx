@@ -61,20 +61,20 @@ export default function MotoristasPage() {
       </div>
 
       <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(var(--muted-foreground))]" />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]" />
         <input
           type="text"
           value={busca}
           onChange={e => setBusca(e.target.value)}
           placeholder="Buscar motorista..."
-          className="w-full pl-9 pr-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full pl-9 pr-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       {filtrados.length === 0 ? (
-        <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-12 text-center">
-          <p className="text-[rgb(var(--muted-foreground))]">Nenhum motorista encontrado</p>
-          <p className="text-sm text-[rgb(var(--muted-foreground))] mt-1">
+        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-12 text-center">
+          <p className="text-[var(--color-muted-fg)]">Nenhum motorista encontrado</p>
+          <p className="text-sm text-[var(--color-muted-fg)] mt-1">
             Cadastre motoristas freelancers para usar nas simulações.
           </p>
         </div>
@@ -83,7 +83,7 @@ export default function MotoristasPage() {
           {filtrados.map(motorista => (
             <div
               key={motorista.id}
-              className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-4"
+              className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-4"
             >
               {editando === motorista.id ? (
                 <div className="space-y-3">
@@ -91,7 +91,7 @@ export default function MotoristasPage() {
                     type="text"
                     value={formNome}
                     onChange={e => setFormNome(e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Nome do motorista"
                   />
                   <div className="grid grid-cols-2 gap-3">
@@ -101,7 +101,7 @@ export default function MotoristasPage() {
                         type="number"
                         value={formTaxa}
                         onChange={e => setFormTaxa(e.target.value)}
-                        className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
                         step="0.01"
                         min="0"
                       />
@@ -112,7 +112,7 @@ export default function MotoristasPage() {
                         type="text"
                         value={formObs}
                         onChange={e => setFormObs(e.target.value)}
-                        className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
@@ -135,7 +135,7 @@ export default function MotoristasPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{motorista.nome}</p>
-                    <div className="flex gap-4 mt-1 text-sm text-[rgb(var(--muted-foreground))]">
+                    <div className="flex gap-4 mt-1 text-sm text-[var(--color-muted-fg)]">
                       <span>Taxa padrão: {motorista.taxaPadrao > 0 ? `R$ ${motorista.taxaPadrao.toFixed(2)}` : 'A definir'}</span>
                       {motorista.observacoes && <span>{motorista.observacoes}</span>}
                     </div>
@@ -150,7 +150,7 @@ export default function MotoristasPage() {
                     </Link>
                     <button
                       onClick={() => iniciarEdicao(motorista)}
-                      className="p-2 text-[rgb(var(--muted-foreground))] hover:bg-[rgb(var(--muted))] rounded-lg transition-colors"
+                      className="p-2 text-[var(--color-muted-fg)] hover:bg-[var(--color-muted)] rounded-lg transition-colors"
                     >
                       <Edit3 size={16} />
                     </button>

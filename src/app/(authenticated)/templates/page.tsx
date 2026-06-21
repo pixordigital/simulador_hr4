@@ -18,25 +18,25 @@ export default function TemplatesPage() {
       <h1 className="text-2xl font-bold">Templates</h1>
 
       {templates.length === 0 ? (
-        <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-12 text-center">
-          <p className="text-[rgb(var(--muted-foreground))] mb-2">Nenhum template salvo</p>
-          <p className="text-sm text-[rgb(var(--muted-foreground))]">
+        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-12 text-center">
+          <p className="text-[var(--color-muted-fg)] mb-2">Nenhum template salvo</p>
+          <p className="text-sm text-[var(--color-muted-fg)]">
             Após realizar uma simulação, você pode salvá-la como template para reutilizar depois.
           </p>
         </div>
       ) : (
         <div className="space-y-3">
           {templates.map(t => (
-            <div key={t.id} className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-4 flex items-center justify-between">
+            <div key={t.id} className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-4 flex items-center justify-between">
               <div>
                 <p className="font-medium">{t.nome}</p>
-                <p className="text-sm text-[rgb(var(--muted-foreground))]">{t.tipo} — {t.cliente}</p>
+                <p className="text-sm text-[var(--color-muted-fg)]">{t.tipo} — {t.cliente}</p>
               </div>
               <div className="flex items-center gap-2">
                 <button className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors">
                   <Play size={14} /> Usar
                 </button>
-                <button className="p-2 text-[rgb(var(--muted-foreground))] hover:bg-[rgb(var(--muted))] rounded-lg transition-colors">
+                <button className="p-2 text-[var(--color-muted-fg)] hover:bg-[var(--color-muted)] rounded-lg transition-colors">
                   <Edit3 size={14} />
                 </button>
                 <button className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">

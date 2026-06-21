@@ -14,55 +14,55 @@ export default function HistoricoPage() {
       <h1 className="text-2xl font-bold">Histórico</h1>
 
       {/* Dashboard de rentabilidade */}
-      <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
         <h2 className="text-lg font-semibold">Dashboard de Rentabilidade</h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-[rgb(var(--muted))] rounded-lg">
-            <p className="text-xs text-[rgb(var(--muted-foreground))]">Custo operacional fixo (mês)</p>
+          <div className="p-4 bg-[var(--color-muted)] rounded-lg">
+            <p className="text-xs text-[var(--color-muted-fg)]">Custo operacional fixo (mês)</p>
             <p className="text-xl font-bold mt-1">R$ 0,00</p>
           </div>
-          <div className="p-4 bg-[rgb(var(--muted))] rounded-lg">
-            <p className="text-xs text-[rgb(var(--muted-foreground))]">Custo freelancers (mês)</p>
+          <div className="p-4 bg-[var(--color-muted)] rounded-lg">
+            <p className="text-xs text-[var(--color-muted-fg)]">Custo freelancers (mês)</p>
             <p className="text-xl font-bold mt-1">R$ 0,00</p>
           </div>
-          <div className="p-4 bg-[rgb(var(--muted))] rounded-lg">
-            <p className="text-xs text-[rgb(var(--muted-foreground))]">Total sugerido (mês)</p>
+          <div className="p-4 bg-[var(--color-muted)] rounded-lg">
+            <p className="text-xs text-[var(--color-muted-fg)]">Total sugerido (mês)</p>
             <p className="text-xl font-bold mt-1">R$ 0,00</p>
           </div>
-          <div className="p-4 bg-[rgb(var(--muted))] rounded-lg">
-            <p className="text-xs text-[rgb(var(--muted-foreground))]">Margem real estimada</p>
+          <div className="p-4 bg-[var(--color-muted)] rounded-lg">
+            <p className="text-xs text-[var(--color-muted-fg)]">Margem real estimada</p>
             <p className="text-xl font-bold mt-1">—</p>
           </div>
         </div>
 
-        <p className="text-xs text-[rgb(var(--muted-foreground))] italic">
+        <p className="text-xs text-[var(--color-muted-fg)] italic">
           Conecte o Supabase para ver dados reais. As simulações são salvas automaticamente no banco.
         </p>
       </div>
 
       {/* Métricas */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-lg p-4">
-          <p className="text-xs text-[rgb(var(--muted-foreground))]">Total de simulações</p>
+        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg p-4">
+          <p className="text-xs text-[var(--color-muted-fg)]">Total de simulações</p>
           <p className="text-2xl font-bold mt-1">0</p>
         </div>
-        <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-lg p-4">
-          <p className="text-xs text-[rgb(var(--muted-foreground))]">Valor total cotado</p>
+        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg p-4">
+          <p className="text-xs text-[var(--color-muted-fg)]">Valor total cotado</p>
           <p className="text-2xl font-bold mt-1">R$ 0,00</p>
         </div>
-        <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-lg p-4">
-          <p className="text-xs text-[rgb(var(--muted-foreground))]">Margem média</p>
+        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg p-4">
+          <p className="text-xs text-[var(--color-muted-fg)]">Margem média</p>
           <p className="text-2xl font-bold mt-1">—</p>
         </div>
-        <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-lg p-4">
-          <p className="text-xs text-[rgb(var(--muted-foreground))]">Custo médio/entrega</p>
+        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg p-4">
+          <p className="text-xs text-[var(--color-muted-fg)]">Custo médio/entrega</p>
           <p className="text-2xl font-bold mt-1">R$ 0,00</p>
         </div>
       </div>
 
       {/* Filtros */}
-      <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-4">
+      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <Filter size={16} />
           <span className="text-sm font-medium">Filtros</span>
@@ -71,13 +71,13 @@ export default function HistoricoPage() {
           <div>
             <label className="block text-xs font-medium mb-1">Cliente</label>
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(var(--muted-foreground))]" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]" />
               <input
                 type="text"
                 value={filtroCliente}
                 onChange={e => setFiltroCliente(e.target.value)}
                 placeholder="Buscar cliente..."
-                className="w-full pl-8 pr-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-8 pr-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -86,7 +86,7 @@ export default function HistoricoPage() {
             <select
               value={filtroTipo}
               onChange={e => setFiltroTipo(e.target.value)}
-              className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos</option>
               <option value="regular">Regular</option>
@@ -99,7 +99,7 @@ export default function HistoricoPage() {
               type="date"
               value={dataInicio}
               onChange={e => setDataInicio(e.target.value)}
-              className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -108,16 +108,16 @@ export default function HistoricoPage() {
               type="date"
               value={dataFim}
               onChange={e => setDataFim(e.target.value)}
-              className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent text-sm outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
       </div>
 
       {/* Lista vazia */}
-      <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-12 text-center">
-        <p className="text-[rgb(var(--muted-foreground))] mb-2">Nenhuma simulação encontrada</p>
-        <p className="text-sm text-[rgb(var(--muted-foreground))]">
+      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-12 text-center">
+        <p className="text-[var(--color-muted-fg)] mb-2">Nenhuma simulação encontrada</p>
+        <p className="text-sm text-[var(--color-muted-fg)]">
           As simulações serão exibidas aqui após conectar o Supabase e salvar as primeiras cotações.
         </p>
       </div>

@@ -26,7 +26,7 @@ export default function Sidebar() {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <aside className="w-64 h-screen bg-[rgb(var(--sidebar))] text-[rgb(var(--sidebar-foreground))] flex flex-col shrink-0">
+    <aside className="w-64 h-screen bg-[var(--color-sidebar)] text-[var(--color-sidebar-fg)] flex flex-col shrink-0">
       <div className="p-6 border-b border-slate-700">
         <h1 className="text-lg font-bold tracking-tight">Simulador de Frete</h1>
         <p className="text-xs text-slate-400 mt-1">João Pessoa / PB</p>
@@ -43,7 +43,7 @@ export default function Sidebar() {
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                 ativo
                   ? 'bg-blue-600 text-white font-medium'
-                  : 'text-slate-300 hover:bg-[rgb(var(--sidebar-hover))] hover:text-white'
+                  : 'text-slate-300 hover:bg-[var(--color-sidebar-hover)] hover:text-white'
               } ${item.destaque ? 'mt-1' : ''}`}
             >
               <Icon size={18} />
@@ -56,7 +56,7 @@ export default function Sidebar() {
       <div className="p-3 border-t border-slate-700 space-y-1">
         <button
           onClick={toggleTheme}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-[rgb(var(--sidebar-hover))] hover:text-white w-full transition-colors"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-[var(--color-sidebar-hover)] hover:text-white w-full transition-colors"
         >
           {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           <span>{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>

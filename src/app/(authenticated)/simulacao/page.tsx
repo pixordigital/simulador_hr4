@@ -297,7 +297,7 @@ export default function SimulacaoPage() {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             tipo === 'regular'
               ? 'bg-blue-600 text-white'
-              : 'bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] hover:bg-blue-100 dark:hover:bg-blue-900/30'
+              : 'bg-[var(--color-muted)] text-[var(--color-muted-fg)] hover:bg-blue-100 dark:hover:bg-blue-900/30'
           }`}
         >
           Entrega Regular
@@ -307,7 +307,7 @@ export default function SimulacaoPage() {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             tipo === 'dedicada'
               ? 'bg-blue-600 text-white'
-              : 'bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] hover:bg-blue-100 dark:hover:bg-blue-900/30'
+              : 'bg-[var(--color-muted)] text-[var(--color-muted-fg)] hover:bg-blue-100 dark:hover:bg-blue-900/30'
           }`}
         >
           Entrega Dedicada
@@ -315,7 +315,7 @@ export default function SimulacaoPage() {
       </div>
 
       {/* Opção de veículo / motorista */}
-      <section className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
         <h2 className="text-lg font-semibold">Veículo / Motorista</h2>
 
         <div className="grid grid-cols-3 gap-4">
@@ -326,7 +326,7 @@ export default function SimulacaoPage() {
               className={`p-4 rounded-lg border-2 text-center transition-all ${
                 opcaoVeiculo === op
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-[rgb(var(--border))] hover:border-blue-300'
+                  : 'border-[var(--color-border)] hover:border-blue-300'
               }`}
             >
               <span className="font-medium">{op}</span>
@@ -344,7 +344,7 @@ export default function SimulacaoPage() {
               type="number"
               value={numeroEntregas}
               onChange={(e) => setNumeroEntregas(e.target.value)}
-              className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
               min="1"
             />
           </div>
@@ -359,7 +359,7 @@ export default function SimulacaoPage() {
                 type="number"
                 value={taxaFreelancer}
                 onChange={(e) => setTaxaFreelancer(e.target.value)}
-                className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
                 step="0.01"
                 min="0"
               />
@@ -374,7 +374,7 @@ export default function SimulacaoPage() {
                   type="number"
                   value={diasDedicada}
                   onChange={(e) => setDiasDedicada(e.target.value)}
-                  className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
                   min="1"
                 />
               </div>
@@ -387,7 +387,7 @@ export default function SimulacaoPage() {
                   type="number"
                   value={kmEstimado}
                   onChange={(e) => setKmEstimado(e.target.value)}
-                  className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
                   step="0.1"
                   min="0"
                 />
@@ -398,7 +398,7 @@ export default function SimulacaoPage() {
                   id="ajudante"
                   checked={ajudante}
                   onChange={(e) => setAjudante(e.target.checked)}
-                  className="rounded border-[rgb(var(--border))]"
+                  className="rounded border-[var(--color-border)]"
                 />
                 <label htmlFor="ajudante" className="text-sm font-medium">
                   Ajudante / auxiliar
@@ -411,7 +411,7 @@ export default function SimulacaoPage() {
 
       {/* Paradas (regular) */}
       {tipo === 'regular' && (
-        <section className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+        <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Paradas</h2>
             <button
@@ -423,7 +423,7 @@ export default function SimulacaoPage() {
           </div>
 
           {paradas.map((parada, idx) => (
-            <div key={parada.id} className="p-4 bg-[rgb(var(--muted))] rounded-lg space-y-3">
+            <div key={parada.id} className="p-4 bg-[var(--color-muted)] rounded-lg space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium">Parada {idx + 1}</h3>
                 {paradas.length > 1 && (
@@ -442,7 +442,7 @@ export default function SimulacaoPage() {
                   <select
                     value={parada.zona}
                     onChange={(e) => atualizarParada(parada.id, 'zona', e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   >
                     <option value="">Selecione</option>
                     {ZONAS.map(z => (
@@ -456,7 +456,7 @@ export default function SimulacaoPage() {
                     type="number"
                     value={parada.pesoReal || ''}
                     onChange={(e) => atualizarParada(parada.id, 'pesoReal', parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     step="0.1"
                     min="0"
                   />
@@ -469,7 +469,7 @@ export default function SimulacaoPage() {
                     type="number"
                     value={parada.comprimento}
                     onChange={(e) => atualizarParada(parada.id, 'comprimento', e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     step="0.01"
                     min="0"
                   />
@@ -480,7 +480,7 @@ export default function SimulacaoPage() {
                     type="number"
                     value={parada.largura}
                     onChange={(e) => atualizarParada(parada.id, 'largura', e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     step="0.01"
                     min="0"
                   />
@@ -491,7 +491,7 @@ export default function SimulacaoPage() {
                     type="number"
                     value={parada.altura}
                     onChange={(e) => atualizarParada(parada.id, 'altura', e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     step="0.01"
                     min="0"
                   />
@@ -504,7 +504,7 @@ export default function SimulacaoPage() {
                     type="number"
                     value={parada.valorNF}
                     onChange={(e) => atualizarParada(parada.id, 'valorNF', e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     step="0.01"
                     min="0"
                   />
@@ -516,19 +516,19 @@ export default function SimulacaoPage() {
       )}
 
       {/* Agendada */}
-      <section className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-3">
           <input
             type="checkbox"
             id="agendada"
             checked={agendada}
             onChange={(e) => setAgendada(e.target.checked)}
-            className="rounded border-[rgb(var(--border))]"
+            className="rounded border-[var(--color-border)]"
           />
           <label htmlFor="agendada" className="text-lg font-semibold">
             Entrega Agendada
           </label>
-          <span className="text-xs text-[rgb(var(--muted-foreground))]">Serviço de horário garantido</span>
+          <span className="text-xs text-[var(--color-muted-fg)]">Serviço de horário garantido</span>
         </div>
 
         {agendada && (
@@ -539,7 +539,7 @@ export default function SimulacaoPage() {
                 type="date"
                 value={dataAgendamento}
                 onChange={(e) => setDataAgendamento(e.target.value)}
-                className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -548,7 +548,7 @@ export default function SimulacaoPage() {
                 type="time"
                 value={horarioAgendado}
                 onChange={(e) => setHorarioAgendado(e.target.value)}
-                className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -557,7 +557,7 @@ export default function SimulacaoPage() {
                 type="number"
                 value={acrescimoAgendamento}
                 onChange={(e) => setAcrescimoAgendamento(e.target.value)}
-                className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
                 step="0.01"
                 min="0"
               />
@@ -567,7 +567,7 @@ export default function SimulacaoPage() {
       </section>
 
       {/* Margem */}
-      <section className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6">
+      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6">
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <label className="block text-sm font-medium mb-1">
@@ -578,7 +578,7 @@ export default function SimulacaoPage() {
               type="number"
               value={margem}
               onChange={(e) => setMargem(e.target.value)}
-              className="w-full max-w-xs px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full max-w-xs px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500"
               step="0.5"
               min="0"
             />
@@ -634,13 +634,13 @@ export default function SimulacaoPage() {
                   className={`rounded-xl p-5 border-2 transition-all ${
                     isSelecionada
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-[rgb(var(--border))]'
-                  } ${isMaisBarata ? 'ring-2 ring-[rgb(var(--accent))]' : ''}`}
+                      : 'border-[var(--color-border)]'
+                  } ${isMaisBarata ? 'ring-2 ring-[var(--color-accent)]' : ''}`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold text-base">{opcao.rotulo}</h3>
                     {isMaisBarata && (
-                      <span className="text-xs bg-[rgb(var(--accent))] text-white px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-[var(--color-accent)] text-white px-2 py-0.5 rounded-full">
                         Mais barato
                       </span>
                     )}
@@ -658,7 +658,7 @@ export default function SimulacaoPage() {
 
                   {/* Detalhamento colapsável por parada */}
                   {opcao.custoPorParada.map((cp, pIdx) => (
-                    <div key={pIdx} className="border-t border-[rgb(var(--border))] pt-2 mt-2">
+                    <div key={pIdx} className="border-t border-[var(--color-border)] pt-2 mt-2">
                       <button
                         onClick={() => toggleDetalhe(idx * 100 + pIdx)}
                         className="flex items-center justify-between w-full text-sm"
@@ -668,7 +668,7 @@ export default function SimulacaoPage() {
                       </button>
 
                       {detalhesAbertos[idx * 100 + pIdx] && (
-                        <div className="mt-2 space-y-1 text-xs text-[rgb(var(--muted-foreground))]">
+                        <div className="mt-2 space-y-1 text-xs text-[var(--color-muted-fg)]">
                           {cp.pesoTaxavel > 0 && <p>Peso taxável: {cp.pesoTaxavel.toFixed(2)} kg</p>}
                           {cp.componentes.salarioParcela > 0 && <p>Salário: {formatarMoeda(cp.componentes.salarioParcela)}</p>}
                           {cp.componentes.valeParcela > 0 && <p>Vale alimentação: {formatarMoeda(cp.componentes.valeParcela)}</p>}
@@ -690,20 +690,20 @@ export default function SimulacaoPage() {
           </div>
 
           {/* Resumo geral */}
-          <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+          <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
             <h2 className="text-lg font-semibold">Resumo Geral</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
-                <p className="text-sm text-[rgb(var(--muted-foreground))]">Custo total</p>
+                <p className="text-sm text-[var(--color-muted-fg)]">Custo total</p>
                 <p className="text-xl font-bold">{formatarMoeda(totalGeral)}</p>
               </div>
               <div>
-                <p className="text-sm text-[rgb(var(--muted-foreground))]">Margem</p>
+                <p className="text-sm text-[var(--color-muted-fg)]">Margem</p>
                 <p className="text-xl font-bold">{margem}%</p>
               </div>
               <div className="col-span-2">
-                <p className="text-sm text-[rgb(var(--muted-foreground))]">Preço sugerido ao cliente</p>
-                <p className="text-3xl font-bold text-[rgb(var(--accent))]">{formatarMoeda(precoSugerido)}</p>
+                <p className="text-sm text-[var(--color-muted-fg)]">Preço sugerido ao cliente</p>
+                <p className="text-3xl font-bold text-[var(--color-accent)]">{formatarMoeda(precoSugerido)}</p>
               </div>
             </div>
           </div>

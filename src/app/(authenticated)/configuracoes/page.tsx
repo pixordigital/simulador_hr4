@@ -235,55 +235,55 @@ export default function ConfiguracoesPage() {
       )}
 
       {/* Seção: Geral + Combustível (sempre visíveis, destaque) */}
-      <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
         <h2 className="text-lg font-semibold text-blue-600 dark:text-blue-400">Geral</h2>
-        <p className="text-xs text-[rgb(var(--muted-foreground))]">Campos alterados com frequência mensal</p>
+        <p className="text-xs text-[var(--color-muted-fg)]">Campos alterados com frequência mensal</p>
 
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Margem padrão (%)</label>
-            <input type="number" value={margemPadrao} onChange={e => setMargemPadrao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.5" min="0" />
+            <input type="number" value={margemPadrao} onChange={e => setMargemPadrao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.5" min="0" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Entregas/dia padrão</label>
-            <input type="number" value={entregasPorDia} onChange={e => setEntregasPorDia(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="1" />
+            <input type="number" value={entregasPorDia} onChange={e => setEntregasPorDia(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="1" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Acréscimo agendamento (R$)</label>
-            <input type="number" value={acrescimoAgendamento} onChange={e => setAcrescimoAgendamento(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
+            <input type="number" value={acrescimoAgendamento} onChange={e => setAcrescimoAgendamento(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
           </div>
         </div>
       </div>
 
-      <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-6 space-y-4">
+      <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl p-6 space-y-4">
         <h2 className="text-lg font-semibold text-blue-600 dark:text-blue-400">Combustível</h2>
-        <p className="text-xs text-[rgb(var(--muted-foreground))]">Alterado mensalmente conforme variação de preço</p>
+        <p className="text-xs text-[var(--color-muted-fg)]">Alterado mensalmente conforme variação de preço</p>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">KANGOO — Preço do litro (R$)</label>
-            <input type="number" value={kangooPrecoLitro} onChange={e => setKangooPrecoLitro(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
+            <input type="number" value={kangooPrecoLitro} onChange={e => setKangooPrecoLitro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">8-160 — Preço do litro (R$)</label>
-            <input type="number" value={oitoPrecoLitro} onChange={e => setOitoPrecoLitro(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
+            <input type="number" value={oitoPrecoLitro} onChange={e => setOitoPrecoLitro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">KANGOO — Consumo (km/L)</label>
-            <input type="number" value={kangooConsumo} onChange={e => setKangooConsumo(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" />
+            <input type="number" value={kangooConsumo} onChange={e => setKangooConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">8-160 — Consumo (km/L)</label>
-            <input type="number" value={oitoConsumo} onChange={e => setOitoConsumo(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" />
+            <input type="number" value={oitoConsumo} onChange={e => setOitoConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" />
           </div>
         </div>
       </div>
 
       {/* Seções colapsáveis */}
       {secoes.filter(s => !['geral', 'combustivel'].includes(s.id)).map(secao => (
-        <div key={secao.id} className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl overflow-hidden">
+        <div key={secao.id} className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl overflow-hidden">
           <button
             onClick={() => toggleSecao(secao.id)}
-            className="w-full flex items-center justify-between p-4 hover:bg-[rgb(var(--muted))] transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-[var(--color-muted)] transition-colors"
           >
             <h2 className="text-base font-semibold">{secao.titulo}</h2>
             {secao.aberto ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -295,62 +295,62 @@ export default function ConfiguracoesPage() {
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Salário mensal (R$)</label>
-                    <input type="number" value={salario} onChange={e => setSalario(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
+                    <input type="number" value={salario} onChange={e => setSalario(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Dias úteis/mês</label>
-                    <input type="number" value={diasUteis} onChange={e => setDiasUteis(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="1" />
+                    <input type="number" value={diasUteis} onChange={e => setDiasUteis(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="1" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Vale alimentação (R$/mês)</label>
-                    <input type="number" value={vale} onChange={e => setVale(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
+                    <input type="number" value={vale} onChange={e => setVale(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" />
                   </div>
                 </div>
               )}
 
               {secao.id === 'veiculoKangoo' && (
                 <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Combustível mensal (R$)</label><input type="number" value={kangooCombustivel} onChange={e => setKangooCombustivel(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção mensal (R$)</label><input type="number" value={kangooManutencao} onChange={e => setKangooManutencao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Seguro mensal (R$)</label><input type="number" value={kangooSeguro} onChange={e => setKangooSeguro(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Depreciação mensal (R$)</label><input type="number" value={kangooDepreciacao} onChange={e => setKangooDepreciacao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Combustível mensal (R$)</label><input type="number" value={kangooCombustivel} onChange={e => setKangooCombustivel(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Manutenção mensal (R$)</label><input type="number" value={kangooManutencao} onChange={e => setKangooManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Seguro mensal (R$)</label><input type="number" value={kangooSeguro} onChange={e => setKangooSeguro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Depreciação mensal (R$)</label><input type="number" value={kangooDepreciacao} onChange={e => setKangooDepreciacao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
                 </div>
               )}
 
               {secao.id === 'veiculo8160' && (
                 <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Combustível mensal (R$)</label><input type="number" value={oitoCombustivel} onChange={e => setOitoCombustivel(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção mensal (R$)</label><input type="number" value={oitoManutencao} onChange={e => setOitoManutencao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Seguro mensal (R$)</label><input type="number" value={oitoSeguro} onChange={e => setOitoSeguro(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Depreciação mensal (R$)</label><input type="number" value={oitoDepreciacao} onChange={e => setOitoDepreciacao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Combustível mensal (R$)</label><input type="number" value={oitoCombustivel} onChange={e => setOitoCombustivel(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Manutenção mensal (R$)</label><input type="number" value={oitoManutencao} onChange={e => setOitoManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Seguro mensal (R$)</label><input type="number" value={oitoSeguro} onChange={e => setOitoSeguro(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Depreciação mensal (R$)</label><input type="number" value={oitoDepreciacao} onChange={e => setOitoDepreciacao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
                 </div>
               )}
 
               {secao.id === 'dedicadaKangoo' && (
                 <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Km incluídos na diária</label><input type="number" value={dedKangooKm} onChange={e => setDedKangooKm(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Custo fixo mensal (R$)</label><input type="number" value={dedKangooCustoFixo} onChange={e => setDedKangooCustoFixo(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção por km (R$)</label><input type="number" value={dedKangooManutencao} onChange={e => setDedKangooManutencao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Ajudante diária (R$)</label><input type="number" value={dedKangooAjudante} onChange={e => setDedKangooAjudante(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Preço litro (R$)</label><input type="number" value={dedKangooLitros} onChange={e => setDedKangooLitros(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Consumo (km/L)</label><input type="number" value={dedKangooConsumo} onChange={e => setDedKangooConsumo(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Km incluídos na diária</label><input type="number" value={dedKangooKm} onChange={e => setDedKangooKm(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Custo fixo mensal (R$)</label><input type="number" value={dedKangooCustoFixo} onChange={e => setDedKangooCustoFixo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Manutenção por km (R$)</label><input type="number" value={dedKangooManutencao} onChange={e => setDedKangooManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Ajudante diária (R$)</label><input type="number" value={dedKangooAjudante} onChange={e => setDedKangooAjudante(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Preço litro (R$)</label><input type="number" value={dedKangooLitros} onChange={e => setDedKangooLitros(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Consumo (km/L)</label><input type="number" value={dedKangooConsumo} onChange={e => setDedKangooConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" /></div>
                 </div>
               )}
 
               {secao.id === 'dedicada8160' && (
                 <div className="grid grid-cols-3 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Km incluídos na diária</label><input type="number" value={dedOitoKm} onChange={e => setDedOitoKm(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Custo fixo mensal (R$)</label><input type="number" value={dedOitoCustoFixo} onChange={e => setDedOitoCustoFixo(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Manutenção por km (R$)</label><input type="number" value={dedOitoManutencao} onChange={e => setDedOitoManutencao(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Ajudante diária (R$)</label><input type="number" value={dedOitoAjudante} onChange={e => setDedOitoAjudante(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Preço litro (R$)</label><input type="number" value={dedOitoLitros} onChange={e => setDedOitoLitros(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Consumo (km/L)</label><input type="number" value={dedOitoConsumo} onChange={e => setDedOitoConsumo(e.target.value)} className="w-full px-3 py-2 border border-[rgb(var(--border))] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Km incluídos na diária</label><input type="number" value={dedOitoKm} onChange={e => setDedOitoKm(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Custo fixo mensal (R$)</label><input type="number" value={dedOitoCustoFixo} onChange={e => setDedOitoCustoFixo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Manutenção por km (R$)</label><input type="number" value={dedOitoManutencao} onChange={e => setDedOitoManutencao(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Ajudante diária (R$)</label><input type="number" value={dedOitoAjudante} onChange={e => setDedOitoAjudante(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Preço litro (R$)</label><input type="number" value={dedOitoLitros} onChange={e => setDedOitoLitros(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.01" min="0" /></div>
+                  <div><label className="block text-sm font-medium mb-1">Consumo (km/L)</label><input type="number" value={dedOitoConsumo} onChange={e => setDedOitoConsumo(e.target.value)} className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-transparent outline-none focus:ring-2 focus:ring-blue-500" step="0.1" min="0" /></div>
                 </div>
               )}
 
               {secao.id === 'taxas' && (
-                <p className="text-sm text-[rgb(var(--muted-foreground))] italic">
-                  Edite o arquivo <code className="text-xs bg-[rgb(var(--muted))] px-1.5 py-0.5 rounded">data/rates/taxas-regioes.json</code> para configurar as faixas de preço por zona.
+                <p className="text-sm text-[var(--color-muted-fg)] italic">
+                  Edite o arquivo <code className="text-xs bg-[var(--color-muted)] px-1.5 py-0.5 rounded">data/rates/taxas-regioes.json</code> para configurar as faixas de preço por zona.
                 </p>
               )}
             </div>
