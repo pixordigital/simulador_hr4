@@ -8,11 +8,9 @@ import {
   FileText,
   Users,
   Settings,
-  LogOut,
   Sun,
   Moon,
 } from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
 
 const itensMenu = [
@@ -25,7 +23,6 @@ const itensMenu = [
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const { signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
 
   return (
@@ -63,13 +60,6 @@ export default function Sidebar() {
         >
           {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           <span>{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>
-        </button>
-        <button
-          onClick={signOut}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-red-600/20 hover:text-red-400 w-full transition-colors"
-        >
-          <LogOut size={18} />
-          <span>Sair</span>
         </button>
       </div>
     </aside>
