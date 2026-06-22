@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calculator, Clock, FileText, Users, Settings, Sun, Moon } from 'lucide-react'
+import { Calculator, Clock, FileText, Users, Settings, Sun, Moon, Sparkles } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
 import {
   Sidebar,
@@ -30,14 +30,17 @@ export default function AppSidebar() {
 
   return (
     <Sidebar collapsible="none" className="border-r border-sidebar-border bg-sidebar">
-      <SidebarHeader className="px-6 py-6 border-b border-sidebar-border">
+      <SidebarHeader className="px-5 py-5 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-blue-500/20 animate-float">
             SF
           </div>
           <div>
-            <h1 className="font-bold tracking-tight text-sm">Simulador de Frete</h1>
-            <p className="text-[11px] text-sidebar-foreground/50">João Pessoa / PB</p>
+            <h1 className="font-bold text-sm flex items-center gap-1.5">
+              Simulador de Frete
+              <Sparkles size={12} className="text-blue-400" />
+            </h1>
+            <p className="text-[11px] text-sidebar-foreground/40">João Pessoa / PB</p>
           </div>
         </div>
       </SidebarHeader>
@@ -55,10 +58,10 @@ export default function AppSidebar() {
                       isActive={ativo}
                       render={<Link href={item.href} />}
                       className={`
-                        rounded-lg transition-all duration-150
+                        rounded-xl transition-all duration-200
                         ${ativo
-                          ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium shadow-sm border-l-2 border-l-blue-500'
-                          : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'
+                          ? 'bg-gradient-to-r from-blue-500/15 to-purple-500/10 text-sidebar-accent-foreground font-medium shadow-sm border-l-2 border-l-blue-500 hover:from-blue-500/20 hover:to-purple-500/15'
+                          : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 hover:translate-x-0.5'
                         }
                       `}
                       size="lg"
@@ -77,7 +80,7 @@ export default function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border p-3">
         <SidebarMenuButton
           onClick={toggleTheme}
-          className="w-full justify-start rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-all duration-150"
+          className="w-full justify-start rounded-xl text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-all duration-200"
           size="lg"
         >
           {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
