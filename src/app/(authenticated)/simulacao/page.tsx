@@ -131,7 +131,7 @@ export default function SimulacaoPage() {
           {/* Coluna principal */}
           <div className="lg:col-span-2 space-y-6">
             {/* Tipo + Veículo */}
-            <div className="glass-card rounded-2xl p-6 space-y-6 noise-bg">
+            <div className="rounded-2xl p-6 space-y-6 bg-background/60 backdrop-blur-xl border border-border/30 shadow-sm relative noise-bg">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                   <ClipboardList size={16} />
@@ -178,7 +178,7 @@ export default function SimulacaoPage() {
                     <TrendingUp size={13} className="text-muted-foreground" />
                     Entregas no dia
                     <Tooltip><TooltipTrigger><Button variant="ghost" className="h-4 w-4 p-0"><Info size={12} className="text-muted-foreground" /></Button></TooltipTrigger>
-                    <TooltipContent side="top" className="glass-dark text-xs"><p>Entregas que o motorista fará no dia</p></TooltipContent></Tooltip>
+                    <TooltipContent side="top" className="text-sm text-muted-foreground bg-background/80 backdrop-blur-xl border border-border/20"><p>Entregas que o motorista fará no dia</p></TooltipContent></Tooltip>
                   </Label>
                   <Input id="entregas-dia" type="number" value={numeroEntregas} onChange={e => setNumeroEntregas(e.target.value)} min="1" className="h-10 rounded-xl bg-background/50" />
                 </div>
@@ -188,7 +188,7 @@ export default function SimulacaoPage() {
                       <DollarSign size={13} className="text-muted-foreground" />
                       Taxa negociada (R$)
                       <Tooltip><TooltipTrigger><Button variant="ghost" className="h-4 w-4 p-0"><Info size={12} className="text-muted-foreground" /></Button></TooltipTrigger>
-                      <TooltipContent side="top" className="glass-dark text-xs"><p>Valor único para o trabalho inteiro</p></TooltipContent></Tooltip>
+                      <TooltipContent side="top" className="text-sm text-muted-foreground bg-background/80 backdrop-blur-xl border border-border/20"><p>Valor único para o trabalho inteiro</p></TooltipContent></Tooltip>
                     </Label>
                     <Input id="taxa-freelancer" type="number" value={taxaFreelancer} onChange={e => setTaxaFreelancer(e.target.value)} step="0.01" min="0" className="h-10 rounded-xl bg-background/50" />
                   </div>
@@ -202,7 +202,7 @@ export default function SimulacaoPage() {
                     <div className="space-y-2">
                       <Label htmlFor="km-estimado" className="text-xs flex items-center gap-1.5"><MapPin size={13} className="text-muted-foreground" /> Km estimado
                         <Tooltip><TooltipTrigger><Button variant="ghost" className="h-4 w-4 p-0"><Info size={12} className="text-muted-foreground" /></Button></TooltipTrigger>
-                        <TooltipContent side="top" className="glass-dark text-xs"><p>Distância total estimada</p></TooltipContent></Tooltip>
+                        <TooltipContent side="top" className="text-sm text-muted-foreground bg-background/80 backdrop-blur-xl border border-border/20"><p>Distância total estimada</p></TooltipContent></Tooltip>
                       </Label>
                       <Input id="km-estimado" type="number" value={kmEstimado} onChange={e => setKmEstimado(e.target.value)} step="0.1" min="0" className="h-10 rounded-xl bg-background/50" />
                     </div>
@@ -217,7 +217,7 @@ export default function SimulacaoPage() {
 
             {/* Paradas */}
             {tipo === 'regular' && (
-              <div className="glass-card rounded-2xl p-6 space-y-4 noise-bg">
+              <div className="rounded-2xl p-6 space-y-4 bg-background/60 backdrop-blur-xl border border-border/30 shadow-sm relative noise-bg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
@@ -267,7 +267,7 @@ export default function SimulacaoPage() {
                         <Label className="text-[11px] text-muted-foreground font-medium flex items-center gap-1">
                           <Receipt size={10} /> Valor NF (R$)
                           <Tooltip><TooltipTrigger><Button variant="ghost" className="h-3 w-3 p-0"><Info size={10} className="text-muted-foreground" /></Button></TooltipTrigger>
-                          <TooltipContent side="top" className="glass-dark text-xs"><p>Opcional — para GRIS e Ad-Valorem</p></TooltipContent></Tooltip>
+                          <TooltipContent side="top" className="text-sm text-muted-foreground bg-background/80 backdrop-blur-xl border border-border/20"><p>Opcional — para GRIS e Ad-Valorem</p></TooltipContent></Tooltip>
                         </Label>
                         <Input type="number" value={parada.valorNF} onChange={e => atualizarParada(parada.id, 'valorNF', e.target.value)} className="text-sm h-9 rounded-xl bg-white/60 dark:bg-blue-950/30" step="0.01" min="0" />
                       </div>
@@ -278,7 +278,7 @@ export default function SimulacaoPage() {
             )}
 
             {/* Agendada */}
-            <div className="glass-card rounded-2xl p-6 noise-bg">
+            <div className="rounded-2xl p-6 bg-background/60 backdrop-blur-xl border border-border/30 shadow-sm relative noise-bg">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/20">
                   <Clock size={16} />
@@ -301,7 +301,7 @@ export default function SimulacaoPage() {
 
           {/* Sidebar - Margem */}
           <div className="space-y-6">
-            <div className="glass-dark rounded-2xl p-6 space-y-5 glow-sm sticky top-8">
+            <div className="rounded-2xl p-6 space-y-5 bg-background/30 backdrop-blur-2xl border border-border/20 shadow-lg shadow-primary/10 sticky top-8">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
                   <BrainCircuit size={16} />
@@ -317,7 +317,7 @@ export default function SimulacaoPage() {
                   <TrendingUp size={13} className="text-purple-500" />
                   Margem (%)
                   <Tooltip><TooltipTrigger><Button variant="ghost" className="h-4 w-4 p-0"><Info size={12} className="text-muted-foreground" /></Button></TooltipTrigger>
-                  <TooltipContent side="top" className="glass-dark text-xs"><p>Margem de lucro sobre o custo total</p></TooltipContent></Tooltip>
+                  <TooltipContent side="top" className="text-sm text-muted-foreground bg-background/80 backdrop-blur-xl border border-border/20"><p>Margem de lucro sobre o custo total</p></TooltipContent></Tooltip>
                 </Label>
                 <div className="relative">
                   <Input id="margem-side" type="number" value={margem} onChange={e => setMargem(e.target.value)} step="0.5" min="0" className="h-12 text-lg font-bold rounded-xl text-center pr-8 bg-background/40" />
@@ -356,7 +356,7 @@ export default function SimulacaoPage() {
         {resultadoVisible && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-500">
             {alertaBreakEven && (
-              <Alert variant="destructive" className="rounded-xl border-red-200/60 dark:border-red-900/60 bg-red-50/80 dark:bg-red-950/30 backdrop-blur-sm glow-sm">
+              <Alert variant="destructive" className="rounded-xl border-red-200/60 dark:border-red-900/60 bg-red-50/80 dark:bg-red-950/30 backdrop-blur-sm shadow-lg shadow-destructive/10">
                 <AlertTriangle size={18} className="text-red-600" />
                 <AlertTitle className="text-base font-bold text-red-800 dark:text-red-300">Preço abaixo do custo!</AlertTitle>
                 <AlertDescription className="text-red-700 dark:text-red-400">Você terá <strong>prejuízo de {formatarMoeda(valorPrejuizo)}</strong> nesta entrega. Ajuste a margem.</AlertDescription>
@@ -386,7 +386,7 @@ export default function SimulacaoPage() {
                   const isSelecionada = opcao.rotulo === opcaoVeiculo || (idx === 0 && opcaoVeiculo !== 'Freelancer')
                   return (
                     <div key={opcao.rotulo} className={`relative overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-                      isMaisBarata ? 'gradient-border bg-card/80 glow-md' : isSelecionada ? 'gradient-border-blue bg-card/80' : 'glass-card bg-card/40'
+                      isMaisBarata ? 'gradient-border bg-card/80 shadow-lg shadow-primary/15' : isSelecionada ? 'gradient-border-blue bg-card/80' : 'bg-card/60 backdrop-blur-xl border border-border/30 shadow-sm'
                     }`}>
                       {isMaisBarata && (
                         <div className="absolute top-0 right-0 w-28 h-28 overflow-hidden z-10">
@@ -477,7 +477,7 @@ export default function SimulacaoPage() {
                     <p className="text-xs text-blue-200/70 flex items-center gap-1.5 mb-1"><TrendingUp size={12} /> Margem aplicada</p>
                     <p className="text-2xl md:text-3xl font-bold text-white">{margem}%</p>
                   </div>
-                  <div className="backdrop-blur-md bg-white/15 dark:bg-white/10 rounded-2xl p-5 border border-white/20 shadow-lg hover:bg-white/20 transition-all duration-300 glow-sm">
+                  <div className="backdrop-blur-md bg-white/15 dark:bg-white/10 rounded-2xl p-5 border border-white/20 shadow-lg hover:bg-white/20 transition-all duration-300 shadow-primary/20">
                     <p className="text-xs text-blue-200/80 flex items-center gap-1.5 mb-1"><DollarSign size={12} /> Preço sugerido</p>
                     <p className="text-2xl md:text-3xl font-bold text-white">{formatarMoeda(precoSugerido)}</p>
                   </div>
