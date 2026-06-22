@@ -1,6 +1,7 @@
-import Sidebar from '@/components/Sidebar'
+import AppSidebar from '@/components/AppSidebar'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 
 export default function AuthenticatedLayout({
   children,
@@ -10,12 +11,14 @@ export default function AuthenticatedLayout({
   return (
     <ThemeProvider>
       <TooltipProvider>
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 overflow-y-auto p-8 bg-background text-foreground">
-            {children}
-          </main>
-        </div>
+        <SidebarProvider defaultOpen={true}>
+          <AppSidebar />
+          <SidebarInset>
+            <main className="flex-1 overflow-y-auto p-8 bg-background text-foreground">
+              {children}
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
       </TooltipProvider>
     </ThemeProvider>
   )
