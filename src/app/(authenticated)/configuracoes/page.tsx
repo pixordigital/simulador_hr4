@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Save, AlertTriangle, Check, Fuel, Settings2, Truck, DollarSign, Gauge, Link2, Unlink, ExternalLink, Loader, Database } from 'lucide-react'
+import { Save, AlertTriangle, Check, Fuel, Settings2, Truck, DollarSign, Gauge, Link2, Unlink, ExternalLink, Loader, Database, Plus } from 'lucide-react'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
 
 type FaixaInput = { min: number; max: number; precoPorKg: number }
@@ -492,7 +492,34 @@ export default function ConfiguracoesPage() {
         </button>
         {accordionAbertos.includes('taxas') && (
           <div className="px-3 pb-2 pt-1.5 border-t border-[#E0DFDD] dark:border-[#1F2937] space-y-2">
-            <p className="text-xs text-text-secondary">Edite taxas mínimas e R$/kg por faixa de peso para cada zona.</p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-text-secondary">Edite taxas mínimas e R$/kg por faixa de peso para cada zona.</p>
+              <button
+                onClick={() => {
+                  const nome = prompt('Nome da nova zona:')
+                  if (!nome || !nome.trim()) return
+                  setZonas([...zonas, {
+                    origem: 'JOAO PESSOA/PB',
+                    zona: nome.trim(),
+                    taxaMinima: 0,
+                    pesoBase: 10,
+                    faixas: [
+                      { min: 10, max: 20, precoPorKg: 0 },
+                      { min: 20, max: 35, precoPorKg: 0 },
+                      { min: 35, max: 50, precoPorKg: 0 },
+                      { min: 50, max: 70, precoPorKg: 0 },
+                      { min: 70, max: 100, precoPorKg: 0 },
+                      { min: 100, max: 300, precoPorKg: 0 },
+                      { min: 300, max: 500, precoPorKg: 0 },
+                      { min: 500, max: 99999.99, precoPorKg: 0 },
+                    ],
+                  }])
+                }}
+                className="h-[28px] px-3 rounded-[4px] bg-[#F97316] hover:bg-[#C2590A] text-white text-[11px] font-medium transition-colors flex items-center gap-1"
+              >
+                <Plus size={12} /> Adicionar Zona
+              </button>
+            </div>
             {zonas.map((zona, zIdx) => (
               <div key={zona.zona} className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[4px] p-3">
                 <div className="flex items-center gap-3 mb-2">
