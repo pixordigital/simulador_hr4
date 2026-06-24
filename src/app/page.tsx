@@ -1,30 +1,38 @@
-import { redirect } from 'next/navigation'
-import fs from 'fs'
-import path from 'path'
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  // Check if first access — all taxas are 0 and no freelancers
-  try {
-    const taxasPath = path.join(process.cwd(), 'data', 'rates', 'taxas-regioes.json')
-    const freelancersPath = path.join(process.cwd(), 'data', 'dynamic', 'motoristas-freelancer.json')
+  const router = useRouter()
 
-    const taxas = JSON.parse(fs.readFileSync(taxasPath, 'utf-8'))
-    const allZero = Array.isArray(taxas) && taxas.every(
-      (z: any) => z.faixas?.every((f: any) => f.precoPorKg === 0)
-    )
-
-    let hasFreelancers = false
-    if (fs.existsSync(freelancersPath)) {
-      const freelancers = JSON.parse(fs.readFileSync(freelancersPath, 'utf-8'))
-      hasFreelancers = Array.isArray(freelancers) && freelancers.length > 0
+  useEffect(() => {
+    async function checkFirstAccess() {
+      try {
+        const [taxasRes, motRes] = await Promise.all([
+          fetch('/api/configuracoes?tipo=taxas'),
+          fetch('/api/dinamico?tipo=motoristas'),
+        ])
+        const taxas = await taxasRes.json()
+        const allZero = Array.isArray(taxas) && taxas.every(
+          (z: any) => z.faixas?.every((f: any) => f.precoPorKg === 0)
+        )
+        let hasFreelancers = false
+        if (motRes.ok) {
+          const motData = await motRes.json()
+          hasFreelancers = Array.isArray(motData) && motData.length > 0
+        }
+        if (allZero && !hasFreelancers) {
+          router.replace('/boas-vindas')
+        } else {
+          router.replace('/simulacao')
+        }
+      } catch {
+        router.replace('/simulacao')
+      }
     }
+    checkFirstAccess()
+  }, [router])
 
-    if (allZero && !hasFreelancers) {
-      redirect('/boas-vindas')
-    }
-  } catch {
-    // If error reading files, just go to simulacao
-  }
-
-  redirect('/simulacao')
+  return null
 }
