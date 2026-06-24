@@ -125,7 +125,7 @@ export default function PagamentosPage() {
       </div>
 
       {/* Form */}
-      <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-5 space-y-4">
+      <div className="border border-[var(--border-subtle)] rounded-[6px] p-5 space-y-4">
         <h2 className="text-sm font-semibold text-text-primary">Registrar Pagamento</h2>
         <div className="grid grid-cols-4 gap-4">
           <div>
@@ -133,7 +133,7 @@ export default function PagamentosPage() {
             <select
               value={motoristaId}
               onChange={e => setMotoristaId(e.target.value)}
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+              className="w-full h-[38px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
             >
               <option value="">Selecionar</option>
               {motoristas.map(m => (
@@ -149,7 +149,7 @@ export default function PagamentosPage() {
               onChange={e => setValor(e.target.value)}
               step="0.01"
               min="0"
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+              className="w-full h-[38px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
             />
           </div>
           <div>
@@ -158,7 +158,7 @@ export default function PagamentosPage() {
               type="date"
               value={dataPagamento}
               onChange={e => setDataPagamento(e.target.value)}
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+              className="w-full h-[38px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
             />
           </div>
           <div>
@@ -168,7 +168,7 @@ export default function PagamentosPage() {
               value={descricao}
               onChange={e => setDescricao(e.target.value)}
               placeholder="Opcional"
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+              className="w-full h-[38px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[var(--text-disabled)] dark:placeholder:text-[#6B7280]"
             />
           </div>
         </div>
@@ -183,9 +183,9 @@ export default function PagamentosPage() {
 
       {/* Totais por mês */}
       {meses.length === 0 ? (
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-12 text-center">
+        <div className="border border-[var(--border-subtle)] rounded-[6px] p-12 text-center">
           <p className="text-text-secondary font-medium">Nenhum pagamento registrado</p>
-          <p className="text-sm text-[#A8A29E] mt-1">Cadastre motoristas freelancers e registre os pagamentos mensais.</p>
+          <p className="text-sm text-[var(--text-disabled)] mt-1">Cadastre motoristas freelancers e registre os pagamentos mensais.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -196,14 +196,14 @@ export default function PagamentosPage() {
             const nomeMes = new Date(parseInt(ano), parseInt(mesNum) - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
             return (
-              <div key={mes} className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px]">
-                <div className="flex items-center justify-between px-5 py-3 border-b border-[#E0DFDD] dark:border-[#1F2937] bg-[#EBEBEA] dark:bg-[#1F2937]">
+              <div key={mes} className="border border-[var(--border-subtle)] rounded-[6px]">
+                <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border-subtle)] bg-[var(--surface-sunken)]">
                   <span className="text-sm font-semibold text-text-primary capitalize">{nomeMes}</span>
                   <span className="text-sm font-num font-medium text-text-primary">
                     Total: {total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                   </span>
                 </div>
-                <div className="divide-y divide-[#E0DFDD] dark:divide-[#1F2937]">
+                <div className="divide-y divide-[var(--border-subtle)]">
                   {pagamentosMes.map(p => (
                     <div key={p.id} className="flex items-center justify-between px-5 py-3">
                       <div>

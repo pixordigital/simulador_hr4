@@ -36,7 +36,7 @@ export default function NovoMotoristaPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/motoristas" className="p-2 hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937] rounded-[4px] transition-colors">
+        <Link href="/motoristas" className="p-2 hover:bg-[var(--surface-sunken)] dark:hover:bg-[#1F2937] rounded-[4px] transition-colors">
           <ArrowLeft size={20} className="text-text-primary" />
         </Link>
         <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -44,7 +44,7 @@ export default function NovoMotoristaPage() {
         </h1>
       </div>
 
-      <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-6">
+      <div className="border border-[var(--border-subtle)] rounded-[6px] p-6">
         <h2 className="text-sm font-semibold text-text-primary mb-4">Dados do Motorista</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -54,7 +54,7 @@ export default function NovoMotoristaPage() {
               value={nome}
               onChange={e => setNome(e.target.value)}
               required
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+              className="w-full h-[38px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
             />
           </div>
           <div>
@@ -65,7 +65,7 @@ export default function NovoMotoristaPage() {
               onChange={e => setTaxaPadrao(e.target.value)}
               step="0.01"
               min="0"
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+              className="w-full h-[38px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
             />
           </div>
           <div>
@@ -74,7 +74,7 @@ export default function NovoMotoristaPage() {
               value={observacoes}
               onChange={e => setObservacoes(e.target.value)}
               rows={3}
-              className="w-full px-3 py-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 resize-none"
+              className="w-full px-3 py-2 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 resize-none"
             />
           </div>
 

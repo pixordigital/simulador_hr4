@@ -5,6 +5,24 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ===== HR Cargo Design Tokens ===== */
+@theme inline {
+  --color-surface-base: var(--surface-base);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-disabled: var(--text-disabled);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-orange-dim: var(--brand-orange-dim);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-mid: var(--brand-navy-mid);
+  --color-semantic-gain: var(--semantic-gain);
+  --color-semantic-loss: var(--semantic-loss);
+  --color-semantic-warn: var(--semantic-warn);
+  --color-semantic-info: var(--semantic-info);
+}
 
 :root {
   /* Brand */

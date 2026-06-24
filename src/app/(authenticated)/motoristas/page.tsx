@@ -116,37 +116,37 @@ export default function MotoristasPage() {
           value={busca}
           onChange={e => setBusca(e.target.value)}
           placeholder="Buscar motorista..."
-          className="w-full h-[34px] pl-9 pr-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+          className="w-full h-[34px] pl-9 pr-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[var(--text-disabled)] dark:placeholder:text-[#6B7280]"
         />
       </div>
 
       {filtrados.length === 0 ? (
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-12 text-center">
+        <div className="border border-[var(--border-subtle)] rounded-[6px] p-12 text-center">
           <p className="text-text-secondary font-medium">Nenhum motorista encontrado</p>
-          <p className="text-sm text-[#A8A29E] mt-1">Cadastre motoristas freelancers para usar nas simulações.</p>
+          <p className="text-sm text-[var(--text-disabled)] mt-1">Cadastre motoristas freelancers para usar nas simulações.</p>
         </div>
       ) : (
-        <div className="divide-y divide-[#E0DFDD] dark:divide-[#1F2937] border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px]">
+        <div className="divide-y divide-[var(--border-subtle)] border border-[var(--border-subtle)] rounded-[6px]">
           {filtrados.map(motorista => (
-            <div key={motorista.id} className="p-4 hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937]/50 transition-colors">
+            <div key={motorista.id} className="p-4 hover:bg-[var(--surface-sunken)] transition-colors">
               {editando === motorista.id ? (
                 <div className="space-y-3">
                   <input
                     type="text"
                     value={formNome}
                     onChange={e => setFormNome(e.target.value)}
-                    className="w-full h-[34px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2"
+                    className="w-full h-[34px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2"
                   />
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary mb-1">Taxa padrão (R$)</label>
                       <input type="number" value={formTaxa} onChange={e => setFormTaxa(e.target.value)} step="0.01" min="0"
-                        className="w-full h-[34px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                        className="w-full h-[34px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
                     </div>
                     <div>
                       <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary mb-1">Observações</label>
                       <input type="text" value={formObs} onChange={e => setFormObs(e.target.value)}
-                        className="w-full h-[34px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                        className="w-full h-[34px] px-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -155,7 +155,7 @@ export default function MotoristasPage() {
                       Salvar
                     </button>
                     <button onClick={() => setEditando(null)}
-                      className="h-[34px] px-4 border border-[#A8A29E] dark:border-[#374151] text-text-primary text-sm font-medium rounded-[4px] hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937] transition-colors">
+                      className="h-[34px] px-4 border border-[var(--border-strong)] text-text-primary text-sm font-medium rounded-[4px] hover:bg-[var(--surface-sunken)] dark:hover:bg-[#1F2937] transition-colors">
                       Cancelar
                     </button>
                   </div>
@@ -168,7 +168,7 @@ export default function MotoristasPage() {
                       <span>
                         {motorista.taxaPadrao > 0
                           ? `Taxa padrão: ${motorista.taxaPadrao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
-                          : <span className="text-[11px] px-2 py-0.5 rounded-[3px] bg-[#EBEBEA] dark:bg-[#1F2937]">A definir</span>}
+                          : <span className="text-[11px] px-2 py-0.5 rounded-[3px] bg-[var(--surface-sunken)]">A definir</span>}
                       </span>
                       {motorista.observacoes && <span>{motorista.observacoes}</span>}
                     </div>

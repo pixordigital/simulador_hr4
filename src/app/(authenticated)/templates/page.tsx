@@ -47,19 +47,19 @@ export default function TemplatesPage() {
           value={busca}
           onChange={e => setBusca(e.target.value)}
           placeholder="Buscar por nome ou cliente..."
-          className="w-full h-[34px] pl-9 pr-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+          className="w-full h-[34px] pl-9 pr-3 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[var(--text-disabled)] dark:placeholder:text-[#6B7280]"
         />
       </div>
 
       {filtrados.length === 0 ? (
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-12 text-center">
+        <div className="border border-[var(--border-subtle)] rounded-[6px] p-12 text-center">
           <p className="text-text-secondary font-medium">Nenhum template salvo</p>
-          <p className="text-sm text-[#A8A29E] mt-1">Após realizar uma simulação, você pode salvá-la como template para reutilizar depois.</p>
+          <p className="text-sm text-[var(--text-disabled)] mt-1">Após realizar uma simulação, você pode salvá-la como template para reutilizar depois.</p>
         </div>
       ) : (
         <div className="space-y-2">
           {filtrados.map(t => (
-            <div key={t.id} className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4 flex items-center justify-between hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937]/50 transition-colors">
+            <div key={t.id} className="border border-[var(--border-subtle)] rounded-[6px] p-4 flex items-center justify-between hover:bg-[var(--surface-sunken)] transition-colors">
               <div>
                 <p className="text-sm font-medium text-text-primary">{t.nome}</p>
                 <p className="text-[13px] text-text-secondary">
