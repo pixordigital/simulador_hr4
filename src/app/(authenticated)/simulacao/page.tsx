@@ -887,7 +887,7 @@ export default function SimulacaoPage() {
                   Preço Sugerido
                 </p>
                 <p className="text-3xl font-bold text-[var(--brand-orange)] font-num">
-                  {formatarMoeda(precoSugerido)}
+                  {formatarMoeda(precoReal)}
                 </p>
                 <p className="text-[11px] text-[var(--text-disabled)]">
                   Custo: {formatarMoeda(totalGeral)} · Margem: {margem}%
