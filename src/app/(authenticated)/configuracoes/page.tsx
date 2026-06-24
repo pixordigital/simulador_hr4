@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Save, AlertTriangle, Check, Fuel, Settings2, Truck, DollarSign, Gauge, Link2, Unlink, ExternalLink, Loader } from 'lucide-react'
+import { Save, AlertTriangle, Check, Fuel, Settings2, Truck, DollarSign, Gauge, Link2, Unlink, ExternalLink, Loader, Database } from 'lucide-react'
+import BrudamImportPanel from '@/components/BrudamImportPanel'
 
 type FaixaInput = { min: number; max: number; precoPorKg: number }
 type ZonaInput = { origem: string; zona: string; taxaMinima: number; pesoBase: number; faixas: FaixaInput[] }
@@ -465,7 +466,29 @@ export default function ConfiguracoesPage() {
           className="w-full flex items-center justify-between px-3 py-1.5 text-xs font-semibold text-text-primary hover:text-[#F97316] transition-colors"
         >
           <span className="flex items-center gap-1.5"><DollarSign size={14} />Tabela de Preços por Zona</span>
-          <span className={`transition-transform ${accordionAbertos.includes('taxas') ? 'rotate-180' : ''}`}>▼</span>
+          <span className="flex items-center gap-2">
+            <BrudamImportPanel
+              titulo="Zonas"
+              descricao="Importar Tabela de Preços do Brudam"
+              endpoint="tabelas/precos"
+              modoSelecao="click"
+              icone={<Database size={10} />}
+              colunas={[
+                { chave: 'zona', rotulo: 'Zona' },
+                { chave: 'taxaMinima', rotulo: 'Taxa Min', formatar: (v) => `R$ ${parseFloat(v||0).toFixed(2)}` },
+              ]}
+              aoSelecionar={async (item) => {
+                // Auto-fill the first matching zone
+                setZonas(prev => prev.map(z =>
+                  z.zona.toLowerCase() === (item.zona || '').toLowerCase()
+                    ? { ...z, taxaMinima: parseFloat(item.taxaMinima) || z.taxaMinima }
+                    : z
+                ))
+              }}
+              aoImportar={async () => { carregarConfigs() }}
+            />
+            <span className={`transition-transform ${accordionAbertos.includes('taxas') ? 'rotate-180' : ''}`}>▼</span>
+          </span>
         </button>
         {accordionAbertos.includes('taxas') && (
           <div className="px-3 pb-2 pt-1.5 border-t border-[#E0DFDD] dark:border-[#1F2937] space-y-2">

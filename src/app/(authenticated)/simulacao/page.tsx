@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Calculator, Info, AlertTriangle, Plus, Trash2, Truck,
   CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight,
-  Gauge, TrendingUp, DollarSign, Zap, Sun, Moon,
+  Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database,
 } from 'lucide-react'
+import BrudamImportPanel from '@/components/BrudamImportPanel'
 
 type Parada = {
   id: string
@@ -293,9 +294,28 @@ export default function SimulacaoPage() {
                 Nova Simulação
               </h1>
             </div>
-            <button onClick={limpar} className="btn-secondary">
-              Limpar
-            </button>
+            <div className="flex items-center gap-2">
+              <BrudamImportPanel
+                titulo="Pedido"
+                descricao="Importar Pedido do Brudam"
+                endpoint="pedidos"
+                modoSelecao="click"
+                icone={<Database size={12} />}
+                colunas={[
+                  { chave: 'numero', rotulo: 'Nº' },
+                  { chave: 'cliente', rotulo: 'Cliente' },
+                  { chave: 'destino', rotulo: 'Destino' },
+                  { chave: 'peso', rotulo: 'Peso', formatar: (v) => v ? `${v}kg` : '—' },
+                ]}
+                aoSelecionar={(item) => {
+                  if (item.cliente) setNomeCliente(item.cliente)
+                }}
+                aoImportar={async () => {}}
+              />
+              <button onClick={limpar} className="btn-secondary">
+                Limpar
+              </button>
+            </div>
           </div>
 
           {/* Tipo selector */}

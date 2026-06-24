@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Trash2, Search } from 'lucide-react'
+import { Plus, Trash2, Search, Database } from 'lucide-react'
+import BrudamImportPanel from '@/components/BrudamImportPanel'
 
 type Pagamento = {
   id: string
@@ -87,11 +88,40 @@ export default function PagamentosPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-          Pagamentos
-        </h1>
-        <p className="text-sm text-text-secondary mt-1">Registre pagamentos a motoristas freelancers</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            Pagamentos
+          </h1>
+          <p className="text-sm text-text-secondary mt-1">Registre pagamentos a motoristas freelancers</p>
+        </div>
+        <BrudamImportPanel
+          titulo="Importar"
+          descricao="Importar Pagamentos do Brudam"
+          endpoint="financeiro/pagamentos"
+          icone={<Database size={12} />}
+          colunas={[
+            { chave: 'motorista', rotulo: 'Motorista' },
+            { chave: 'valor', rotulo: 'Valor', formatar: (v) => `R$ ${parseFloat(v||0).toFixed(2)}` },
+            { chave: 'data', rotulo: 'Data' },
+          ]}
+          aoImportar={async (selecionados) => {
+            for (const item of selecionados) {
+              await fetch('/api/dinamico?tipo=pagamentos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  motoristaId: 'importado',
+                  motoristaNome: item.motorista || 'Importado Brudam',
+                  valor: parseFloat(item.valor) || 0,
+                  dataPagamento: item.data || new Date().toISOString().split('T')[0],
+                  descricao: item.descricao || 'Importado Brudam',
+                }),
+              })
+            }
+            carregarDados()
+          }}
+        />
       </div>
 
       {/* Form */}

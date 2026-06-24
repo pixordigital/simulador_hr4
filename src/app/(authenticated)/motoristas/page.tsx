@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Plus, Search, Edit3, Trash2, DollarSign, ArrowLeft } from 'lucide-react'
+import { Plus, Search, Edit3, Trash2, DollarSign, ArrowLeft, Database } from 'lucide-react'
+import BrudamImportPanel from '@/components/BrudamImportPanel'
 
 type Motorista = {
   id: string
@@ -74,12 +75,38 @@ export default function MotoristasPage() {
           </h1>
           <p className="text-sm text-text-secondary mt-1">Cadastro de motoristas freelancers</p>
         </div>
-        <Link href="/motoristas/novo">
-          <button className="h-[38px] px-4 bg-[#F97316] hover:bg-[#C2590A] text-white text-sm font-semibold rounded-[6px] transition-colors flex items-center gap-2">
-            <Plus size={16} />
-            Novo Motorista
-          </button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <BrudamImportPanel
+            titulo="Importar"
+            descricao="Importar Motoristas do Brudam"
+            endpoint="motoristas"
+            icone={<Database size={12} />}
+            colunas={[
+              { chave: 'nome', rotulo: 'Nome' },
+              { chave: 'cpf', rotulo: 'CPF' },
+            ]}
+            aoImportar={async (selecionados) => {
+              for (const item of selecionados) {
+                await fetch('/api/dinamico?tipo=motoristas', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    nome: item.nome || item.nomeMotorista || 'Importado Brudam',
+                    taxaPadrao: 0,
+                    observacoes: `Importado do Brudam${item.observacao ? ': ' + item.observacao : ''}`,
+                  }),
+                })
+              }
+              carregarMotoristas()
+            }}
+          />
+          <Link href="/motoristas/novo">
+            <button className="h-[38px] px-4 bg-[#F97316] hover:bg-[#C2590A] text-white text-sm font-semibold rounded-[6px] transition-colors flex items-center gap-2">
+              <Plus size={16} />
+              Novo Motorista
+            </button>
+          </Link>
+        </div>
       </div>
 
       <div className="relative max-w-xs">
