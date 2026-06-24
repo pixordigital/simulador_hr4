@@ -4,12 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 
 export default function NovoMotoristaPage() {
   const router = useRouter()
@@ -17,52 +11,92 @@ export default function NovoMotoristaPage() {
   const [taxaPadrao, setTaxaPadrao] = useState('')
   const [observacoes, setObservacoes] = useState('')
   const [salvo, setSalvo] = useState(false)
+  const [erro, setErro] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSalvo(true)
-    setTimeout(() => router.push('/motoristas'), 1000)
+    if (!nome) { setErro('Nome é obrigatório'); return }
+
+    try {
+      const res = await fetch('/api/dinamico?tipo=motoristas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, taxaPadrao: parseFloat(taxaPadrao) || 0, observacoes }),
+      })
+      if (res.ok) {
+        setSalvo(true)
+        setTimeout(() => router.push('/motoristas'), 1000)
+      } else {
+        const d = await res.json()
+        setErro(d.erro || 'Erro ao salvar')
+      }
+    } catch { setErro('Erro ao salvar motorista') }
   }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/motoristas" className="p-2 hover:bg-muted rounded-lg transition-colors">
-          <ArrowLeft size={20} />
+        <Link href="/motoristas" className="p-2 hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937] rounded-[4px] transition-colors">
+          <ArrowLeft size={20} className="text-text-primary" />
         </Link>
-        <h1 className="text-2xl font-bold">Novo Motorista</h1>
+        <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          Novo Motorista
+        </h1>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Dados do Motorista</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="nome">Nome completo</Label>
-              <Input id="nome" value={nome} onChange={e => setNome(e.target.value)} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="taxa">Taxa padrão (R$)</Label>
-              <Input id="taxa" type="number" value={taxaPadrao} onChange={e => setTaxaPadrao(e.target.value)} step="0.01" min="0" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="obs">Observações</Label>
-              <Textarea id="obs" value={observacoes} onChange={e => setObservacoes(e.target.value)} rows={3} />
-            </div>
+      <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-6">
+        <h2 className="text-sm font-semibold text-text-primary mb-4">Dados do Motorista</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Nome completo</label>
+            <input
+              type="text"
+              value={nome}
+              onChange={e => setNome(e.target.value)}
+              required
+              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+            />
+          </div>
+          <div>
+            <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Taxa padrão (R$)</label>
+            <input
+              type="number"
+              value={taxaPadrao}
+              onChange={e => setTaxaPadrao(e.target.value)}
+              step="0.01"
+              min="0"
+              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+            />
+          </div>
+          <div>
+            <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Observações</label>
+            <textarea
+              value={observacoes}
+              onChange={e => setObservacoes(e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 resize-none"
+            />
+          </div>
 
-            {salvo && (
-              <Alert variant="default" className="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400">
-                <Check size={16} />
-                <AlertDescription>Motorista salvo com sucesso!</AlertDescription>
-              </Alert>
-            )}
+          {salvo && (
+            <div className="border-l-[3px] border-l-[#15803D] bg-[#15803D]/5 p-3 rounded-[4px] flex items-center gap-2">
+              <Check size={16} className="text-[#15803D]" />
+              <p className="text-sm font-medium text-[#15803D]">Motorista salvo com sucesso!</p>
+            </div>
+          )}
 
-            <Button type="submit" className="w-full">Salvar Motorista</Button>
-          </form>
-        </CardContent>
-      </Card>
+          {erro && !salvo && (
+            <div className="border-l-[3px] border-l-[#B91C1C] bg-[#B91C1C]/5 p-3 rounded-[4px]">
+              <p className="text-sm font-medium text-[#B91C1C]">{erro}</p>
+            </div>
+          )}
+
+          <button type="submit"
+            className="w-full h-[42px] bg-[#F97316] hover:bg-[#C2590A] text-white font-semibold text-sm rounded-[6px] transition-colors">
+            Salvar Motorista
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
