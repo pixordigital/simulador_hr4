@@ -2,97 +2,97 @@
   {
     "origem": "JOAO PESSOA/PB",
     "zona": "João Pessoa",
-    "taxaMinima": 0,
+    "taxaMinima": 25.00,
     "pesoBase": 10,
     "faixas": [
-      { "min": 10, "max": 20, "precoPorKg": 0 },
-      { "min": 20, "max": 35, "precoPorKg": 0 },
-      { "min": 35, "max": 50, "precoPorKg": 0 },
-      { "min": 50, "max": 70, "precoPorKg": 0 },
-      { "min": 70, "max": 100, "precoPorKg": 0 },
-      { "min": 100, "max": 300, "precoPorKg": 0 },
-      { "min": 300, "max": 500, "precoPorKg": 0 },
-      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+      { "min": 10, "max": 20, "precoPorKg": 1.20 },
+      { "min": 20, "max": 35, "precoPorKg": 1.00 },
+      { "min": 35, "max": 50, "precoPorKg": 0.85 },
+      { "min": 50, "max": 70, "precoPorKg": 0.70 },
+      { "min": 70, "max": 100, "precoPorKg": 0.55 },
+      { "min": 100, "max": 300, "precoPorKg": 0.42 },
+      { "min": 300, "max": 500, "precoPorKg": 0.32 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0.25 }
     ]
   },
   {
     "origem": "JOAO PESSOA/PB",
     "zona": "Cabedelo",
-    "taxaMinima": 0,
+    "taxaMinima": 28.00,
     "pesoBase": 10,
     "faixas": [
-      { "min": 10, "max": 20, "precoPorKg": 0 },
-      { "min": 20, "max": 35, "precoPorKg": 0 },
-      { "min": 35, "max": 50, "precoPorKg": 0 },
-      { "min": 50, "max": 70, "precoPorKg": 0 },
-      { "min": 70, "max": 100, "precoPorKg": 0 },
-      { "min": 100, "max": 300, "precoPorKg": 0 },
-      { "min": 300, "max": 500, "precoPorKg": 0 },
-      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
-    ]
-  },
-  {
-    "origem": "JOAO PESSOA/PB",
-    "zona": "Conde",
-    "taxaMinima": 0,
-    "pesoBase": 10,
-    "faixas": [
-      { "min": 10, "max": 20, "precoPorKg": 0 },
-      { "min": 20, "max": 35, "precoPorKg": 0 },
-      { "min": 35, "max": 50, "precoPorKg": 0 },
-      { "min": 50, "max": 70, "precoPorKg": 0 },
-      { "min": 70, "max": 100, "precoPorKg": 0 },
-      { "min": 100, "max": 300, "precoPorKg": 0 },
-      { "min": 300, "max": 500, "precoPorKg": 0 },
-      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
-    ]
-  },
-  {
-    "origem": "JOAO PESSOA/PB",
-    "zona": "Santa Rita",
-    "taxaMinima": 0,
-    "pesoBase": 10,
-    "faixas": [
-      { "min": 10, "max": 20, "precoPorKg": 0 },
-      { "min": 20, "max": 35, "precoPorKg": 0 },
-      { "min": 35, "max": 50, "precoPorKg": 0 },
-      { "min": 50, "max": 70, "precoPorKg": 0 },
-      { "min": 70, "max": 100, "precoPorKg": 0 },
-      { "min": 100, "max": 300, "precoPorKg": 0 },
-      { "min": 300, "max": 500, "precoPorKg": 0 },
-      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+      { "min": 10, "max": 20, "precoPorKg": 1.35 },
+      { "min": 20, "max": 35, "precoPorKg": 1.15 },
+      { "min": 35, "max": 50, "precoPorKg": 0.95 },
+      { "min": 50, "max": 70, "precoPorKg": 0.80 },
+      { "min": 70, "max": 100, "precoPorKg": 0.65 },
+      { "min": 100, "max": 300, "precoPorKg": 0.50 },
+      { "min": 300, "max": 500, "precoPorKg": 0.38 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0.30 }
     ]
   },
   {
     "origem": "JOAO PESSOA/PB",
     "zona": "Bayeux",
-    "taxaMinima": 0,
+    "taxaMinima": 28.00,
     "pesoBase": 10,
     "faixas": [
-      { "min": 10, "max": 20, "precoPorKg": 0 },
-      { "min": 20, "max": 35, "precoPorKg": 0 },
-      { "min": 35, "max": 50, "precoPorKg": 0 },
-      { "min": 50, "max": 70, "precoPorKg": 0 },
-      { "min": 70, "max": 100, "precoPorKg": 0 },
-      { "min": 100, "max": 300, "precoPorKg": 0 },
-      { "min": 300, "max": 500, "precoPorKg": 0 },
-      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+      { "min": 10, "max": 20, "precoPorKg": 1.35 },
+      { "min": 20, "max": 35, "precoPorKg": 1.15 },
+      { "min": 35, "max": 50, "precoPorKg": 0.95 },
+      { "min": 50, "max": 70, "precoPorKg": 0.80 },
+      { "min": 70, "max": 100, "precoPorKg": 0.65 },
+      { "min": 100, "max": 300, "precoPorKg": 0.50 },
+      { "min": 300, "max": 500, "precoPorKg": 0.38 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0.30 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Santa Rita",
+    "taxaMinima": 32.00,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 1.55 },
+      { "min": 20, "max": 35, "precoPorKg": 1.30 },
+      { "min": 35, "max": 50, "precoPorKg": 1.10 },
+      { "min": 50, "max": 70, "precoPorKg": 0.90 },
+      { "min": 70, "max": 100, "precoPorKg": 0.72 },
+      { "min": 100, "max": 300, "precoPorKg": 0.58 },
+      { "min": 300, "max": 500, "precoPorKg": 0.45 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0.35 }
+    ]
+  },
+  {
+    "origem": "JOAO PESSOA/PB",
+    "zona": "Conde",
+    "taxaMinima": 35.00,
+    "pesoBase": 10,
+    "faixas": [
+      { "min": 10, "max": 20, "precoPorKg": 1.70 },
+      { "min": 20, "max": 35, "precoPorKg": 1.45 },
+      { "min": 35, "max": 50, "precoPorKg": 1.20 },
+      { "min": 50, "max": 70, "precoPorKg": 1.00 },
+      { "min": 70, "max": 100, "precoPorKg": 0.80 },
+      { "min": 100, "max": 300, "precoPorKg": 0.62 },
+      { "min": 300, "max": 500, "precoPorKg": 0.48 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0.38 }
     ]
   },
   {
     "origem": "JOAO PESSOA/PB",
     "zona": "Alhandra",
-    "taxaMinima": 0,
+    "taxaMinima": 38.00,
     "pesoBase": 10,
     "faixas": [
-      { "min": 10, "max": 20, "precoPorKg": 0 },
-      { "min": 20, "max": 35, "precoPorKg": 0 },
-      { "min": 35, "max": 50, "precoPorKg": 0 },
-      { "min": 50, "max": 70, "precoPorKg": 0 },
-      { "min": 70, "max": 100, "precoPorKg": 0 },
-      { "min": 100, "max": 300, "precoPorKg": 0 },
-      { "min": 300, "max": 500, "precoPorKg": 0 },
-      { "min": 500, "max": 99999.99, "precoPorKg": 0 }
+      { "min": 10, "max": 20, "precoPorKg": 1.90 },
+      { "min": 20, "max": 35, "precoPorKg": 1.60 },
+      { "min": 35, "max": 50, "precoPorKg": 1.35 },
+      { "min": 50, "max": 70, "precoPorKg": 1.15 },
+      { "min": 70, "max": 100, "precoPorKg": 0.92 },
+      { "min": 100, "max": 300, "precoPorKg": 0.72 },
+      { "min": 300, "max": 500, "precoPorKg": 0.55 },
+      { "min": 500, "max": 99999.99, "precoPorKg": 0.42 }
     ]
   }
 ]
