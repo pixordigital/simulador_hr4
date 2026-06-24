@@ -25,16 +25,25 @@ export default function AppSidebar() {
 
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col h-full bg-[#0F1C2E] select-none">
-      {/* Logo */}
+      {/* Logo + Toggle */}
       <div className="px-6 py-5 border-b border-[#1A2E45]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-[5px] bg-gradient-to-br from-[#F97316] to-[#C2590A] flex items-center justify-center shadow-sm shadow-[#F97316]/20">
-            <span className="text-white font-bold text-xs">HR</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-[5px] bg-gradient-to-br from-[#F97316] to-[#C2590A] flex items-center justify-center shadow-sm shadow-[#F97316]/20">
+              <span className="text-white font-bold text-xs">HR</span>
+            </div>
+            <div>
+              <span className="text-white font-bold text-sm tracking-tight block leading-tight">HR CARGO</span>
+              <p className="text-[10px] text-slate-500 tracking-wide">João Pessoa / PB</p>
+            </div>
           </div>
-          <div>
-            <span className="text-white font-bold text-sm tracking-tight block leading-tight">HR CARGO</span>
-            <p className="text-[10px] text-slate-500 tracking-wide">João Pessoa / PB</p>
-          </div>
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 flex items-center justify-center rounded-[4px] text-slate-500 hover:text-white hover:bg-[#1A2E45] transition-all duration-100"
+            title={theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
+          >
+            {theme === 'dark' ? <Sun size={16} strokeWidth={1.5} /> : <Moon size={16} strokeWidth={1.5} />}
+          </button>
         </div>
       </div>
 
@@ -69,13 +78,6 @@ export default function AppSidebar() {
 
         <div className="px-3">
           <div className="h-px bg-[#1A2E45] mx-4 my-2" />
-          <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-full py-2 text-slate-400 hover:text-white hover:bg-[#1A2E45] rounded-[4px] transition-all duration-100"
-            title={theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
-          >
-            {theme === 'dark' ? <Sun size={17} strokeWidth={1.5} /> : <Moon size={17} strokeWidth={1.5} />}
-          </button>
         </div>
       </nav>
     </aside>
