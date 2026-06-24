@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Calculator, Info, AlertTriangle, Plus, Trash2, Truck,
   CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight,
-  Gauge, TrendingUp, DollarSign, Zap,
+  Gauge, TrendingUp, DollarSign, Zap, Sun, Moon,
 } from 'lucide-react'
 
 type Parada = {
@@ -242,19 +242,13 @@ export default function SimulacaoPage() {
   }, [tipo, paradas, opcaoVeiculo, numeroEntregas, margem, taxaFreelancer, agendada, acrescimoAgendamento, kmEstimado, diasDedicada, ajudante])
 
   const opcaoMaisBarata = opcoes.length > 0 ? Math.min(...opcoes.map(o => o.custoTotal)) : 0
-
-  // Margem slider sync
   const margemNum = parseFloat(margem) || 0
-  const handleMargemSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMargem(e.target.value)
-  }
 
   return (
     <div className="space-y-0">
-      {/* Visível? O layout tem sidebar + main agora */}
       {erro && (
-        <div className="mb-6 border-l-[3px] border-l-[#B91C1C] bg-[#B91C1C]/5 p-3 rounded-[4px]">
-          <p className="text-[#B91C1C] text-sm font-medium flex items-center gap-2">
+        <div className="mb-6 border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-3 rounded-[4px]">
+          <p className="text-[color:var(--semantic-loss)] text-sm font-medium flex items-center gap-2">
             <AlertTriangle size={14} />
             {erro}
           </p>
@@ -262,43 +256,61 @@ export default function SimulacaoPage() {
       )}
 
       <div className="flex gap-0">
-        {/* ===== COLUNA ESQUERDA (58%) ===== */}
-        <div className="w-[58%] pr-8 border-r border-[#E0DFDD] dark:border-[#1F2937]">
+        {/* ===== LEFT (58%) ===== */}
+        <div className="w-[58%] pr-10 border-r border-[var(--border)]">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1
-                className="text-[28px] font-bold tracking-tight text-text-primary"
-                style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700 }}
-              >
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--text-secondary)] mb-1 font-display">
+                Simulação de Frete
+              </p>
+              <h1 className="text-[28px] font-bold tracking-tight text-[var(--text-primary)] font-display">
                 Nova Simulação
               </h1>
             </div>
-            <button
-              onClick={limpar}
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors px-3 py-1.5 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-transparent"
-            >
+            <button onClick={limpar} className="btn-secondary">
               Limpar
             </button>
           </div>
 
+          {/* Tipo selector */}
+          <div className="mb-7">
+            <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-2">
+              Tipo de entrega
+            </label>
+            <div className="tab-group">
+              <button
+                onClick={() => setTipo('regular')}
+                className={`tab-item ${tipo === 'regular' ? 'tab-item--active' : ''}`}
+              >
+                Regular
+              </button>
+              <button
+                onClick={() => setTipo('dedicada')}
+                className={`tab-item ${tipo === 'dedicada' ? 'tab-item--active' : ''}`}
+              >
+                Dedicada
+              </button>
+            </div>
+          </div>
+
           {/* Cliente */}
           <div className="mb-6">
-            <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+            <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
               Cliente
             </label>
             <input
               type="text"
               value={nomeCliente}
               onChange={e => setNomeCliente(e.target.value)}
-              placeholder="Nome do cliente"
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-text-primary text-sm outline-none focus:border-[#F97316] focus:border-2 transition-colors placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+              placeholder="Nome do cliente ou empresa"
+              className="input-premium"
             />
           </div>
 
           {/* Motorista / Veículo */}
           <div className="mb-6">
-            <label className="block text-[13px] font-medium text-text-secondary mb-2">
+            <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-2">
               Motorista / Veículo
             </label>
             <div className="flex gap-2 flex-wrap">
@@ -308,13 +320,7 @@ export default function SimulacaoPage() {
                   <button
                     key={op}
                     onClick={() => setOpcaoVeiculo(op)}
-                    className={`
-                      text-[13px] font-medium px-3.5 py-1.5 rounded-[4px] border transition-colors duration-100
-                      ${ativo
-                        ? 'border-[#F97316] border-2 text-[#F97316] bg-[#F97316]/5'
-                        : 'border-[#A8A29E] dark:border-[#374151] text-text-secondary hover:border-text-secondary dark:hover:border-text-secondary'
-                      }
-                    `}
+                    className={`chip ${ativo ? 'chip--active' : ''}`}
                   >
                     {op}
                   </button>
@@ -323,116 +329,118 @@ export default function SimulacaoPage() {
             </div>
           </div>
 
-          {/* Entregas no dia */}
-          <div className="mb-6">
-            <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
-              Entregas do dia
-            </label>
-            <input
-              type="number"
-              value={numeroEntregas}
-              onChange={e => setNumeroEntregas(e.target.value)}
-              min="1"
-              className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-text-primary text-sm outline-none focus:border-[#F97316] focus:border-2 transition-colors"
-            />
-          </div>
-
-          {/* Freelancer taxa */}
-          {opcaoVeiculo === 'Freelancer' && tipo === 'regular' && (
-            <div className="mb-6">
-              <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
-                Taxa negociada (R$)
+          {/* Entregas no dia + freelancer taxa */}
+          <div className="grid grid-cols-2 gap-5 mb-6">
+            <div>
+              <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
+                Entregas do dia
               </label>
               <input
                 type="number"
-                value={taxaFreelancer}
-                onChange={e => setTaxaFreelancer(e.target.value)}
-                step="0.01"
-                min="0"
-                placeholder="Valor único para o trabalho"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-text-primary text-sm outline-none focus:border-[#F97316] focus:border-2 transition-colors placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+                value={numeroEntregas}
+                onChange={e => setNumeroEntregas(e.target.value)}
+                min="1"
+                className="input-premium"
               />
             </div>
-          )}
-
-          {/* Dedicada fields */}
-          {tipo === 'dedicada' && (
-            <div className="mb-6 grid grid-cols-2 gap-4">
+            {opcaoVeiculo === 'Freelancer' && tipo === 'regular' && (
               <div>
-                <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Dias</label>
-                <input
-                  type="number"
-                  value={diasDedicada}
-                  onChange={e => setDiasDedicada(e.target.value)}
-                  min="1"
-                  className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-text-primary text-sm outline-none focus:border-[#F97316] focus:border-2 transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Km estimado</label>
-                <input
-                  type="number"
-                  value={kmEstimado}
-                  onChange={e => setKmEstimado(e.target.value)}
-                  step="0.1"
-                  min="0"
-                  className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-text-primary text-sm outline-none focus:border-[#F97316] focus:border-2 transition-colors"
-                />
-              </div>
-              <div className="col-span-2 flex items-center gap-3 pt-1">
-                <input
-                  type="checkbox"
-                  id="ajudante"
-                  checked={ajudante}
-                  onChange={e => setAjudante(e.target.checked)}
-                  className="rounded-[3px] border-[#A8A29E] text-[#F97316] focus:ring-[#F97316]"
-                />
-                <label htmlFor="ajudante" className="text-sm text-text-primary cursor-pointer">
-                  Adicionar ajudante / auxiliar
+                <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
+                  Taxa negociada (R$)
                 </label>
+                <input
+                  type="number"
+                  value={taxaFreelancer}
+                  onChange={e => setTaxaFreelancer(e.target.value)}
+                  step="0.01"
+                  min="0"
+                  placeholder="Valor único"
+                  className="input-premium"
+                />
               </div>
-            </div>
-          )}
+            )}
+            {tipo === 'dedicada' && (
+              <>
+                <div>
+                  <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
+                    Dias
+                  </label>
+                  <input
+                    type="number"
+                    value={diasDedicada}
+                    onChange={e => setDiasDedicada(e.target.value)}
+                    min="1"
+                    className="input-premium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
+                    Km estimado
+                  </label>
+                  <input
+                    type="number"
+                    value={kmEstimado}
+                    onChange={e => setKmEstimado(e.target.value)}
+                    step="0.1"
+                    min="0"
+                    className="input-premium"
+                  />
+                </div>
+                <div className="col-span-2 flex items-center gap-3 pt-1">
+                  <input
+                    type="checkbox"
+                    id="ajudante"
+                    checked={ajudante}
+                    onChange={e => setAjudante(e.target.checked)}
+                    className="rounded-[3px] border-[var(--border-strong)] text-[var(--brand-orange)] focus:ring-[var(--brand-orange)]"
+                  />
+                  <label htmlFor="ajudante" className="text-sm text-[var(--text-primary)] cursor-pointer select-none">
+                    Adicionar ajudante / auxiliar
+                  </label>
+                </div>
+              </>
+            )}
+          </div>
 
-          {/* Separador */}
-          <div className="h-px bg-[#E0DFDD] dark:bg-[#1F2937] mb-6" />
+          <div className="section-divider" />
 
-          {/* Paradas (só regular) */}
+          {/* Paradas */}
           {tipo === 'regular' && (
             <div className="mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-secondary)]">
                   Paradas
                 </span>
                 <button
                   onClick={adicionarParada}
-                  className="text-[13px] font-medium text-[#F97316] hover:text-[#C2590A] transition-colors flex items-center gap-1"
+                  className="text-[13px] font-medium text-[var(--brand-orange)] hover:text-[var(--brand-orange-dim)] transition-colors flex items-center gap-1"
                 >
-                  <Plus size={14} />
-                  Adicionar
+                  <Plus size={14} strokeWidth={2} />
+                  Adicionar parada
                 </button>
               </div>
 
-              {/* Mini-header da tabela */}
+              {/* Table header */}
               <div className="grid grid-cols-12 gap-3 mb-2 px-1">
-                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary">Zona</span>
-                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary">Peso</span>
-                <span className="col-span-3 text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary">Dimensões (C×L×A m)</span>
-                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary">Valor NF</span>
+                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)]">Zona</span>
+                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)]">Peso</span>
+                <span className="col-span-3 text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)]">Dimensões</span>
+                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)]">Valor NF</span>
+                <span className="col-span-2 text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)]">Custo</span>
                 <span className="col-span-1" />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 {paradas.map((parada, idx) => (
                   <div
                     key={parada.id}
-                    className="grid grid-cols-12 gap-3 items-center py-2 border-b border-[#E0DFDD] dark:border-[#1F2937]"
+                    className="group grid grid-cols-12 gap-3 items-center py-2.5 border-b border-[var(--border)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface-sunken)_40%,transparent)] -mx-1 px-1 rounded-[4px]"
                   >
                     <div className="col-span-2">
                       <select
                         value={parada.zona}
                         onChange={e => atualizarParada(parada.id, 'zona', e.target.value)}
-                        className="w-full h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
+                        className="select-premium"
                       >
                         <option value="">Zona</option>
                         {ZONAS.map(z => (
@@ -448,34 +456,16 @@ export default function SimulacaoPage() {
                         step="0.1"
                         min="0"
                         placeholder="kg"
-                        className="w-full h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+                        className="input-premium h-[34px]"
                       />
                     </div>
-                    <div className="col-span-3 flex gap-1">
-                      <input
-                        type="number"
-                        value={parada.comprimento}
-                        onChange={e => atualizarParada(parada.id, 'comprimento', e.target.value)}
-                        step="0.01"
-                        placeholder="C"
-                        className="w-full h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
-                      />
-                      <input
-                        type="number"
-                        value={parada.largura}
-                        onChange={e => atualizarParada(parada.id, 'largura', e.target.value)}
-                        step="0.01"
-                        placeholder="L"
-                        className="w-full h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
-                      />
-                      <input
-                        type="number"
-                        value={parada.altura}
-                        onChange={e => atualizarParada(parada.id, 'altura', e.target.value)}
-                        step="0.01"
-                        placeholder="A"
-                        className="w-full h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
-                      />
+                    <div className="col-span-3 flex gap-1.5">
+                      <input type="number" value={parada.comprimento} onChange={e => atualizarParada(parada.id, 'comprimento', e.target.value)} step="0.01" placeholder="C"
+                        className="input-premium h-[34px]" />
+                      <input type="number" value={parada.largura} onChange={e => atualizarParada(parada.id, 'largura', e.target.value)} step="0.01" placeholder="L"
+                        className="input-premium h-[34px]" />
+                      <input type="number" value={parada.altura} onChange={e => atualizarParada(parada.id, 'altura', e.target.value)} step="0.01" placeholder="A"
+                        className="input-premium h-[34px]" />
                     </div>
                     <div className="col-span-2">
                       <input
@@ -485,16 +475,23 @@ export default function SimulacaoPage() {
                         step="0.01"
                         min="0"
                         placeholder="R$"
-                        className="w-full h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
+                        className="input-premium h-[34px]"
                       />
+                    </div>
+                    <div className="col-span-2 text-right">
+                      {parada.pesoReal > 0 && (
+                        <span className="text-[13px] font-num text-[var(--text-secondary)]">
+                          {formatarMoeda(parada.pesoReal * 0.5)}
+                        </span>
+                      )}
                     </div>
                     <div className="col-span-1 flex justify-center">
                       {paradas.length > 1 && (
                         <button
                           onClick={() => removerParada(parada.id)}
-                          className="text-text-secondary hover:text-[#B91C1C] transition-colors"
+                          className="opacity-0 group-hover:opacity-100 text-[var(--text-secondary)] hover:text-[var(--semantic-loss)] transition-all duration-150"
                         >
-                          <Trash2 size={14} />
+                          <Trash2 size={14} strokeWidth={1.5} />
                         </button>
                       )}
                     </div>
@@ -502,7 +499,7 @@ export default function SimulacaoPage() {
                 ))}
               </div>
 
-              {/* Weight ruler — visible when any parada has pesoReal > 0 */}
+              {/* Weight Ruler */}
               {paradas.some(p => p.pesoReal > 0) && (
                 <div className="mt-6 mb-2">
                   <PesoRuler paradas={paradas} />
@@ -511,249 +508,158 @@ export default function SimulacaoPage() {
             </div>
           )}
 
-          {/* Tipo selector (fora do box — no topo) não, vamos usar tabs no topo */}
-          <div className="mb-6">
-            <div className="flex gap-1 border border-[#E0DFDD] dark:border-[#1F2937] rounded-[4px] p-0.5 w-fit">
-              <button
-                onClick={() => setTipo('regular')}
-                className={`px-4 py-1.5 text-[13px] font-medium rounded-[3px] transition-colors ${
-                  tipo === 'regular'
-                    ? 'bg-[#F97316] text-white'
-                    : 'text-text-secondary hover:text-text-primary'
-                }`}
-              >
-                Regular
-              </button>
-              <button
-                onClick={() => setTipo('dedicada')}
-                className={`px-4 py-1.5 text-[13px] font-medium rounded-[3px] transition-colors ${
-                  tipo === 'dedicada'
-                    ? 'bg-[#F97316] text-white'
-                    : 'text-text-secondary hover:text-text-primary'
-                }`}
-              >
-                Dedicada
-              </button>
-            </div>
-          </div>
+          <div className="section-divider" />
 
           {/* Entrega Agendada */}
-          <div className="mb-4">
-            <div className="flex items-center gap-3 py-3 border-t border-[#E0DFDD] dark:border-[#1F2937] pt-5">
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-2">
               <input
                 type="checkbox"
                 id="agendada"
                 checked={agendada}
                 onChange={e => setAgendada(e.target.checked)}
-                className="rounded-[3px] border-[#A8A29E] text-[#F97316] focus:ring-[#F97316]"
+                className="rounded-[3px] border-[var(--border-strong)] text-[var(--brand-orange)] focus:ring-[var(--brand-orange)]"
               />
-              <label htmlFor="agendada" className="text-sm font-medium text-text-primary cursor-pointer">
+              <label htmlFor="agendada" className="text-sm font-medium text-[var(--text-primary)] cursor-pointer select-none flex items-center gap-2">
+                <Clock size={15} strokeWidth={1.5} />
                 Entrega Agendada
               </label>
+              <span className="text-[11px] text-[var(--text-disabled)] font-medium uppercase tracking-[0.05em]">Horário garantido</span>
             </div>
             {agendada && (
-              <div className="grid grid-cols-3 gap-4 mt-3 mb-3">
+              <div className="grid grid-cols-3 gap-4 mt-3 pl-7">
                 <div>
-                  <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Data</label>
-                  <input
-                    type="date"
-                    value={dataAgendamento}
-                    onChange={e => setDataAgendamento(e.target.value)}
-                    className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
-                  />
+                  <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">Data</label>
+                  <input type="date" value={dataAgendamento} onChange={e => setDataAgendamento(e.target.value)} className="input-premium" />
                 </div>
                 <div>
-                  <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Horário</label>
-                  <input
-                    type="time"
-                    value={horarioAgendado}
-                    onChange={e => setHorarioAgendado(e.target.value)}
-                    className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
-                  />
+                  <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">Horário</label>
+                  <input type="time" value={horarioAgendado} onChange={e => setHorarioAgendado(e.target.value)} className="input-premium" />
                 </div>
                 <div>
-                  <label className="block text-[13px] font-medium text-text-secondary mb-1.5">Acréscimo (R$)</label>
-                  <input
-                    type="number"
-                    value={acrescimoAgendamento}
-                    onChange={e => setAcrescimoAgendamento(e.target.value)}
-                    step="0.01"
-                    min="0"
-                    className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
-                  />
+                  <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">Acréscimo (R$)</label>
+                  <input type="number" value={acrescimoAgendamento} onChange={e => setAcrescimoAgendamento(e.target.value)} step="0.01" min="0" className="input-premium" />
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* ===== COLUNA DIREITA (42%) ===== */}
-        <div className="w-[42%] pl-8">
+        {/* ===== RIGHT (42%) ===== */}
+        <div className="w-[42%] pl-10">
           {opcoes.length === 0 ? (
-            /* Empty state */
-            <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center">
-              <p
-                className="text-[18px] text-text-secondary mb-3"
-                style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
-              >
+            <div className="flex flex-col items-center justify-center h-full min-h-[500px] text-center">
+              <div className="w-16 h-16 rounded-full border-2 border-dashed border-[var(--border-strong)] flex items-center justify-center mb-6">
+                <Calculator size={28} className="text-[var(--text-disabled)]" strokeWidth={1} />
+              </div>
+              <p className="text-lg font-display font-medium text-[var(--text-secondary)] mb-2">
                 Preencha os dados da entrega para ver a cotação em tempo real.
               </p>
-              <div className="w-12 border-t border-[#E0DFDD] dark:border-[#1F2937] my-4" />
-              <p className="text-[14px] text-[#A8A29E] dark:text-[#6B7280]">
+              <div className="w-10 border-t border-[var(--border)] my-5" />
+              <p className="text-sm text-[var(--text-disabled)] max-w-[280px]">
                 Custo do motorista, frete por faixa e margem calculados automaticamente.
               </p>
             </div>
           ) : (
-            /* Active state */
-            <div className="space-y-5">
+            <div className="space-y-6">
+              {/* Alerts */}
               {alertaBreakEven && (
-                <div className="border-l-[3px] border-l-[#B91C1C] bg-[#B91C1C]/5 p-3 rounded-[4px]">
-                  <p className="text-[#B91C1C] text-sm font-medium">
-                    ⚑ Atenção: o preço sugerido está abaixo do seu custo. Você terá prejuízo de {formatarMoeda(valorPrejuizo)} nesta entrega.
+                <div className="border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-3 rounded-[4px]">
+                  <p className="text-[color:var(--semantic-loss)] text-sm font-medium">
+                    ⚑ Atenção: o preço sugerido está abaixo do seu custo. Prejuízo de {formatarMoeda(valorPrejuizo)} nesta entrega.
                   </p>
                 </div>
               )}
-
               {avisoSemNF && (
-                <div className="border-l-[3px] border-l-[#92400E] bg-[#92400E]/5 p-3 rounded-[4px]">
-                  <p className="text-[#92400E] text-sm font-medium">
+                <div className="border-l-[3px] border-l-[var(--semantic-warn)] bg-[color-mix(in_srgb,var(--semantic-warn)_6%,transparent)] p-3 rounded-[4px]">
+                  <p className="text-[color:var(--semantic-warn)] text-sm font-medium">
                     GRIS e Ad-Valorem não incluídos — informe o valor da NF para cálculo completo.
                   </p>
                 </div>
               )}
 
-              {/* Cards de custo — 3 colunas lado a lado */}
-              <div className="grid grid-cols-3 gap-3">
-                {opcoes.map((opcao) => {
-                  const isMaisBarata = opcao.custoTotal === opcaoMaisBarata
-                  const isSelecionada =
-                    opcao.rotulo === opcaoVeiculo ||
-                    (opcao.rotulo === 'KANGOO' && !['KANGOO', 'Freelancer'].includes(opcaoVeiculo) && opcao.rotulo === opcaoVeiculo)
+              {/* Opções de custo */}
+              <div>
+                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-3">
+                  Opções de Custo
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  {opcoes.map((opcao) => {
+                    const isMaisBarata = opcao.custoTotal === opcaoMaisBarata
+                    const selecionada = opcao.rotulo === opcaoVeiculo
 
-                  // Simplificar: testa se o rótulo corresponde à opção selecionada
-                  const selecionada = opcao.rotulo === opcaoVeiculo
-
-                  return (
-                    <div
-                      key={opcao.rotulo}
-                      className={`
-                        relative rounded-[6px] p-4 border
-                        ${isMaisBarata
-                          ? 'border-[#15803D] border-2'
-                          : selecionada
-                          ? 'border-[#F97316] border-2'
-                          : 'border-[#E0DFDD] dark:border-[#1F2937]'}
-                      `}
-                    >
-                      {isMaisBarata && (
-                        <span className="inline-block text-[11px] font-medium text-[#15803D] bg-[#15803D]/10 px-2 py-0.5 rounded-[3px] mb-2">
-                          ↓ Menor custo
-                        </span>
-                      )}
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-sm font-semibold text-text-primary">
-                          {opcao.rotulo}
-                        </span>
-                        {opcao.isFreelancer && (
-                          <span className="text-[11px] text-text-secondary">Freelancer</span>
+                    return (
+                      <div
+                        key={opcao.rotulo}
+                        className={`
+                          relative rounded-[6px] p-4 transition-all duration-150
+                          ${isMaisBarata
+                            ? 'card-premium--cheapest'
+                            : selecionada
+                            ? 'card-premium--selected'
+                            : 'card-premium'}
+                        `}
+                      >
+                        {isMaisBarata && (
+                          <span className="inline-flex items-center text-[10px] font-medium text-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_8%,transparent)] px-2 py-0.5 rounded-[3px] mb-2.5 tracking-wide uppercase">
+                            ↓ Menor custo
+                          </span>
+                        )}
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-sm font-semibold text-[var(--text-primary)]">
+                            {opcao.rotulo}
+                          </span>
+                          {opcao.isFreelancer && (
+                            <span className="text-[10px] uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-[2px] bg-[var(--surface-sunken)] text-[var(--text-secondary)]">
+                              Freela
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-2xl font-num font-medium text-[var(--text-primary)] mb-1">
+                          {formatarMoeda(opcao.custoTotal)}
+                        </p>
+                        {selecionada && !isMaisBarata && opcaoMaisBarata < opcao.custoTotal && (
+                          <p className="text-[12px] text-[var(--text-secondary)] mt-2">
+                            ↑ {formatarMoeda(opcao.custoTotal - opcaoMaisBarata)} a mais
+                          </p>
                         )}
                       </div>
-                      <p
-                        className="text-[24px] font-medium text-text-primary mb-1"
-                        style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 500 }}
-                      >
-                        {formatarMoeda(opcao.custoTotal)}
-                      </p>
-
-                      {selecionada && !isMaisBarata && opcaoMaisBarata < opcao.custoTotal && (
-                        <p className="text-[13px] text-text-secondary mt-2">
-                          ↑ {formatarMoeda(opcao.custoTotal - opcaoMaisBarata)} a mais que a opção mais barata
-                        </p>
-                      )}
-                    </div>
-                  )
-                })}
+                    )
+                  })}
+                </div>
               </div>
 
               {/* Detalhamento */}
               <button
                 onClick={() => setExpandido(!expandido)}
-                className="text-[13px] font-medium text-text-secondary hover:text-text-primary transition-colors"
+                className="text-[13px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1.5"
               >
-                {expandido ? '▲ Recolher detalhamento' : '▼ Ver detalhamento'}
+                <span className={`transition-transform duration-150 ${expandido ? 'rotate-180' : ''}`}>▼</span>
+                {expandido ? 'Recolher detalhamento' : 'Ver detalhamento'}
               </button>
 
               {expandido && (
-                <div className="space-y-2 text-sm border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4">
+                <div className="border border-[var(--border)] rounded-[6px] p-4 space-y-3 text-sm">
                   {opcoes.map(opcao =>
                     opcao.custoPorParada.map((cp, pIdx) => (
-                      <div key={`${opcao.rotulo}-${pIdx}`} className="mb-3">
-                        <p className="text-[13px] font-medium text-text-secondary mb-1">
+                      <div key={`${opcao.rotulo}-${pIdx}`}>
+                        <p className="text-[13px] font-medium text-[var(--text-secondary)] mb-2 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-orange)]" />
                           {cp.zona}
                         </p>
-                        <div className="space-y-0.5 text-[13px]">
-                          {cp.componentes.salarioParcela > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Parcela do salário</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.salarioParcela)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.valeParcela > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Vale alimentação</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.valeParcela)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.combustivelParcela > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Combustível</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.combustivelParcela)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.manutencaoParcela > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Manutenção</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.manutencaoParcela)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.seguroParcela > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Seguro</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.seguroParcela)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.depreciacaoParcela > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Depreciação</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.depreciacaoParcela)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.taxaFaixaPeso > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Frete por faixa</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.taxaFaixaPeso)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.gris > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">GRIS</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.gris)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.adValorem > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Ad-Valorem</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.adValorem)}</span>
-                            </div>
-                          )}
-                          {cp.componentes.acrescimoAgendamento > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-text-secondary">Acréscimo agendamento</span>
-                              <span className="font-num">{formatarMoeda(cp.componentes.acrescimoAgendamento)}</span>
-                            </div>
-                          )}
-                          <div className="border-t border-[#A8A29E] dark:border-[#374151] mt-1 pt-1 flex justify-between font-semibold">
-                            <span className="text-text-primary">Total</span>
+                        <div className="space-y-1 text-[13px] ml-3.5">
+                          <CustoLinha label="Parcela do salário" valor={cp.componentes.salarioParcela} />
+                          <CustoLinha label="Vale alimentação" valor={cp.componentes.valeParcela} />
+                          <CustoLinha label="Combustível" valor={cp.componentes.combustivelParcela} />
+                          <CustoLinha label="Manutenção" valor={cp.componentes.manutencaoParcela} />
+                          <CustoLinha label="Seguro" valor={cp.componentes.seguroParcela} />
+                          <CustoLinha label="Depreciação" valor={cp.componentes.depreciacaoParcela} />
+                          <CustoLinha label="Frete por faixa" valor={cp.componentes.taxaFaixaPeso} />
+                          <CustoLinha label="GRIS" valor={cp.componentes.gris} />
+                          <CustoLinha label="Ad-Valorem" valor={cp.componentes.adValorem} />
+                          <CustoLinha label="Acréscimo agendamento" valor={cp.componentes.acrescimoAgendamento} />
+                          <div className="border-t border-[var(--border-strong)] mt-1.5 pt-1.5 flex justify-between font-semibold text-[var(--text-primary)]">
+                            <span>Total parada</span>
                             <span className="font-num">{formatarMoeda(cp.total)}</span>
                           </div>
                         </div>
@@ -764,18 +670,24 @@ export default function SimulacaoPage() {
               )}
 
               {/* Margem */}
-              <div className="border-t border-[#E0DFDD] dark:border-[#1F2937] pt-4">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-[13px] font-medium text-text-secondary">Margem</label>
-                  <input
-                    ref={margemInputRef}
-                    type="number"
-                    value={margem}
-                    onChange={e => setMargem(e.target.value)}
-                    step="0.5"
-                    min="0"
-                    className="w-20 h-[34px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary text-right outline-none focus:border-[#F97316] focus:border-2 font-num"
-                  />
+              <div className="border-t border-[var(--border)] pt-5">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-[13px] font-medium text-[var(--text-secondary)] flex items-center gap-1.5">
+                    <TrendingUp size={14} strokeWidth={1.5} />
+                    Margem de lucro
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      ref={margemInputRef}
+                      type="number"
+                      value={margem}
+                      onChange={e => setMargem(e.target.value)}
+                      step="0.5"
+                      min="0"
+                      className="w-16 h-[32px] px-2 border border-[var(--input)] rounded-[4px] bg-[var(--surface-raised)] text-sm text-[var(--text-primary)] text-right outline-none focus:border-[var(--brand-orange)] focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--brand-orange)_12%,transparent)] font-num transition-all duration-150"
+                    />
+                    <span className="text-sm text-[var(--text-secondary)]">%</span>
+                  </div>
                 </div>
                 <input
                   type="range"
@@ -783,40 +695,47 @@ export default function SimulacaoPage() {
                   max="100"
                   step="0.5"
                   value={margemNum}
-                  onChange={handleMargemSlider}
-                  className="w-full h-2 rounded-full appearance-none cursor-pointer bg-[#E0DFDD] dark:bg-[#1F2937]
-                    [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
-                    [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#F97316] [&::-webkit-slider-thumb]:border-none
-                    [&::-webkit-slider-thumb]:cursor-pointer"
+                  onChange={e => setMargem(e.target.value)}
+                  className="range-premium"
                 />
+                <div className="flex justify-between text-[10px] text-[var(--text-disabled)] mt-1 px-0.5">
+                  <span>0%</span>
+                  <span>50%</span>
+                  <span>100%</span>
+                </div>
               </div>
 
               {/* Preço Sugerido */}
-              <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4">
-                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary mb-1">
+              <div className="card-premium p-5">
+                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1">
                   Preço Sugerido
                 </p>
-                <p
-                  className="text-[36px] font-bold text-[#F97316]"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}
-                >
+                <p className="text-4xl font-bold text-[var(--brand-orange)] font-num">
                   {formatarMoeda(precoSugerido)}
+                </p>
+                <p className="text-[12px] text-[var(--text-disabled)] mt-1">
+                  Custo total: {formatarMoeda(totalGeral)} · Margem: {margem}%
                 </p>
               </div>
 
-              {/* Buttons */}
+              {/* Actions */}
               <div className="flex gap-3">
-                <button
-                  onClick={calcular}
-                  disabled={calculando}
-                  className="flex-1 h-10 bg-[#F97316] hover:bg-[#C2590A] text-white text-sm font-semibold rounded-[6px] transition-colors duration-100 disabled:opacity-50"
-                >
-                  {calculando ? 'Calculando...' : 'Calcular'}
+                <button onClick={calcular} disabled={calculando} className="btn-primary flex-1 h-10">
+                  {calculando ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Calculando...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      Calcular <Calculator size={15} strokeWidth={1.5} />
+                    </span>
+                  )}
                 </button>
-                <button className="flex-1 h-10 border border-[#A8A29E] dark:border-[#374151] text-text-primary text-sm font-medium rounded-[6px] hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937] transition-colors">
+                <button className="btn-secondary flex-1 h-10 text-sm">
                   Salvar cotação
                 </button>
-                <button className="flex-1 h-10 border border-[#A8A29E] dark:border-[#374151] text-text-primary text-sm font-medium rounded-[6px] hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937] transition-colors">
+                <button className="btn-secondary flex-1 h-10 text-sm">
                   Salvar template
                 </button>
               </div>
@@ -828,41 +747,46 @@ export default function SimulacaoPage() {
   )
 }
 
-/* ===== Weight Ruler Component ===== */
+/* ===== CustoLinha helper ===== */
+function CustoLinha({ label, valor }: { label: string; valor: number }) {
+  if (valor <= 0) return null
+  return (
+    <div className="flex justify-between">
+      <span className="text-[var(--text-secondary)]">{label}</span>
+      <span className="font-num text-[var(--text-primary)]">{formatarMoeda(valor)}</span>
+    </div>
+  )
+}
+
+/* ===== Weight Ruler ===== */
 function PesoRuler({ paradas }: { paradas: Parada[] }) {
   const maxPeso = Math.max(...paradas.map(p => p.pesoReal), 100)
   const marcas = [10, 20, 35, 50, 70, 100, 200, 300, 500]
-  const marcasVisiveis = marcas.filter(m => m <= Math.max(maxPeso * 1.2, 100))
 
   return (
-    <div>
+    <div className="space-y-4">
       {paradas.map(parada =>
         parada.pesoReal > 0 ? (
-          <div key={parada.id} className="mb-3">
-            <p className="text-[11px] text-text-secondary mb-1">
-              Parada {paradas.indexOf(parada) + 1}: {parada.zona || '—'} — {parada.pesoReal} kg
+          <div key={parada.id}>
+            <p className="text-[11px] font-medium text-[var(--text-secondary)] mb-2 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-orange)]" />
+              Parada {paradas.indexOf(parada) + 1}: {parada.zona || '—'} —{' '}
+              <span className="font-num">{parada.pesoReal} kg</span>
             </p>
-            <div className="weight-ruler-track relative mx-1">
-              {marcasVisiveis.map(m => {
+            <div className="weight-ruler">
+              {marcas.filter(m => m <= maxPeso * 1.2).map(m => {
                 const pct = (m / (maxPeso * 1.2)) * 100
                 return (
-                  <div key={m} className="absolute" style={{ left: `${pct}%`, top: -6 }}>
+                  <div key={m} className="absolute" style={{ left: `${pct}%` }}>
                     <div className="weight-ruler-mark" />
-                    <span className="absolute top-3 left-1/2 -translate-x-1/2 text-[9px] text-text-secondary">
-                      {m}
-                    </span>
+                    <span className="weight-ruler-label">{m}</span>
                   </div>
                 )
               })}
-              {(() => {
-                const pct = Math.min((parada.pesoReal / (maxPeso * 1.2)) * 100, 100)
-                return (
-                  <div
-                    className="weight-ruler-indicator"
-                    style={{ left: `${pct}%` }}
-                  />
-                )
-              })()}
+              <div
+                className="weight-ruler-indicator"
+                style={{ left: `${Math.min((parada.pesoReal / (maxPeso * 1.2)) * 100, 100)}%` }}
+              />
             </div>
           </div>
         ) : null

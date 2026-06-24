@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock } from 'lucide-react'
+import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter } from 'lucide-react'
 
 type Simulacao = {
   id: string
@@ -91,114 +91,126 @@ export default function HistoricoPage() {
 
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+        <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--text-secondary)] mb-1 font-display">
+          Relatórios
+        </p>
+        <h1 className="text-[28px] font-bold tracking-tight text-[var(--text-primary)] font-display">
           Histórico
         </h1>
-        <p className="text-sm text-text-secondary mt-1">Acompanhe a rentabilidade e consulte simulações passadas</p>
+        <p className="text-sm text-[var(--text-secondary)] mt-1">
+          Acompanhe a rentabilidade e consulte simulações passadas
+        </p>
       </div>
 
-      {/* Dashboard de Rentabilidade */}
+      {/* Dashboard KPIs */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary">Total Sugerido</p>
-          <p className="text-[32px] font-num font-medium text-text-primary mt-1">{formatarMoeda(totalSugerido)}</p>
-          <p className="text-[11px] text-text-secondary mt-1">Soma dos preços sugeridos</p>
+        <div className="card-premium p-4">
+          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+            Total Sugerido
+          </p>
+          <p className="text-[28px] font-num font-medium text-[var(--text-primary)]">
+            {formatarMoeda(totalSugerido)}
+          </p>
+          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+            Soma dos preços sugeridos
+          </p>
         </div>
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary">Total Cobrado</p>
-          <p className="text-[32px] font-num font-medium text-text-primary mt-1">{formatarMoeda(totalCobrado)}</p>
-          <p className="text-[11px] text-text-secondary mt-1">{totalCobradoArr.length} de {simulacoes.length} registrados</p>
+        <div className="card-premium p-4">
+          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+            Total Cobrado
+          </p>
+          <p className="text-[28px] font-num font-medium text-[var(--text-primary)]">
+            {formatarMoeda(totalCobrado)}
+          </p>
+          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+            {totalCobradoArr.length} de {simulacoes.length} registrados
+          </p>
         </div>
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary">Custo Freelancers</p>
-          <p className="text-[32px] font-num font-medium text-text-primary mt-1">{formatarMoeda(custoFreelancers)}</p>
-          <p className="text-[11px] text-text-secondary mt-1">Total de pagamentos</p>
+        <div className="card-premium p-4">
+          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+            Custo Freelancers
+          </p>
+          <p className="text-[28px] font-num font-medium text-[var(--text-primary)]">
+            {formatarMoeda(custoFreelancers)}
+          </p>
+          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+            Total de pagamentos
+          </p>
         </div>
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary">Margem Real</p>
-          <p className={`text-[32px] font-num font-medium mt-1 ${margemReal >= 0 ? 'text-[#15803D]' : 'text-[#B91C1C]'}`}>
+        <div className="card-premium p-4">
+          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+            Margem Real
+          </p>
+          <p className={`text-[28px] font-num font-medium ${margemReal >= 0 ? 'text-[var(--semantic-gain)]' : 'text-[var(--semantic-loss)]'}`}>
             {simulacoes.length > 0 ? `${margemReal.toFixed(1)}%` : '—'}
           </p>
-          <p className="text-[11px] text-text-secondary mt-1">(Cobrado − Custo) ÷ Cobrado</p>
+          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+            (Cobrado − Custo) ÷ Cobrado
+          </p>
         </div>
       </div>
 
       {/* Filtros */}
-      <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-5 space-y-4">
+      <div className="card-premium p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <BarChart3 size={15} className="text-text-secondary" />
-          <span className="text-[13px] font-medium text-text-primary">Filtros</span>
+          <Filter size={15} className="text-[var(--text-secondary)]" strokeWidth={1.5} />
+          <span className="text-[13px] font-medium text-[var(--text-primary)]">Filtros</span>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary mb-1">Cliente</label>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)] mb-1.5">Cliente</label>
             <div className="relative">
-              <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-secondary" />
-              <input
-                type="text"
-                value={filtroCliente}
-                onChange={e => setFiltroCliente(e.target.value)}
-                placeholder="Buscar..."
-                className="w-full h-[34px] pl-8 pr-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2 placeholder:text-[#A8A29E] dark:placeholder:text-[#6B7280]"
-              />
+              <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--text-disabled)]" strokeWidth={1.5} />
+              <input type="text" value={filtroCliente} onChange={e => setFiltroCliente(e.target.value)} placeholder="Buscar..."
+                className="input-premium h-[34px] pl-9" />
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary mb-1">Tipo</label>
-            <select
-              value={filtroTipo}
-              onChange={e => setFiltroTipo(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
-            >
+            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)] mb-1.5">Tipo</label>
+            <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)} className="select-premium h-[34px]">
               <option value="">Todos</option>
               <option value="regular">Regular</option>
               <option value="dedicada">Dedicada</option>
             </select>
           </div>
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary mb-1">Data início</label>
-            <input
-              type="date"
-              value={dataInicio}
-              onChange={e => setDataInicio(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
-            />
+            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)] mb-1.5">Data início</label>
+            <input type="date" value={dataInicio} onChange={e => setDataInicio(e.target.value)} className="input-premium h-[34px]" />
           </div>
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-text-secondary mb-1">Data fim</label>
-            <input
-              type="date"
-              value={dataFim}
-              onChange={e => setDataFim(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-text-primary outline-none focus:border-[#F97316] focus:border-2"
-            />
+            <label className="block text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)] mb-1.5">Data fim</label>
+            <input type="date" value={dataFim} onChange={e => setDataFim(e.target.value)} className="input-premium h-[34px]" />
           </div>
         </div>
       </div>
 
       {/* Tabela */}
       {filtradas.length === 0 ? (
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-12 text-center">
-          <p className="text-text-secondary font-medium">Nenhuma simulação encontrada</p>
-          <p className="text-sm text-[#A8A29E] mt-1">As simulações salvas aparecerão aqui.</p>
+        <div className="card-premium p-12 text-center">
+          <div className="w-12 h-12 rounded-full border-2 border-dashed border-[var(--border-strong)] flex items-center justify-center mx-auto mb-4">
+            <Clock size={22} className="text-[var(--text-disabled)]" strokeWidth={1} />
+          </div>
+          <p className="text-[var(--text-secondary)] font-medium">Nenhuma simulação encontrada</p>
+          <p className="text-sm text-[var(--text-disabled)] mt-1">As simulações salvas aparecerão aqui.</p>
         </div>
       ) : (
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] overflow-hidden">
+        <div className="card-premium overflow-hidden">
           <table className="w-full text-[13px]">
             <thead>
-              <tr className="border-b border-[#E0DFDD] dark:border-[#1F2937] bg-[#EBEBEA] dark:bg-[#1F2937]">
-                <th className="text-left px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Data</th>
-                <th className="text-left px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Cliente</th>
-                <th className="text-left px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Tipo</th>
-                <th className="text-left px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Paradas</th>
-                <th className="text-right px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Custo</th>
-                <th className="text-right px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Margem</th>
-                <th className="text-right px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Sugerido</th>
-                <th className="text-right px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.06em] text-text-secondary">Cobrado</th>
+              <tr className="border-b border-[var(--border)] bg-[var(--surface-sunken)]">
+                <th className="table-header-cell text-left px-4 py-3">Data</th>
+                <th className="table-header-cell text-left px-4 py-3">Cliente</th>
+                <th className="table-header-cell text-left px-4 py-3">Tipo</th>
+                <th className="table-header-cell text-left px-4 py-3">Paradas</th>
+                <th className="table-header-cell text-right px-4 py-3">Custo</th>
+                <th className="table-header-cell text-right px-4 py-3">Margem</th>
+                <th className="table-header-cell text-right px-4 py-3">Sugerido</th>
+                <th className="table-header-cell text-right px-4 py-3">Cobrado</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E0DFDD] dark:divide-[#1F2937]">
+            <tbody className="divide-y divide-[var(--border)]">
               {filtradas.map(sim => {
                 const custoTotal = sim.resultadoJson?.totalGeral || 0
                 const precoSugerido = sim.resultadoJson?.precoSugerido || 0
@@ -208,58 +220,39 @@ export default function HistoricoPage() {
                 const isDiferente = sim.precoCobrado && Math.abs(sim.precoCobrado - precoSugerido) > 0.01
 
                 return (
-                  <tr key={sim.id} className="hover:bg-[#EBEBEA] dark:hover:bg-[#1F2937]/50 transition-colors">
-                    <td className="px-4 py-3 text-text-secondary">{formatarData(sim.criadoEm)}</td>
-                    <td className="px-4 py-3 text-text-primary font-medium">{sim.nomeCliente || '—'}</td>
+                  <tr key={sim.id} className="hover:bg-[color-mix(in_srgb,var(--surface-sunken)_40%,transparent)] transition-colors">
+                    <td className="px-4 py-3 text-[var(--text-secondary)]">{formatarData(sim.criadoEm)}</td>
+                    <td className="px-4 py-3 text-[var(--text-primary)] font-medium">{sim.nomeCliente || '—'}</td>
                     <td className="px-4 py-3">
-                      <span className="text-[11px] font-medium px-2 py-0.5 rounded-[3px] bg-[#EBEBEA] dark:bg-[#1F2937] text-text-secondary">
+                      <span className="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-[3px] bg-[var(--surface-sunken)] text-[var(--text-secondary)] uppercase tracking-[0.04em]">
                         {sim.tipoEntrega === 'dedicada' ? 'Dedicada' : sim.agendada ? 'Agendada' : 'Regular'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-text-secondary max-w-[200px] truncate">{paradasStr}</td>
-                    <td className="px-4 py-3 text-right font-num text-text-primary">{formatarMoeda(custoTotal)}</td>
-                    <td className="px-4 py-3 text-right font-num text-text-primary">{sim.margemPct}%</td>
-                    <td className="px-4 py-3 text-right font-num text-text-primary">{formatarMoeda(precoSugerido)}</td>
+                    <td className="px-4 py-3 text-[var(--text-secondary)] max-w-[200px] truncate">{paradasStr}</td>
+                    <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{formatarMoeda(custoTotal)}</td>
+                    <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{sim.margemPct}%</td>
+                    <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{formatarMoeda(precoSugerido)}</td>
                     <td className="px-4 py-3 text-right">
                       {editandoCobrado === sim.id ? (
                         <div className="flex items-center gap-1 justify-end">
-                          <input
-                            type="number"
-                            value={cobradoEdit}
-                            onChange={e => setCobradoEdit(e.target.value)}
-                            step="0.01"
-                            className="w-24 h-[30px] px-2 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm text-right font-num outline-none focus:border-[#F97316] focus:border-2"
-                            autoFocus
-                          />
-                          <button
-                            onClick={() => salvarPrecoCobrado(sim)}
-                            className="text-[11px] font-medium text-[#15803D] hover:text-[#15803D]/80"
-                          >
-                            OK
-                          </button>
-                          <button
-                            onClick={() => setEditandoCobrado(null)}
-                            className="text-[11px] font-medium text-text-secondary hover:text-text-primary"
-                          >
-                            Cancelar
-                          </button>
+                          <input type="number" value={cobradoEdit} onChange={e => setCobradoEdit(e.target.value)} step="0.01"
+                            className="w-24 h-[30px] input-premium text-right font-num text-sm" autoFocus />
+                          <button onClick={() => salvarPrecoCobrado(sim)}
+                            className="text-[11px] font-medium text-[var(--semantic-gain)] hover:underline px-1">OK</button>
+                          <button onClick={() => setEditandoCobrado(null)}
+                            className="text-[11px] font-medium text-[var(--text-secondary)] hover:underline px-1">X</button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => {
-                            setEditandoCobrado(sim.id)
-                            setCobradoEdit(String(sim.precoCobrado || ''))
-                          }}
+                        <button onClick={() => { setEditandoCobrado(sim.id); setCobradoEdit(String(sim.precoCobrado || '')) }}
                           className={`font-num cursor-pointer hover:underline ${
                             sim.precoCobrado
                               ? isDiferente
                                 ? sim.precoCobrado! > precoSugerido
-                                  ? 'text-[#15803D]'
-                                  : 'text-[#B91C1C]'
-                                : 'text-text-primary'
-                              : 'text-[#A8A29E]'
-                          }`}
-                        >
+                                  ? 'text-[var(--semantic-gain)]'
+                                  : 'text-[var(--semantic-loss)]'
+                                : 'text-[var(--text-primary)]'
+                              : 'text-[var(--text-disabled)]'
+                          }`}>
                           {sim.precoCobrado ? formatarMoeda(sim.precoCobrado) : '—'}
                         </button>
                       )}
