@@ -266,6 +266,8 @@ export default function SimulacaoPage() {
 
   const opcaoMaisBarata = opcoes.length > 0 ? Math.min(...opcoes.map(o => o.custoTotal)) : 0
   const margemNum = parseFloat(margem) || 0
+  const opcaoSelecionada = opcoes.length > 0 ? (opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]) : undefined
+  const catSelecionada = opcaoSelecionada?.agregadoTotal
 
   return (
     <div className="space-y-0">
@@ -502,10 +504,20 @@ export default function SimulacaoPage() {
                       />
                     </div>
                     <div className="col-span-2 text-right">
-                      {parada.pesoReal > 0 && (
-                        <span className="text-[13px] font-num text-[var(--text-secondary)]">
-                          {formatarMoeda(parada.pesoReal * 0.5)}
-                        </span>
+                      {opcoes.length > 0 ? (
+                        (() => {
+                          const sel = opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]
+                          const cp = sel.custoPorParada[idx]
+                          return cp ? (
+                            <span className="text-[13px] font-num text-[var(--text-primary)]">
+                              {formatarMoeda(cp.total)}
+                            </span>
+                          ) : (
+                            <span className="text-[12px] text-[var(--text-disabled)]">—</span>
+                          )
+                        })()
+                      ) : (
+                        <span className="text-[12px] text-[var(--text-disabled)]">—</span>
                       )}
                     </div>
                     <div className="col-span-1 flex justify-center">
@@ -678,37 +690,31 @@ export default function SimulacaoPage() {
               {expandido && (
                 <div className="border border-[var(--border)] rounded-[6px] p-4 space-y-4 text-sm">
                   {/* Category summary for selected option */}
-                  {(() => {
-                    const sel = opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]
-                    if (!sel || !sel.agregadoTotal) return null
-                    const cat = sel.agregadoTotal
-                    return (
-                      <div>
-                        <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-secondary)] mb-3">
-                          Resumo por Categoria — {sel.rotulo}
-                        </p>
+                  {opcaoSelecionada && catSelecionada && (
+                    <div>
+                      <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-secondary)] mb-3">
+                        Resumo por Categoria — {opcaoSelecionada.rotulo}
+                      </p>
                         <div className="space-y-1">
-                          <CategoriaLinha label="Motorista" valor={cat.motorista} cor="var(--brand-orange)" />
-                          <CategoriaLinha label="Combustível" valor={cat.combustivel} cor="var(--semantic-warn)" />
-                          <CategoriaLinha label="Veículo (manut + seguro + depr)" valor={cat.veiculo} cor="var(--semantic-info)" />
-                          <CategoriaLinha label="Frete por faixa de peso" valor={cat.frete} cor="var(--semantic-gain)" />
-                          {cat.taxaNF > 0 && <CategoriaLinha label="Taxas NF (GRIS + Ad-Valorem)" valor={cat.taxaNF} cor="#7C3AED" />}
-                          {cat.agendamento > 0 && <CategoriaLinha label="Acréscimo agendamento" valor={cat.agendamento} cor="#9333EA" />}
+                          <CategoriaLinha label="Motorista" valor={catSelecionada.motorista} cor="var(--brand-orange)" />
+                          <CategoriaLinha label="Combustível" valor={catSelecionada.combustivel} cor="var(--semantic-warn)" />
+                          <CategoriaLinha label="Veículo (manut + seguro + depr)" valor={catSelecionada.veiculo} cor="var(--semantic-info)" />
+                          <CategoriaLinha label="Frete por faixa de peso" valor={catSelecionada.frete} cor="var(--semantic-gain)" />
+                          {catSelecionada.taxaNF > 0 && <CategoriaLinha label="Taxas NF (GRIS + Ad-Valorem)" valor={catSelecionada.taxaNF} cor="#7C3AED" />}
+                          {catSelecionada.agendamento > 0 && <CategoriaLinha label="Acréscimo agendamento" valor={catSelecionada.agendamento} cor="#9333EA" />}
                           <div className="border-t border-[var(--border-strong)] mt-2 pt-2 flex justify-between font-semibold text-[var(--text-primary)]">
                             <span>Custo total</span>
-                            <span className="font-num">{formatarMoeda(cat.total)}</span>
+                            <span className="font-num">{formatarMoeda(catSelecionada.total)}</span>
                           </div>
                         </div>
                       </div>
-                    )
-                  })()}
+                    )}
 
                   <div className="border-t border-[var(--border)] pt-3" />
 
-                  {/* Per-stop breakdown */}
-                  {opcoes.map(opcao =>
-                    opcao.custoPorParada.map((cp, pIdx) => (
-                      <div key={`${opcao.rotulo}-${pIdx}`}>
+                  {/* Per-stop breakdown — only for selected option */}
+                  {opcaoSelecionada && opcaoSelecionada.custoPorParada.map((cp, pIdx) => (
+                      <div key={`${opcaoSelecionada.rotulo}-${pIdx}`}>
                         <p className="text-[13px] font-medium text-[var(--text-secondary)] mb-2 flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-orange)]" />
                           {cp.zona} — <span className="font-num">{cp.pesoTaxavel} kg</span>
@@ -736,8 +742,7 @@ export default function SimulacaoPage() {
                           </div>
                         </div>
                       </div>
-                    ))
-                  )}
+                    ))}
                 </div>
               )}
 
