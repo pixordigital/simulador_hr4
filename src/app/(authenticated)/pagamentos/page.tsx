@@ -87,7 +87,7 @@ export default function PagamentosPage() {
   const meses = Object.keys(agrupados).sort((a, b) => b.localeCompare(a))
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="h-full flex flex-col overflow-y-auto">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>

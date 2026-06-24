@@ -269,7 +269,7 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <div className="h-full flex flex-col space-y-2 overflow-y-auto">
+    <div className="flex flex-col space-y-2">
       <div className="flex-shrink-0">
         <h1 className="text-xl font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
           Configurações

@@ -90,7 +90,7 @@ export default function HistoricoPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="h-full flex flex-col overflow-y-auto">
       {/* Header */}
       <div>
         <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--text-secondary)] mb-1 font-display">
