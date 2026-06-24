@@ -12,7 +12,8 @@ export function calcularFretePeso(taxa: FaixaPreco, pesoTaxavel: number): number
   let restante = pesoTaxavel - taxa.pesoBase
 
   for (const faixa of taxa.faixas) {
-    const pesoNaFaixa = Math.min(restante, faixa.max - faixa.min)
+    const range = faixa.max - faixa.min + 1
+    const pesoNaFaixa = Math.min(restante, range)
     if (pesoNaFaixa <= 0) break
     total += pesoNaFaixa * faixa.precoPorKg
     restante -= pesoNaFaixa

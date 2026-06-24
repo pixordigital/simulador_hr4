@@ -504,14 +504,14 @@ export default function ConfiguracoesPage() {
                     taxaMinima: 0,
                     pesoBase: 10,
                     faixas: [
-                      { min: 10, max: 20, precoPorKg: 0 },
-                      { min: 20, max: 35, precoPorKg: 0 },
-                      { min: 35, max: 50, precoPorKg: 0 },
-                      { min: 50, max: 70, precoPorKg: 0 },
-                      { min: 70, max: 100, precoPorKg: 0 },
-                      { min: 100, max: 300, precoPorKg: 0 },
-                      { min: 300, max: 500, precoPorKg: 0 },
-                      { min: 500, max: 99999.99, precoPorKg: 0 },
+                      { min: 11, max: 20, precoPorKg: 0 },
+                      { min: 21, max: 35, precoPorKg: 0 },
+                      { min: 36, max: 50, precoPorKg: 0 },
+                      { min: 51, max: 70, precoPorKg: 0 },
+                      { min: 71, max: 100, precoPorKg: 0 },
+                      { min: 101, max: 300, precoPorKg: 0 },
+                      { min: 301, max: 500, precoPorKg: 0 },
+                      { min: 501, max: 99999.99, precoPorKg: 0 },
                     ],
                   }])
                 }}
