@@ -272,6 +272,9 @@ export default function SimulacaoPage() {
   const margemNum = parseFloat(margem) || 0
   const opcaoSelecionada = opcoes.length > 0 ? (opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]) : undefined
   const catSelecionada = opcaoSelecionada?.agregadoTotal
+  // Preço reflete a opção selecionada, não a mais barata
+  const custoReal = opcaoSelecionada?.custoTotal || totalGeral
+  const precoReal = custoReal * (1 + margemNum / 100)
 
   async function salvarCotacao() {
     if (!nomeCliente) { setErro('Informe o nome do cliente'); return }
@@ -706,13 +709,15 @@ export default function SimulacaoPage() {
                     return (
                       <div
                         key={opcao.rotulo}
+                        onClick={() => setOpcaoVeiculo(opcao.rotulo)}
                         className={`
-                          relative rounded-[6px] p-3 transition-all duration-150
+                          relative rounded-[6px] p-3 transition-all duration-150 cursor-pointer
                           ${isMaisBarata
                             ? 'card-premium--cheapest'
                             : selecionada
                             ? 'card-premium--selected'
                             : 'card-premium'}
+                          ${!selecionada && !isMaisBarata ? 'hover:bg-[var(--surface-sunken)]' : ''}
                         `}
                       >
                         {isMaisBarata && (
@@ -743,6 +748,34 @@ export default function SimulacaoPage() {
                   })}
                 </div>
               </div>
+
+              {/* Indicador Financeiro */}
+              {opcaoSelecionada && custoReal > 0 && (
+                <div className={`border-l-[3px] rounded-[4px] p-2.5 ${
+                  precoReal >= custoReal * 1.1
+                    ? 'border-l-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_6%,transparent)]'
+                    : precoReal >= custoReal * 1.05
+                    ? 'border-l-[var(--semantic-warn)] bg-[color-mix(in_srgb,var(--semantic-warn)_6%,transparent)]'
+                    : precoReal >= custoReal
+                    ? 'border-l-[#7C3AED] bg-[color-mix(in_srgb,#7C3AED_6%,transparent)]'
+                    : 'border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)]'
+                }`}>
+                  <p className="text-xs font-medium flex items-center gap-1.5" style={{
+                    color: precoReal >= custoReal * 1.1 ? 'var(--semantic-gain)'
+                      : precoReal >= custoReal * 1.05 ? 'var(--semantic-warn)'
+                      : precoReal >= custoReal ? '#7C3AED'
+                      : 'var(--semantic-loss)'
+                  }}>
+                    {precoReal >= custoReal * 1.1 ? '▲ Lucro saudável' :
+                     precoReal >= custoReal * 1.05 ? '→ Margem apertada' :
+                     precoReal >= custoReal ? '→ Lucro mínimo' :
+                     '▼ Preço abaixo do custo!'}
+                    <span className="font-num ml-auto text-[11px] opacity-80">
+                      {precoReal >= custoReal ? `+${((precoReal / custoReal - 1) * 100).toFixed(1)}%` : `${((precoReal / custoReal - 1) * 100).toFixed(1)}%`}
+                    </span>
+                  </p>
+                </div>
+              )}
 
               {/* Detalhamento */}
               <button
