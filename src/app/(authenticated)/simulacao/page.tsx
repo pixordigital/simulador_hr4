@@ -890,7 +890,7 @@ export default function SimulacaoPage() {
                   {formatarMoeda(precoReal)}
                 </p>
                 <p className="text-[11px] text-[var(--text-disabled)]">
-                  Custo: {formatarMoeda(totalGeral)} · Margem: {margem}%
+                  Custo: {formatarMoeda(custoReal)} · Margem: {margem}%
                 </p>
               </div>
 
