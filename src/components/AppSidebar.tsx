@@ -26,30 +26,30 @@ export default function AppSidebar() {
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col h-full bg-[#0F1C2E] select-none">
       {/* Logo + Toggle */}
-      <div className="px-6 py-5 border-b border-[#1A2E45]">
+      <div className="px-4 py-3 border-b border-[#1A2E45]">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-[5px] bg-gradient-to-br from-[#F97316] to-[#C2590A] flex items-center justify-center shadow-sm shadow-[#F97316]/20">
-              <span className="text-white font-bold text-xs">HR</span>
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-[4px] bg-gradient-to-br from-[#F97316] to-[#C2590A] flex items-center justify-center">
+              <span className="text-white font-bold text-[10px]">HR</span>
             </div>
             <div>
-              <span className="text-white font-bold text-sm tracking-tight block leading-tight">HR CARGO</span>
-              <p className="text-[10px] text-slate-500 tracking-wide">João Pessoa / PB</p>
+              <span className="text-white font-bold text-xs tracking-tight block leading-tight">HR CARGO</span>
+              <p className="text-[9px] text-slate-500 tracking-wide">João Pessoa / PB</p>
             </div>
           </div>
           <button
             onClick={toggleTheme}
-            className="w-8 h-8 flex items-center justify-center rounded-[4px] text-slate-500 hover:text-white hover:bg-[#1A2E45] transition-all duration-100"
+            className="w-7 h-7 flex items-center justify-center rounded-[3px] text-slate-500 hover:text-white hover:bg-[#1A2E45] transition-all duration-100"
             title={theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
           >
-            {theme === 'dark' ? <Sun size={16} strokeWidth={1.5} /> : <Moon size={16} strokeWidth={1.5} />}
+            {theme === 'dark' ? <Sun size={14} strokeWidth={1.5} /> : <Moon size={14} strokeWidth={1.5} />}
           </button>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 flex flex-col py-3">
-        <div className="flex-1 space-y-0.5 px-3">
+      <nav className="flex-1 flex flex-col py-2">
+        <div className="flex-1 space-y-0.5 px-2">
           {itensMenu.map((item) => {
             const Icon = item.icon
             const ativo = isActive(item.href)
@@ -58,7 +58,7 @@ export default function AppSidebar() {
                 key={item.href}
                 href={item.href}
                 className={`
-                  flex items-center gap-3 px-4 py-2 text-sm rounded-[4px] transition-all duration-100 relative
+                  flex items-center gap-3 px-3 py-1.5 text-sm rounded-[4px] transition-all duration-100 relative
                   ${ativo
                     ? 'text-white font-medium'
                     : 'text-slate-400 hover:text-white hover:bg-[#1A2E45]'
@@ -76,8 +76,8 @@ export default function AppSidebar() {
           })}
         </div>
 
-        <div className="px-3">
-          <div className="h-px bg-[#1A2E45] mx-4 my-2" />
+        <div className="px-2">
+          <div className="h-px bg-[#1A2E45] mx-4 my-1.5" />
         </div>
       </nav>
     </aside>
