@@ -216,12 +216,11 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-12">
-      <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="h-full flex flex-col space-y-2 overflow-y-auto">
+      <div className="flex-shrink-0">
+        <h1 className="text-xl font-bold tracking-tight text-text-primary" style={{ fontFamily: "'DM Sans', sans-serif" }}>
           Configurações
         </h1>
-        <p className="text-sm text-text-secondary mt-1">Gerencie os parâmetros operacionais do simulador</p>
       </div>
 
       {mensagem && (
@@ -236,8 +235,8 @@ export default function ConfiguracoesPage() {
       )}
 
       {/* Combustível + Geral — destaque mensal */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-5 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 flex-shrink-0">
+        <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] p-3 space-y-2">
           <div className="flex items-center gap-2">
             <Settings2 size={16} className="text-[#F97316]" />
             <h2 className="text-sm font-semibold text-text-primary">Geral</h2>
@@ -247,22 +246,22 @@ export default function ConfiguracoesPage() {
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">Margem padrão (%)</label>
               <input type="number" value={margemPadrao} onChange={e => setMargemPadrao(e.target.value)} step="0.5" min="0"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">Entregas/dia padrão</label>
               <input type="number" value={entregasPorDia} onChange={e => setEntregasPorDia(e.target.value)} min="1"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">Acréscimo agendamento (R$)</label>
               <input type="number" value={acrescimoAgendamento} onChange={e => setAcrescimoAgendamento(e.target.value)} step="0.01" min="0"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
           </div>
         </div>
 
-        <div className="border border-[#F97316]/30 rounded-[6px] p-5 space-y-4">
+        <div className="border border-[#F97316]/30 rounded-[6px] p-3 space-y-2">
           <div className="flex items-center gap-2">
             <Fuel size={16} className="text-[#F97316]" />
             <h2 className="text-sm font-semibold text-text-primary">Combustível</h2>
@@ -272,22 +271,22 @@ export default function ConfiguracoesPage() {
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">KANGOO — R$/L</label>
               <input type="number" value={kangooPrecoLitro} onChange={e => setKangooPrecoLitro(e.target.value)} step="0.01" min="0"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">8-160 — R$/L</label>
               <input type="number" value={oitoPrecoLitro} onChange={e => setOitoPrecoLitro(e.target.value)} step="0.01" min="0"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">KANGOO — km/L</label>
               <input type="number" value={kangooConsumo} onChange={e => setKangooConsumo(e.target.value)} step="0.1" min="0"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
             <div>
               <label className="block text-[13px] font-medium text-text-secondary mb-1">8-160 — km/L</label>
               <input type="number" value={oitoConsumo} onChange={e => setOitoConsumo(e.target.value)} step="0.1" min="0"
-                className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
             </div>
           </div>
         </div>
@@ -325,22 +324,22 @@ export default function ConfiguracoesPage() {
           { id: 'dedOitoAjudante', label: 'Ajudante diária (R$)', val: dedOitoAjudante, set: setDedOitoAjudante, step: '0.01' },
         ]},
       ].map(s => (
-        <div key={s.value} className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px]">
+        <div key={s.value} className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] flex-shrink-0">
           <button
             onClick={() => toggleAccordion(s.value)}
-            className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-text-primary hover:text-[#F97316] transition-colors"
+            className="w-full flex items-center justify-between px-3 py-1.5 text-xs font-semibold text-text-primary hover:text-[#F97316] transition-colors"
           >
-            <span className="flex items-center gap-2">{s.icon}{s.title}</span>
+            <span className="flex items-center gap-1.5">{s.icon}{s.title}</span>
             <span className={`transition-transform ${accordionAbertos.includes(s.value) ? 'rotate-180' : ''}`}>▼</span>
           </button>
           {accordionAbertos.includes(s.value) && (
-            <div className="px-5 pb-4 pt-2 border-t border-[#E0DFDD] dark:border-[#1F2937]">
-              <div className="grid grid-cols-3 gap-4">
+            <div className="px-3 pb-2 pt-1.5 border-t border-[#E0DFDD] dark:border-[#1F2937]">
+              <div className="grid grid-cols-3 gap-2">
                 {s.fields.map((f: any) => (
                   <div key={f.id}>
                     <label className="block text-[13px] font-medium text-text-secondary mb-1">{f.label}</label>
                     <input type="number" value={f.val} onChange={e => f.set(e.target.value)} step={f.step || '1'} min="0"
-                      className="w-full h-[38px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                      className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
                   </div>
                 ))}
               </div>
@@ -350,17 +349,17 @@ export default function ConfiguracoesPage() {
       ))}
 
       {/* Taxas section */}
-      <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px]">
+      <div className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[6px] flex-shrink-0">
         <button
           onClick={() => toggleAccordion('taxas')}
-          className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-text-primary hover:text-[#F97316] transition-colors"
+          className="w-full flex items-center justify-between px-3 py-1.5 text-xs font-semibold text-text-primary hover:text-[#F97316] transition-colors"
         >
-          <span className="flex items-center gap-2"><DollarSign size={16} />Tabela de Preços por Zona</span>
+          <span className="flex items-center gap-1.5"><DollarSign size={14} />Tabela de Preços por Zona</span>
           <span className={`transition-transform ${accordionAbertos.includes('taxas') ? 'rotate-180' : ''}`}>▼</span>
         </button>
         {accordionAbertos.includes('taxas') && (
-          <div className="px-5 pb-4 pt-2 border-t border-[#E0DFDD] dark:border-[#1F2937] space-y-3">
-            <p className="text-[13px] text-text-secondary">Edite as taxas mínimas e R$/kg por faixa de peso para cada zona.</p>
+          <div className="px-3 pb-2 pt-1.5 border-t border-[#E0DFDD] dark:border-[#1F2937] space-y-2">
+            <p className="text-xs text-text-secondary">Edite taxas mínimas e R$/kg por faixa de peso para cada zona.</p>
             {zonas.map((zona, zIdx) => (
               <div key={zona.zona} className="border border-[#E0DFDD] dark:border-[#1F2937] rounded-[4px] p-3">
                 <div className="flex items-center gap-3 mb-2">
@@ -399,9 +398,9 @@ export default function ConfiguracoesPage() {
       <button
         onClick={salvarTudo}
         disabled={salvando}
-        className="w-full h-12 bg-[#F97316] hover:bg-[#C2590A] text-white font-semibold text-sm rounded-[6px] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+        className="w-full h-9 flex-shrink-0 bg-[#F97316] hover:bg-[#C2590A] text-white font-semibold text-xs rounded-[6px] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
       >
-        <Save size={16} />
+        <Save size={14} />
         {salvando ? 'Salvando...' : 'Salvar Todas as Configurações'}
       </button>
     </div>
