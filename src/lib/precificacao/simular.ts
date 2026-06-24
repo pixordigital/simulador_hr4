@@ -1,4 +1,4 @@
-import { EntradaSimulacao, ResultadoSimulacao, OpcaoCusto, CustoParada } from './tipos'
+import { EntradaSimulacao, ResultadoSimulacao, OpcaoCusto, CustoParada, custoAgregadoVazio } from './tipos'
 import { calcularOpcoesRegulares } from './regular'
 import { calcularCustoDedicada } from './dedicada'
 import { aplicarAgendamento } from './agendada'
@@ -46,6 +46,7 @@ export function simular(
       margemPct
     )
 
+    const acrescimoAgend = entrada.agendada ? insumos.acrescimoAgendamento : 0
     const custoParada: CustoParada = {
       zona: 'Dedicada',
       pesoTaxavel: 0,
@@ -59,14 +60,20 @@ export function simular(
       seguroParcela: 0,
       depreciacaoParcela: 0,
       taxaFaixaPeso: 0,
-      acrescimoAgendamento: entrada.agendada ? insumos.acrescimoAgendamento : 0,
-      total: resultado.total + (entrada.agendada ? insumos.acrescimoAgendamento : 0),
+      acrescimoAgendamento: acrescimoAgend,
+      agregado: {
+        ...resultado.agregado,
+        agendamento: acrescimoAgend,
+        total: resultado.total + acrescimoAgend,
+      },
+      total: resultado.total + acrescimoAgend,
     }
 
     opcoes = [{
       rotulo: veiculo,
       custoTotal: custoParada.total,
       custoPorParada: [custoParada],
+      agregadoTotal: { ...resultado.agregado, agendamento: acrescimoAgend, total: resultado.total + acrescimoAgend },
       isFreelancer: false,
     }]
   }

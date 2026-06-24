@@ -46,6 +46,39 @@ export interface Parada {
   valorNF?: number
 }
 
+export interface CustoAgregado {
+  /** Salário + vale — custo do motorista */
+  motorista: number
+  /** Combustível por km rodado na parada */
+  combustivel: number
+  /** Manutenção + seguro + depreciação — custo do veículo */
+  veiculo: number
+  /** Frete por faixa de peso + taxa mínima */
+  frete: number
+  /** GRIS + Ad-Valorem */
+  taxaNF: number
+  /** Acréscimo de agendamento */
+  agendamento: number
+  /** Total = soma de todos acima */
+  total: number
+}
+
+export function somarCustoAgregado(a: CustoAgregado, b: CustoAgregado): CustoAgregado {
+  return {
+    motorista: a.motorista + b.motorista,
+    combustivel: a.combustivel + b.combustivel,
+    veiculo: a.veiculo + b.veiculo,
+    frete: a.frete + b.frete,
+    taxaNF: a.taxaNF + b.taxaNF,
+    agendamento: a.agendamento + b.agendamento,
+    total: a.total + b.total,
+  }
+}
+
+export function custoAgregadoVazio(): CustoAgregado {
+  return { motorista: 0, combustivel: 0, veiculo: 0, frete: 0, taxaNF: 0, agendamento: 0, total: 0 }
+}
+
 export interface CustoParada {
   zona: string
   pesoTaxavel: number
@@ -60,6 +93,7 @@ export interface CustoParada {
   depreciacaoParcela: number
   taxaFaixaPeso: number
   acrescimoAgendamento: number
+  agregado: CustoAgregado
   total: number
 }
 
@@ -67,6 +101,7 @@ export interface OpcaoCusto {
   rotulo: string
   custoTotal: number
   custoPorParada: CustoParada[]
+  agregadoTotal: CustoAgregado
   isFreelancer: boolean
 }
 

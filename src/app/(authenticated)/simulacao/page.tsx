@@ -30,11 +30,22 @@ type Componentes = {
   acrescimoAgendamento: number
 }
 
+type CustoAgregadoResult = {
+  motorista: number
+  combustivel: number
+  veiculo: number
+  frete: number
+  taxaNF: number
+  agendamento: number
+  total: number
+}
+
 type CustoParadaResult = {
   zona: string
   pesoTaxavel: number
   total: number
   componentes: Componentes
+  agregado: CustoAgregadoResult
 }
 
 type Opcao = {
@@ -42,6 +53,7 @@ type Opcao = {
   custoTotal: number
   isFreelancer: boolean
   custoPorParada: CustoParadaResult[]
+  agregadoTotal: CustoAgregadoResult
 }
 
 const ZONAS = ['João Pessoa', 'Cabedelo', 'Conde', 'Santa Rita', 'Bayeux', 'Alhandra']
@@ -206,14 +218,25 @@ export default function SimulacaoPage() {
         return
       }
       const data = await res.json()
+      const mapearAgregado = (a: any) => ({
+        motorista: a.motorista || 0,
+        combustivel: a.combustivel || 0,
+        veiculo: a.veiculo || 0,
+        frete: a.frete || 0,
+        taxaNF: a.taxaNF || 0,
+        agendamento: a.agendamento || 0,
+        total: a.total || 0,
+      })
       const fmt = (o: any) => ({
         rotulo: o.rotulo,
         custoTotal: o.custoTotal,
         isFreelancer: o.isFreelancer,
+        agregadoTotal: mapearAgregado(o.agregadoTotal || {}),
         custoPorParada: o.custoPorParada.map((cp: any) => ({
           zona: cp.zona || '',
           pesoTaxavel: cp.pesoTaxavel || 0,
           total: cp.total || 0,
+          agregado: mapearAgregado(cp.agregado || {}),
           componentes: {
             salarioParcela: cp.salarioParcela || 0,
             valeParcela: cp.valeParcela || 0,
@@ -653,26 +676,61 @@ export default function SimulacaoPage() {
               </button>
 
               {expandido && (
-                <div className="border border-[var(--border)] rounded-[6px] p-4 space-y-3 text-sm">
+                <div className="border border-[var(--border)] rounded-[6px] p-4 space-y-4 text-sm">
+                  {/* Category summary for selected option */}
+                  {(() => {
+                    const sel = opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]
+                    if (!sel || !sel.agregadoTotal) return null
+                    const cat = sel.agregadoTotal
+                    return (
+                      <div>
+                        <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-secondary)] mb-3">
+                          Resumo por Categoria — {sel.rotulo}
+                        </p>
+                        <div className="space-y-1">
+                          <CategoriaLinha label="Motorista" valor={cat.motorista} cor="var(--brand-orange)" />
+                          <CategoriaLinha label="Combustível" valor={cat.combustivel} cor="var(--semantic-warn)" />
+                          <CategoriaLinha label="Veículo (manut + seguro + depr)" valor={cat.veiculo} cor="var(--semantic-info)" />
+                          <CategoriaLinha label="Frete por faixa de peso" valor={cat.frete} cor="var(--semantic-gain)" />
+                          {cat.taxaNF > 0 && <CategoriaLinha label="Taxas NF (GRIS + Ad-Valorem)" valor={cat.taxaNF} cor="#7C3AED" />}
+                          {cat.agendamento > 0 && <CategoriaLinha label="Acréscimo agendamento" valor={cat.agendamento} cor="#9333EA" />}
+                          <div className="border-t border-[var(--border-strong)] mt-2 pt-2 flex justify-between font-semibold text-[var(--text-primary)]">
+                            <span>Custo total</span>
+                            <span className="font-num">{formatarMoeda(cat.total)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
+
+                  <div className="border-t border-[var(--border)] pt-3" />
+
+                  {/* Per-stop breakdown */}
                   {opcoes.map(opcao =>
                     opcao.custoPorParada.map((cp, pIdx) => (
                       <div key={`${opcao.rotulo}-${pIdx}`}>
                         <p className="text-[13px] font-medium text-[var(--text-secondary)] mb-2 flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-orange)]" />
-                          {cp.zona}
+                          {cp.zona} — <span className="font-num">{cp.pesoTaxavel} kg</span>
                         </p>
-                        <div className="space-y-1 text-[13px] ml-3.5">
-                          <CustoLinha label="Parcela do salário" valor={cp.componentes.salarioParcela} />
+                        <div className="space-y-1.5 text-[13px] ml-3.5">
+                          <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-disabled)] mb-1.5">Custos fixos</p>
+                          <CustoLinha label="Salário (parcela)" valor={cp.componentes.salarioParcela} />
                           <CustoLinha label="Vale alimentação" valor={cp.componentes.valeParcela} />
-                          <CustoLinha label="Combustível" valor={cp.componentes.combustivelParcela} />
-                          <CustoLinha label="Manutenção" valor={cp.componentes.manutencaoParcela} />
                           <CustoLinha label="Seguro" valor={cp.componentes.seguroParcela} />
                           <CustoLinha label="Depreciação" valor={cp.componentes.depreciacaoParcela} />
-                          <CustoLinha label="Frete por faixa" valor={cp.componentes.taxaFaixaPeso} />
+
+                          <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-disabled)] mt-3 mb-1.5">Custos variáveis</p>
+                          <CustoLinha label="Combustível" valor={cp.componentes.combustivelParcela} />
+                          <CustoLinha label="Manutenção" valor={cp.componentes.manutencaoParcela} />
+
+                          <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-disabled)] mt-3 mb-1.5">Frete e taxas</p>
+                          <CustoLinha label="Frete por faixa de peso" valor={cp.componentes.taxaFaixaPeso} />
                           <CustoLinha label="GRIS" valor={cp.componentes.gris} />
                           <CustoLinha label="Ad-Valorem" valor={cp.componentes.adValorem} />
                           <CustoLinha label="Acréscimo agendamento" valor={cp.componentes.acrescimoAgendamento} />
-                          <div className="border-t border-[var(--border-strong)] mt-1.5 pt-1.5 flex justify-between font-semibold text-[var(--text-primary)]">
+
+                          <div className="border-t border-[var(--border-strong)] mt-2 pt-1.5 flex justify-between font-semibold text-[var(--text-primary)]">
                             <span>Total parada</span>
                             <span className="font-num">{formatarMoeda(cp.total)}</span>
                           </div>
@@ -756,6 +814,20 @@ function CustoLinha({ label, valor }: { label: string; valor: number }) {
     <div className="flex justify-between">
       <span className="text-[var(--text-secondary)]">{label}</span>
       <span className="font-num text-[var(--text-primary)]">{formatarMoeda(valor)}</span>
+    </div>
+  )
+}
+
+/* ===== CategoriaLinha helper (colored indicator) ===== */
+function CategoriaLinha({ label, valor, cor }: { label: string; valor: number; cor: string }) {
+  if (valor <= 0) return null
+  return (
+    <div className="flex justify-between items-center py-0.5">
+      <span className="flex items-center gap-2 text-[var(--text-secondary)]">
+        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cor }} />
+        {label}
+      </span>
+      <span className="font-num font-medium text-[var(--text-primary)]">{formatarMoeda(valor)}</span>
     </div>
   )
 }

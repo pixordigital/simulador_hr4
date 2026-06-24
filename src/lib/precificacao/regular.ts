@@ -1,4 +1,4 @@
-import { FaixaPreco, Parada, CustoParada, ConfigVeiculo, ConfigMotoristaProprio } from './tipos'
+import { FaixaPreco, Parada, CustoParada, ConfigVeiculo, ConfigMotoristaProprio, CustoAgregado, custoAgregadoVazio, somarCustoAgregado } from './tipos'
 import { calcularPesoTaxavel } from './peso'
 
 export function buscarFaixaPreco(taxas: FaixaPreco[], zona: string): FaixaPreco | undefined {
@@ -45,6 +45,7 @@ export function calcularCustoParadaRegular(
   const adValorem = calcularAdValorem(parada.valorNF)
 
   const custoVeiculoPorEntrega = custoDiarioVeiculo / numeroEntregasDia
+  const taxaFaixaPeso = fretePeso - taxa.taxaMinima
 
   return {
     zona: parada.zona,
@@ -58,8 +59,17 @@ export function calcularCustoParadaRegular(
     manutencaoParcela: 0,
     seguroParcela: 0,
     depreciacaoParcela: 0,
-    taxaFaixaPeso: fretePeso - taxa.taxaMinima,
+    taxaFaixaPeso,
     acrescimoAgendamento,
+    agregado: {
+      motorista: 0,
+      combustivel: 0,
+      veiculo: 0,
+      frete: fretePeso,
+      taxaNF: gris + adValorem,
+      agendamento: acrescimoAgendamento,
+      total: fretePeso + gris + adValorem + acrescimoAgendamento,
+    },
     total: fretePeso + gris + adValorem + acrescimoAgendamento,
   }
 }
@@ -110,14 +120,29 @@ export function calcularOpcoesRegulares(
     if (!taxa) throw new Error(`Zona não encontrada: ${p.zona}`)
     const base = calcularCustoParadaRegular(p, taxa, kangoo.custoDiario, numeroEntregasDia, acrescimoAgendamento)
     const custoVeiculoPorEntrega = kangoo.custoDiario / numeroEntregasDia
+    const salarioParcela = kangoo.componentes.salario / numeroEntregasDia
+    const valeParcela = kangoo.componentes.vale / numeroEntregasDia
+    const combustivelParcela = kangoo.componentes.combustivel / numeroEntregasDia
+    const manutencaoParcela = kangoo.componentes.manutencao / numeroEntregasDia
+    const seguroParcela = kangoo.componentes.seguro / numeroEntregasDia
+    const depreciacaoParcela = kangoo.componentes.depreciacao / numeroEntregasDia
     return {
       ...base,
-      salarioParcela: kangoo.componentes.salario / numeroEntregasDia,
-      valeParcela: kangoo.componentes.vale / numeroEntregasDia,
-      combustivelParcela: kangoo.componentes.combustivel / numeroEntregasDia,
-      manutencaoParcela: kangoo.componentes.manutencao / numeroEntregasDia,
-      seguroParcela: kangoo.componentes.seguro / numeroEntregasDia,
-      depreciacaoParcela: kangoo.componentes.depreciacao / numeroEntregasDia,
+      salarioParcela,
+      valeParcela,
+      combustivelParcela,
+      manutencaoParcela,
+      seguroParcela,
+      depreciacaoParcela,
+      agregado: {
+        motorista: salarioParcela + valeParcela,
+        combustivel: combustivelParcela,
+        veiculo: manutencaoParcela + seguroParcela + depreciacaoParcela,
+        frete: base.agregado.frete,
+        taxaNF: base.agregado.taxaNF,
+        agendamento: base.agregado.agendamento,
+        total: base.total + custoVeiculoPorEntrega,
+      },
       total: base.total + custoVeiculoPorEntrega,
     }
   })
@@ -126,6 +151,7 @@ export function calcularOpcoesRegulares(
     rotulo: 'KANGOO',
     custoTotal: paradasKangoo.reduce((s, p) => s + p.total, 0),
     custoPorParada: paradasKangoo,
+    agregadoTotal: custoAgregadoVazio(),
     isFreelancer: false,
   })
 
@@ -135,14 +161,29 @@ export function calcularOpcoesRegulares(
     const taxa = buscarFaixaPreco(taxasRegioes, p.zona)
     if (!taxa) throw new Error(`Zona não encontrada: ${p.zona}`)
     const base = calcularCustoParadaRegular(p, taxa, oito160.custoDiario, numeroEntregasDia, acrescimoAgendamento)
+    const salarioParcela = oito160.componentes.salario / numeroEntregasDia
+    const valeParcela = oito160.componentes.vale / numeroEntregasDia
+    const combustivelParcela = oito160.componentes.combustivel / numeroEntregasDia
+    const manutencaoParcela = oito160.componentes.manutencao / numeroEntregasDia
+    const seguroParcela = oito160.componentes.seguro / numeroEntregasDia
+    const depreciacaoParcela = oito160.componentes.depreciacao / numeroEntregasDia
     return {
       ...base,
-      salarioParcela: oito160.componentes.salario / numeroEntregasDia,
-      valeParcela: oito160.componentes.vale / numeroEntregasDia,
-      combustivelParcela: oito160.componentes.combustivel / numeroEntregasDia,
-      manutencaoParcela: oito160.componentes.manutencao / numeroEntregasDia,
-      seguroParcela: oito160.componentes.seguro / numeroEntregasDia,
-      depreciacaoParcela: oito160.componentes.depreciacao / numeroEntregasDia,
+      salarioParcela,
+      valeParcela,
+      combustivelParcela,
+      manutencaoParcela,
+      seguroParcela,
+      depreciacaoParcela,
+      agregado: {
+        motorista: salarioParcela + valeParcela,
+        combustivel: combustivelParcela,
+        veiculo: manutencaoParcela + seguroParcela + depreciacaoParcela,
+        frete: base.agregado.frete,
+        taxaNF: base.agregado.taxaNF,
+        agendamento: base.agregado.agendamento,
+        total: base.total + oito160.custoDiario / numeroEntregasDia,
+      },
       total: base.total + oito160.custoDiario / numeroEntregasDia,
     }
   })
@@ -151,6 +192,7 @@ export function calcularOpcoesRegulares(
     rotulo: '8-160',
     custoTotal: paradasOito160.reduce((s, p) => s + p.total, 0),
     custoPorParada: paradasOito160,
+    agregadoTotal: custoAgregadoVazio(),
     isFreelancer: false,
   })
 
@@ -176,6 +218,15 @@ export function calcularOpcoesRegulares(
         depreciacaoParcela: 0,
         taxaFaixaPeso: 0,
         acrescimoAgendamento,
+        agregado: {
+          motorista: custoPorParada,
+          combustivel: 0,
+          veiculo: 0,
+          frete: 0,
+          taxaNF: gris + adValorem,
+          agendamento: acrescimoAgendamento,
+          total: custoPorParada + gris + adValorem + acrescimoAgendamento,
+        },
         total: custoPorParada + gris + adValorem + acrescimoAgendamento,
       }
     })
@@ -184,8 +235,16 @@ export function calcularOpcoesRegulares(
       rotulo: 'Freelancer',
       custoTotal: paradasFreela.reduce((s, p) => s + p.total, 0),
       custoPorParada: paradasFreela,
+      agregadoTotal: custoAgregadoVazio(),
       isFreelancer: true,
     })
+  }
+
+  // Compute agregadoTotal per opcao
+  for (const op of opcoes) {
+    op.agregadoTotal = op.custoPorParada
+      .map(p => p.agregado)
+      .reduce((acc, a) => somarCustoAgregado(acc, a), custoAgregadoVazio())
   }
 
   return opcoes
