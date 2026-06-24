@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter } from 'lucide-react'
+import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 type Simulacao = {
   id: string
@@ -24,6 +25,7 @@ type Pagamento = {
 }
 
 export default function HistoricoPage() {
+  const router = useRouter()
   const [simulacoes, setSimulacoes] = useState<Simulacao[]>([])
   const [pagamentos, setPagamentos] = useState<Pagamento[]>([])
   const [filtroCliente, setFiltroCliente] = useState('')
@@ -208,6 +210,7 @@ export default function HistoricoPage() {
                 <th className="table-header-cell text-right px-4 py-3">Margem</th>
                 <th className="table-header-cell text-right px-4 py-3">Sugerido</th>
                 <th className="table-header-cell text-right px-4 py-3">Cobrado</th>
+                <th className="table-header-cell text-center px-2 py-3 w-16">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">
@@ -256,6 +259,18 @@ export default function HistoricoPage() {
                           {sim.precoCobrado ? formatarMoeda(sim.precoCobrado) : '—'}
                         </button>
                       )}
+                    </td>
+                    <td className="px-2 py-3 text-center">
+                      <button
+                        onClick={() => {
+                          localStorage.setItem('simulacao_duplicar', JSON.stringify(sim.inputJson))
+                          router.push('/simulacao')
+                        }}
+                        className="text-[var(--text-secondary)] hover:text-[var(--brand-orange)] transition-colors"
+                        title="Duplicar simulação"
+                      >
+                        <Copy size={14} strokeWidth={1.5} />
+                      </button>
                     </td>
                   </tr>
                 )

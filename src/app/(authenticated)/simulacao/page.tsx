@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Calculator, Info, AlertTriangle, Plus, Trash2, Truck,
-  CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight,
+  CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight, Check,
   Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database,
 } from 'lucide-react'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
@@ -100,6 +100,9 @@ export default function SimulacaoPage() {
   const [valorPrejuizo, setValorPrejuizo] = useState(0)
   const [avisoSemNF, setAvisoSemNF] = useState(false)
   const [expandido, setExpandido] = useState(false)
+  const [salvandoCotacao, setSalvandoCotacao] = useState(false)
+  const [salvandoTemp, setSalvandoTemp] = useState(false)
+  const [salvoMsg, setSalvoMsg] = useState('')
   const margemInputRef = useRef<HTMLInputElement>(null)
 
   const adicionarParada = () => setParadas([...paradas, criarParada()])
@@ -270,13 +273,67 @@ export default function SimulacaoPage() {
   const opcaoSelecionada = opcoes.length > 0 ? (opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]) : undefined
   const catSelecionada = opcaoSelecionada?.agregadoTotal
 
+  async function salvarCotacao() {
+    if (!nomeCliente) { setErro('Informe o nome do cliente'); return }
+    if (opcoes.length === 0) { setErro('Calcule o frete antes de salvar'); return }
+    setSalvandoCotacao(true)
+    setErro('')
+    try {
+      const res = await fetch('/api/dinamico?tipo=simulacoes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nomeCliente,
+          tipoEntrega: tipo,
+          agendada,
+          dataHorarioAgendado: agendada ? `${dataAgendamento} ${horarioAgendado}` : undefined,
+          acrescimoAgendamento: agendada ? parseFloat(acrescimoAgendamento) : 0,
+          margemPct: parseFloat(margem),
+          opcaoVeiculo,
+          resultadoJson: { opcoes, totalGeral, precoSugerido },
+        }),
+      })
+      if (!res.ok) throw new Error()
+      setSalvoMsg('Cotação salva!')
+      setTimeout(() => setSalvoMsg(''), 2500)
+    } catch { setErro('Erro ao salvar cotação') }
+    setSalvandoCotacao(false)
+  }
+
+  async function salvarTemplate() {
+    if (!nomeCliente) { setErro('Informe o nome do cliente'); return }
+    if (opcoes.length === 0) { setErro('Calcule o frete antes de salvar'); return }
+    setSalvandoTemp(true)
+    setErro('')
+    try {
+      const res = await fetch('/api/dinamico?tipo=templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: nomeCliente,
+          inputJson: { tipo, paradas, opcaoVeiculo, numeroEntregas, margem, agendada },
+        }),
+      })
+      if (!res.ok) throw new Error()
+      setSalvoMsg('Template salvo!')
+      setTimeout(() => setSalvoMsg(''), 2500)
+    } catch { setErro('Erro ao salvar template') }
+    setSalvandoTemp(false)
+  }
+
   return (
     <div className="h-full flex flex-col">
       {erro && (
-        <div className="mb-3 border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-2.5 rounded-[4px]">
-          <p className="text-[color:var(--semantic-loss)] text-sm font-medium flex items-center gap-2">
-            <AlertTriangle size={14} />
-            {erro}
+        <div className="mb-2 border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-2 rounded-[4px]">
+          <p className="text-[color:var(--semantic-loss)] text-xs font-medium flex items-center gap-1.5">
+            <AlertTriangle size={12} /> {erro}
+          </p>
+        </div>
+      )}
+      {salvoMsg && (
+        <div className="mb-2 border-l-[3px] border-l-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_6%,transparent)] p-2 rounded-[4px]">
+          <p className="text-[color:var(--semantic-gain)] text-xs font-medium flex items-center gap-1.5">
+            <Check size={12} /> {salvoMsg}
           </p>
         </div>
       )}
@@ -817,11 +874,18 @@ export default function SimulacaoPage() {
 
               {/* Actions */}
               <div className="flex gap-3">
-                <button className="btn-secondary flex-1 h-10 text-sm">
-                  Salvar cotação
+                {salvoMsg && (
+                  <span className="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs font-medium text-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_8%,transparent)] px-3 py-1.5 rounded-[4px]">
+                    {salvoMsg}
+                  </span>
+                )}
+                <button onClick={salvarCotacao} disabled={salvandoCotacao || opcoes.length === 0}
+                  className="btn-secondary flex-1 h-9 text-xs disabled:opacity-40">
+                  {salvandoCotacao ? 'Salvando...' : 'Salvar cotação'}
                 </button>
-                <button className="btn-secondary flex-1 h-10 text-sm">
-                  Salvar template
+                <button onClick={salvarTemplate} disabled={salvandoTemp || opcoes.length === 0}
+                  className="btn-secondary flex-1 h-9 text-xs disabled:opacity-40">
+                  {salvandoTemp ? 'Salvando...' : 'Salvar template'}
                 </button>
               </div>
             </div>
