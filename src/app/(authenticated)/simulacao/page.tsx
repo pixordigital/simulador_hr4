@@ -270,9 +270,9 @@ export default function SimulacaoPage() {
   const catSelecionada = opcaoSelecionada?.agregadoTotal
 
   return (
-    <div className="space-y-0">
+    <div className="h-full flex flex-col">
       {erro && (
-        <div className="mb-6 border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-3 rounded-[4px]">
+        <div className="mb-3 border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-2.5 rounded-[4px]">
           <p className="text-[color:var(--semantic-loss)] text-sm font-medium flex items-center gap-2">
             <AlertTriangle size={14} />
             {erro}
@@ -280,11 +280,11 @@ export default function SimulacaoPage() {
         </div>
       )}
 
-      <div className="flex gap-0">
+      <div className="flex flex-1 gap-0 overflow-hidden h-full">
         {/* ===== LEFT (58%) ===== */}
-        <div className="w-[58%] pr-10 border-r border-[var(--border)]">
+        <div className="w-[58%] pr-8 border-r border-[var(--border)] overflow-y-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-3">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--text-secondary)] mb-1 font-display">
                 Simulação de Frete
@@ -320,7 +320,7 @@ export default function SimulacaoPage() {
           </div>
 
           {/* Cliente */}
-          <div className="mb-6">
+          <div className="mb-3">
             <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
               Cliente
             </label>
@@ -334,7 +334,7 @@ export default function SimulacaoPage() {
           </div>
 
           {/* Motorista / Veículo */}
-          <div className="mb-6">
+          <div className="mb-3">
             <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-2">
               Motorista / Veículo
             </label>
@@ -355,7 +355,7 @@ export default function SimulacaoPage() {
           </div>
 
           {/* Entregas no dia + freelancer taxa */}
-          <div className="grid grid-cols-2 gap-5 mb-6">
+          <div className="grid grid-cols-2 gap-5 mb-3">
             <div>
               <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
                 Entregas do dia
@@ -431,7 +431,7 @@ export default function SimulacaoPage() {
 
           {/* Paradas */}
           {tipo === 'regular' && (
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-secondary)]">
                   Paradas
@@ -546,7 +546,7 @@ export default function SimulacaoPage() {
           <div className="section-divider" />
 
           {/* Entrega Agendada */}
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex items-center gap-3 mb-2">
               <input
                 type="checkbox"
@@ -595,34 +595,34 @@ export default function SimulacaoPage() {
         </div>
 
         {/* ===== RIGHT (42%) ===== */}
-        <div className="w-[42%] pl-10">
+        <div className="w-[42%] pl-8 overflow-y-auto">
           {opcoes.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full min-h-[500px] text-center">
-              <div className="w-16 h-16 rounded-full border-2 border-dashed border-[var(--border-strong)] flex items-center justify-center mb-6">
-                <Calculator size={28} className="text-[var(--text-disabled)]" strokeWidth={1} />
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="w-14 h-14 rounded-full border-2 border-dashed border-[var(--border-strong)] flex items-center justify-center mb-3">
+                <Calculator size={24} className="text-[var(--text-disabled)]" strokeWidth={1} />
               </div>
-              <p className="text-lg font-display font-medium text-[var(--text-secondary)] mb-2">
-                Preencha os dados da entrega para ver a cotação em tempo real.
+              <p className="text-base font-display font-medium text-[var(--text-secondary)] mb-1">
+                Preencha os dados da entrega para ver a cotação.
               </p>
-              <div className="w-10 border-t border-[var(--border)] my-5" />
-              <p className="text-sm text-[var(--text-disabled)] max-w-[280px]">
+              <div className="w-8 border-t border-[var(--border)] my-3" />
+              <p className="text-sm text-[var(--text-disabled)] max-w-[240px]">
                 Custo do motorista, frete por faixa e margem calculados automaticamente.
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-2">
               {/* Alerts */}
               {alertaBreakEven && (
-                <div className="border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-3 rounded-[4px]">
+                <div className="border-l-[3px] border-l-[var(--semantic-loss)] bg-[color-mix(in_srgb,var(--semantic-loss)_6%,transparent)] p-2 rounded-[4px] text-sm">
                   <p className="text-[color:var(--semantic-loss)] text-sm font-medium">
-                    ⚑ Atenção: o preço sugerido está abaixo do seu custo. Prejuízo de {formatarMoeda(valorPrejuizo)} nesta entrega.
+                    ⚑ Atenção: preço abaixo do custo. Prejuízo de {formatarMoeda(valorPrejuizo)}.
                   </p>
                 </div>
               )}
               {avisoSemNF && (
-                <div className="border-l-[3px] border-l-[var(--semantic-warn)] bg-[color-mix(in_srgb,var(--semantic-warn)_6%,transparent)] p-3 rounded-[4px]">
+                <div className="border-l-[3px] border-l-[var(--semantic-warn)] bg-[color-mix(in_srgb,var(--semantic-warn)_6%,transparent)] p-2 rounded-[4px] text-sm">
                   <p className="text-[color:var(--semantic-warn)] text-sm font-medium">
-                    GRIS e Ad-Valorem não incluídos — informe o valor da NF para cálculo completo.
+                    GRIS e Ad-Valorem não incluídos — informe o valor da NF.
                   </p>
                 </div>
               )}
@@ -632,7 +632,7 @@ export default function SimulacaoPage() {
                 <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-3">
                   Opções de Custo
                 </p>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-2">
                   {opcoes.map((opcao) => {
                     const isMaisBarata = opcao.custoTotal === opcaoMaisBarata
                     const selecionada = opcao.rotulo === opcaoVeiculo
@@ -641,7 +641,7 @@ export default function SimulacaoPage() {
                       <div
                         key={opcao.rotulo}
                         className={`
-                          relative rounded-[6px] p-4 transition-all duration-150
+                          relative rounded-[6px] p-3 transition-all duration-150
                           ${isMaisBarata
                             ? 'card-premium--cheapest'
                             : selecionada
@@ -650,12 +650,12 @@ export default function SimulacaoPage() {
                         `}
                       >
                         {isMaisBarata && (
-                          <span className="inline-flex items-center text-[10px] font-medium text-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_8%,transparent)] px-2 py-0.5 rounded-[3px] mb-2.5 tracking-wide uppercase">
+                          <span className="inline-flex items-center text-[10px] font-medium text-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_8%,transparent)] px-2 py-0.5 rounded-[3px] mb-1.5 tracking-wide uppercase">
                             ↓ Menor custo
                           </span>
                         )}
                         <div className="flex items-center gap-2 mb-3">
-                          <span className="text-sm font-semibold text-[var(--text-primary)]">
+                          <span className="text-xs font-semibold text-[var(--text-primary)]">
                             {opcao.rotulo}
                           </span>
                           {opcao.isFreelancer && (
@@ -664,7 +664,7 @@ export default function SimulacaoPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-2xl font-num font-medium text-[var(--text-primary)] mb-1">
+                        <p className="text-xl font-num font-medium text-[var(--text-primary)]">
                           {formatarMoeda(opcao.custoTotal)}
                         </p>
                         {selecionada && !isMaisBarata && opcaoMaisBarata < opcao.custoTotal && (
@@ -688,7 +688,7 @@ export default function SimulacaoPage() {
               </button>
 
               {expandido && (
-                <div className="border border-[var(--border)] rounded-[6px] p-4 space-y-4 text-sm">
+                <div className="border border-[var(--border)] rounded-[6px] p-3 space-y-2 text-xs">
                   {/* Category summary for selected option */}
                   {opcaoSelecionada && catSelecionada && (
                     <div>
@@ -747,8 +747,8 @@ export default function SimulacaoPage() {
               )}
 
               {/* Margem */}
-              <div className="border-t border-[var(--border)] pt-5">
-                <div className="flex items-center justify-between mb-3">
+              <div className="border-t border-[var(--border)] pt-2">
+                <div className="flex items-center justify-between mb-2">
                   <label className="text-[13px] font-medium text-[var(--text-secondary)] flex items-center gap-1.5">
                     <TrendingUp size={14} strokeWidth={1.5} />
                     Margem de lucro
@@ -783,15 +783,15 @@ export default function SimulacaoPage() {
               </div>
 
               {/* Preço Sugerido */}
-              <div className="card-premium p-5">
-                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1">
+              <div className="card-premium p-3">
+                <p className="text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-0.5">
                   Preço Sugerido
                 </p>
-                <p className="text-4xl font-bold text-[var(--brand-orange)] font-num">
+                <p className="text-3xl font-bold text-[var(--brand-orange)] font-num">
                   {formatarMoeda(precoSugerido)}
                 </p>
-                <p className="text-[12px] text-[var(--text-disabled)] mt-1">
-                  Custo total: {formatarMoeda(totalGeral)} · Margem: {margem}%
+                <p className="text-[11px] text-[var(--text-disabled)]">
+                  Custo: {formatarMoeda(totalGeral)} · Margem: {margem}%
                 </p>
               </div>
 

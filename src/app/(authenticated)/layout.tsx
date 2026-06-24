@@ -10,8 +10,8 @@ export default function AuthenticatedLayout({
     <ThemeProvider>
       <div className="flex h-screen overflow-hidden">
         <AppSidebar />
-        <main className="flex-1 overflow-y-auto bg-surface-base text-text-primary">
-          <div className="max-w-6xl mx-auto p-8">
+        <main className="flex-1 bg-surface-base text-text-primary">
+          <div className="max-w-6xl mx-auto p-3 h-full">
             {children}
           </div>
         </main>
