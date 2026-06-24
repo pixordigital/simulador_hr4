@@ -281,9 +281,9 @@ export default function SimulacaoPage() {
         </div>
       )}
 
-      <div className="flex flex-1 gap-0 overflow-hidden h-full">
+      <div className="flex flex-1 gap-0 h-full">
         {/* ===== LEFT (58%) ===== */}
-        <div className="w-[58%] pr-8 border-r border-[var(--border)] overflow-y-auto">
+        <div className="w-[58%] pr-5 border-r border-[var(--border)]">
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <div>
@@ -319,7 +319,7 @@ export default function SimulacaoPage() {
           </div>
 
           {/* Tipo selector */}
-          <div className="mb-7">
+          <div className="mb-2">
             <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-2">
               Tipo de entrega
             </label>
@@ -615,7 +615,7 @@ export default function SimulacaoPage() {
         </div>
 
         {/* ===== RIGHT (42%) ===== */}
-        <div className="w-[42%] pl-8 overflow-y-auto">
+        <div className="w-[42%] pl-5">
           {opcoes.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="w-14 h-14 rounded-full border-2 border-dashed border-[var(--border-strong)] flex items-center justify-center mb-3">
@@ -739,7 +739,7 @@ export default function SimulacaoPage() {
                           <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-orange)]" />
                           {cp.zona} — <span className="font-num">{cp.pesoTaxavel} kg</span>
                         </p>
-                        <div className="space-y-1.5 text-[13px] ml-3.5">
+                        <div className="space-y-1.5 text-[13px] ml-2">
                           <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-disabled)] mb-1.5">Custos fixos</p>
                           <CustoLinha label="Salário (parcela)" valor={cp.componentes.salarioParcela} />
                           <CustoLinha label="Vale alimentação" valor={cp.componentes.valeParcela} />
