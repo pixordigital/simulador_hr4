@@ -7,6 +7,7 @@ import {
   Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database,
 } from 'lucide-react'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
+import { dispararToast } from '@/components/Toast'
 
 type Parada = {
   id: string
@@ -102,7 +103,6 @@ export default function SimulacaoPage() {
   const [expandido, setExpandido] = useState(false)
   const [salvandoCotacao, setSalvandoCotacao] = useState(false)
   const [salvandoTemp, setSalvandoTemp] = useState(false)
-  const [salvoMsg, setSalvoMsg] = useState('')
   const margemInputRef = useRef<HTMLInputElement>(null)
 
   const adicionarParada = () => setParadas([...paradas, criarParada()])
@@ -294,9 +294,8 @@ export default function SimulacaoPage() {
         }),
       })
       if (!res.ok) throw new Error()
-      setSalvoMsg('Cotação salva!')
-      setTimeout(() => setSalvoMsg(''), 2500)
-    } catch { setErro('Erro ao salvar cotação') }
+      dispararToast('sucesso', 'Cotação salva!')
+    } catch { dispararToast('erro', 'Erro ao salvar cotação') }
     setSalvandoCotacao(false)
   }
 
@@ -314,10 +313,8 @@ export default function SimulacaoPage() {
           inputJson: { tipo, paradas, opcaoVeiculo, numeroEntregas, margem, agendada },
         }),
       })
-      if (!res.ok) throw new Error()
-      setSalvoMsg('Template salvo!')
-      setTimeout(() => setSalvoMsg(''), 2500)
-    } catch { setErro('Erro ao salvar template') }
+      dispararToast('sucesso', 'Template salvo!')
+    } catch { dispararToast('erro', 'Erro ao salvar template') }
     setSalvandoTemp(false)
   }
 
@@ -330,14 +327,6 @@ export default function SimulacaoPage() {
           </p>
         </div>
       )}
-      {salvoMsg && (
-        <div className="mb-2 border-l-[3px] border-l-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_6%,transparent)] p-2 rounded-[4px]">
-          <p className="text-[color:var(--semantic-gain)] text-xs font-medium flex items-center gap-1.5">
-            <Check size={12} /> {salvoMsg}
-          </p>
-        </div>
-      )}
-
       <div className="flex flex-1 gap-0 h-full">
         {/* ===== LEFT (58%) ===== */}
         <div className="w-[58%] pr-5 border-r border-[var(--border)]">
@@ -874,11 +863,6 @@ export default function SimulacaoPage() {
 
               {/* Actions */}
               <div className="flex gap-3">
-                {salvoMsg && (
-                  <span className="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs font-medium text-[var(--semantic-gain)] bg-[color-mix(in_srgb,var(--semantic-gain)_8%,transparent)] px-3 py-1.5 rounded-[4px]">
-                    {salvoMsg}
-                  </span>
-                )}
                 <button onClick={salvarCotacao} disabled={salvandoCotacao || opcoes.length === 0}
                   className="btn-secondary flex-1 h-9 text-xs disabled:opacity-40">
                   {salvandoCotacao ? 'Salvando...' : 'Salvar cotação'}

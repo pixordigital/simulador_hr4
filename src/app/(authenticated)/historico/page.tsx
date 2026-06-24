@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy } from 'lucide-react'
+import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy, Download, FileDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { dispararToast } from '@/components/Toast'
 
 type Simulacao = {
   id: string
@@ -91,19 +92,61 @@ export default function HistoricoPage() {
     return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
   }
 
+  function exportarCSV() {
+    const linhas = [['Data', 'Cliente', 'Tipo', 'Custo', 'Margem', 'Sugerido', 'Cobrado'].join(';')]
+    for (const sim of filtradas) {
+      const custo = sim.resultadoJson?.totalGeral || 0
+      const sugerido = sim.resultadoJson?.precoSugerido || 0
+      linhas.push([
+        formatarData(sim.criadoEm),
+        sim.nomeCliente || '',
+        sim.tipoEntrega,
+        custo.toFixed(2),
+        sim.margemPct + '%',
+        sugerido.toFixed(2),
+        (sim.precoCobrado || 0).toFixed(2),
+      ].join(';'))
+    }
+    const blob = new Blob([linhas.join('\n')], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = `simulacoes_${new Date().toISOString().slice(0,10)}.csv`
+    a.click(); URL.revokeObjectURL(url)
+    dispararToast('sucesso', 'CSV exportado!')
+  }
+
+  function exportarJSON() {
+    const blob = new Blob([JSON.stringify(filtradas, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = `simulacoes_${new Date().toISOString().slice(0,10)}.json`
+    a.click(); URL.revokeObjectURL(url)
+    dispararToast('sucesso', 'JSON exportado!')
+  }
+
   return (
     <div className="h-full flex flex-col overflow-y-auto">
       {/* Header */}
-      <div>
-        <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--text-secondary)] mb-1 font-display">
-          Relatórios
-        </p>
-        <h1 className="text-[28px] font-bold tracking-tight text-[var(--text-primary)] font-display">
-          Histórico
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-1">
-          Acompanhe a rentabilidade e consulte simulações passadas
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--text-secondary)] mb-1 font-display">
+            Relatórios
+          </p>
+          <h1 className="text-[28px] font-bold tracking-tight text-[var(--text-primary)] font-display">
+            Histórico
+          </h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">
+            Acompanhe a rentabilidade e consulte simulações passadas
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={exportarCSV} className="h-[34px] px-3 rounded-[4px] border border-[var(--border-strong)] text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--surface-sunken)] transition-colors flex items-center gap-1.5">
+            <FileDown size={13} /> CSV
+          </button>
+          <button onClick={exportarJSON} className="h-[34px] px-3 rounded-[4px] border border-[var(--border-strong)] text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--surface-sunken)] transition-colors flex items-center gap-1.5">
+            <Download size={13} /> JSON
+          </button>
+        </div>
       </div>
 
       {/* Dashboard KPIs */}
