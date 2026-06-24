@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Save, AlertTriangle, Check, Fuel, Settings2, Truck, DollarSign, Gauge } from 'lucide-react'
+import { Save, AlertTriangle, Check, Fuel, Settings2, Truck, DollarSign, Gauge, Link2, Unlink, ExternalLink, Loader } from 'lucide-react'
 
 type FaixaInput = { min: number; max: number; precoPorKg: number }
 type ZonaInput = { origem: string; zona: string; taxaMinima: number; pesoBase: number; faixas: FaixaInput[] }
@@ -52,7 +52,59 @@ export default function ConfiguracoesPage() {
   // Accordion state
   const [accordionAbertos, setAccordionAbertos] = useState<string[]>([])
 
-  useEffect(() => { carregarConfigs() }, [])
+  // Brudam integration
+  const [brudamUser, setBrudamUser] = useState('')
+  const [brudamPass, setBrudamPass] = useState('')
+  const [brudamStatus, setBrudamStatus] = useState<'idle' | 'testando' | 'ok' | 'erro'>('idle')
+  const [brudamMensagem, setBrudamMensagem] = useState('')
+
+  useEffect(() => {
+    carregarConfigs()
+    const savedUser = localStorage.getItem('brudam_usuario') || ''
+    const savedPass = localStorage.getItem('brudam_senha') || ''
+    if (savedUser && savedPass) {
+      setBrudamUser(savedUser)
+      setBrudamPass(savedPass)
+    }
+  }, [])
+
+  async function testarBrudam() {
+    if (!brudamUser || !brudamPass) {
+      setBrudamStatus('erro')
+      setBrudamMensagem('Preencha usuário e senha')
+      return
+    }
+    setBrudamStatus('testando')
+    setBrudamMensagem('')
+    const basic = btoa(`${brudamUser}:${brudamPass}`)
+    try {
+      const res = await fetch('/api/integracao/brudam/auth', {
+        headers: { authorization: `Basic ${basic}` },
+      })
+      const data = await res.json()
+      if (data.status === 0 && data.message?.includes('informar')) {
+        setBrudamStatus('ok')
+        setBrudamMensagem('Conectado!')
+        localStorage.setItem('brudam_usuario', brudamUser)
+        localStorage.setItem('brudam_senha', brudamPass)
+      } else {
+        setBrudamStatus('erro')
+        setBrudamMensagem(data.message || 'Falha na autenticação')
+      }
+    } catch {
+      setBrudamStatus('erro')
+      setBrudamMensagem('Erro de conexão')
+    }
+  }
+
+  function desconectarBrudam() {
+    localStorage.removeItem('brudam_usuario')
+    localStorage.removeItem('brudam_senha')
+    setBrudamUser('')
+    setBrudamPass('')
+    setBrudamStatus('idle')
+    setBrudamMensagem('')
+  }
 
   function toggleAccordion(valor: string) {
     setAccordionAbertos(prev =>
@@ -233,6 +285,64 @@ export default function ConfiguracoesPage() {
           {mensagem.texto}
         </div>
       )}
+
+      {/* Integração Brudam */}
+      <div className="flex-shrink-0 border border-[#7C3AED]/30 rounded-[6px] p-3 space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {brudamStatus === 'ok' ? <Link2 size={16} className="text-[#15803D]" /> : <Unlink size={16} className="text-[#A8A29E]" />}
+            <h2 className="text-sm font-semibold text-text-primary">Integração Brudam TMS</h2>
+          </div>
+          <a href="https://brudam.com.br" target="_blank" rel="noopener noreferrer" className="text-xs text-[#7C3AED] hover:underline flex items-center gap-1">
+            brudam.com.br <ExternalLink size={10} />
+          </a>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <label className="block text-[11px] font-medium text-text-secondary mb-0.5">Usuário</label>
+            <input
+              type="text"
+              value={brudamUser}
+              onChange={e => { setBrudamUser(e.target.value); setBrudamStatus('idle') }}
+              placeholder="Usuário Brudam"
+              className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#7C3AED] focus:border-2"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-medium text-text-secondary mb-0.5">Senha</label>
+            <input
+              type="password"
+              value={brudamPass}
+              onChange={e => { setBrudamPass(e.target.value); setBrudamStatus('idle') }}
+              placeholder="••••••••"
+              className="w-full h-[32px] px-3 border border-[#A8A29E] dark:border-[#374151] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#7C3AED] focus:border-2"
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {brudamStatus === 'testando' ? (
+            <button disabled className="h-[32px] px-4 rounded-[4px] bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-medium flex items-center gap-1.5">
+              <Loader size={12} className="animate-spin" /> Testando...
+            </button>
+          ) : brudamStatus === 'ok' ? (
+            <>
+              <span className="text-xs text-[#15803D] font-medium flex items-center gap-1"><Check size={12} /> Conectado</span>
+              <button onClick={desconectarBrudam} className="h-[32px] px-3 rounded-[4px] border border-[#A8A29E] text-xs text-text-secondary hover:text-[#B91C1C] transition-colors">
+                Desconectar
+              </button>
+            </>
+          ) : (
+            <button onClick={testarBrudam} className="h-[32px] px-4 rounded-[4px] bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-medium transition-colors">
+              Testar Conexão
+            </button>
+          )}
+          {brudamMensagem && brudamStatus !== 'ok' && (
+            <span className={`text-xs ${brudamStatus === 'erro' ? 'text-[#B91C1C]' : 'text-text-secondary'}`}>
+              {brudamMensagem}
+            </span>
+          )}
+        </div>
+      </div>
 
       {/* Combustível + Geral — destaque mensal */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 flex-shrink-0">
