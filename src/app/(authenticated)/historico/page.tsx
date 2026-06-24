@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy, Download, FileDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { dispararToast } from '@/components/Toast'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 type Simulacao = {
   id: string
@@ -27,6 +29,7 @@ type Pagamento = {
 
 export default function HistoricoPage() {
   const router = useRouter()
+  const relatorioRef = useRef<HTMLDivElement>(null)
   const [simulacoes, setSimulacoes] = useState<Simulacao[]>([])
   const [pagamentos, setPagamentos] = useState<Pagamento[]>([])
   const [filtroCliente, setFiltroCliente] = useState('')
@@ -124,8 +127,43 @@ export default function HistoricoPage() {
     dispararToast('sucesso', 'JSON exportado!')
   }
 
+  async function exportarPDF() {
+    const el = relatorioRef.current
+    if (!el) return
+    dispararToast('info', 'Gerando PDF...')
+    try {
+      const canvas = await html2canvas(el, {
+        scale: 2,
+        backgroundColor: '#F5F5F4',
+        logging: false,
+      })
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const imgWidth = pageWidth - 20
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      let heightLeft = imgHeight
+      let position = 10
+
+      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+      heightLeft -= pdf.internal.pageSize.getHeight() - 20
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight + 10
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+        heightLeft -= pdf.internal.pageSize.getHeight() - 20
+      }
+
+      pdf.save(`simulacoes_${new Date().toISOString().slice(0,10)}.pdf`)
+      dispararToast('sucesso', 'PDF exportado!')
+    } catch {
+      dispararToast('erro', 'Erro ao gerar PDF')
+    }
+  }
+
   return (
-    <div className="h-full flex flex-col overflow-y-auto">
+    <div ref={relatorioRef} className="h-full flex flex-col overflow-y-auto">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
@@ -140,6 +178,9 @@ export default function HistoricoPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <button onClick={exportarPDF} className="h-[34px] px-3 rounded-[4px] border border-[var(--border-strong)] text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--surface-sunken)] transition-colors flex items-center gap-1.5">
+            <Download size={13} /> PDF
+          </button>
           <button onClick={exportarCSV} className="h-[34px] px-3 rounded-[4px] border border-[var(--border-strong)] text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--surface-sunken)] transition-colors flex items-center gap-1.5">
             <FileDown size={13} /> CSV
           </button>
