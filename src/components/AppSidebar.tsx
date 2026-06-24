@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calculator, Clock, FileText, Users, Settings, Sun, Moon, CreditCard } from 'lucide-react'
+import { Calculator, Clock, FileText, Users, Settings, Sun, Moon, CreditCard, UserPlus } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
 
 const itensMenu = [
   { href: '/simulacao', label: 'Nova Simulação', icon: Calculator },
   { href: '/historico', label: 'Histórico', icon: Clock },
   { href: '/templates', label: 'Templates', icon: FileText },
+  { href: '/clientes', label: 'Clientes', icon: UserPlus },
   { href: '/motoristas', label: 'Motoristas', icon: Users },
   { href: '/pagamentos', label: 'Pagamentos', icon: CreditCard },
   { href: '/configuracoes', label: 'Configurações', icon: Settings },

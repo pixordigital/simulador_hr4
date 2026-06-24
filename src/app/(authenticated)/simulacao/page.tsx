@@ -4,10 +4,22 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Calculator, Info, AlertTriangle, Plus, Trash2, Truck,
   CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight, Check,
-  Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database,
+  Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database, Search, UserPlus,
 } from 'lucide-react'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
 import { dispararToast } from '@/components/Toast'
+
+interface Cliente {
+  id: string
+  nome: string
+  documento?: string
+  endereco?: string
+  telefone?: string
+  email?: string
+  observacoes?: string
+  criadoEm: string
+  atualizadoEm: string
+}
 
 type Parada = {
   id: string
@@ -103,7 +115,24 @@ export default function SimulacaoPage() {
   const [expandido, setExpandido] = useState(false)
   const [salvandoCotacao, setSalvandoCotacao] = useState(false)
   const [salvandoTemp, setSalvandoTemp] = useState(false)
+  const [clientes, setClientes] = useState<Cliente[]>([])
   const margemInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    fetch('/api/dinamico/clientes')
+      .then(r => r.ok && r.json())
+      .then(data => Array.isArray(data) && setClientes(data))
+      .catch(() => {})
+  }, [])
+
+  const adicionarParada = () => setParadas([...paradas, criarParada()])
+  const removerParada = (id: string) => { if (paradas.length > 1) setParadas(paradas.filter(p => p.id !== id)) }
+  const atualizarParada = (id: string, campo: keyof Parada, valor: string | number) =>
+    setParadas(paradas.map(p => (p.id === id ? { ...p, [campo]: valor } : p)))
+
+  const limpar = () => {
+    setNomeCliente('')
+    setParadas([criarParada()])
 
   const adicionarParada = () => setParadas([...paradas, criarParada()])
   const removerParada = (id: string) => { if (paradas.length > 1) setParadas(paradas.filter(p => p.id !== id)) }
@@ -393,13 +422,28 @@ export default function SimulacaoPage() {
             <label className="block text-[13px] font-medium text-[var(--text-secondary)] mb-1.5">
               Cliente
             </label>
-            <input
-              type="text"
-              value={nomeCliente}
-              onChange={e => setNomeCliente(e.target.value)}
-              placeholder="Nome do cliente ou empresa"
-              className="input-premium"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={nomeCliente}
+                onChange={e => setNomeCliente(e.target.value)}
+                placeholder="Digite para buscar ou criar novo..."
+                className="input-premium pr-10"
+                list="clientes-list"
+                autoComplete="off"
+              />
+              <datalist id="clientes-list">
+                {clientes.map(c => <option key={c.id} value={c.nome} />)}
+              </datalist>
+              <button
+                type="button"
+                onClick={() => window.location.href = '/clientes'}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--text-disabled)] hover:text-[var(--brand-orange)] transition-colors"
+                title="Gerenciar clientes"
+              >
+                <UserPlus size={16} strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
 
           {/* Motorista / Veículo */}
