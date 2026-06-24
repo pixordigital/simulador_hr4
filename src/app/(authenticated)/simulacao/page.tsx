@@ -543,6 +543,20 @@ export default function SimulacaoPage() {
               </div>
             )}
           </div>
+
+          {/* Calcular button — always visible */}
+          <button onClick={calcular} disabled={calculando} className="btn-primary w-full h-11 mt-6">
+            {calculando ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Calculando...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Calcular <Calculator size={15} strokeWidth={1.5} />
+              </span>
+            )}
+          </button>
         </div>
 
         {/* ===== RIGHT (42%) ===== */}
@@ -720,18 +734,6 @@ export default function SimulacaoPage() {
 
               {/* Actions */}
               <div className="flex gap-3">
-                <button onClick={calcular} disabled={calculando} className="btn-primary flex-1 h-10">
-                  {calculando ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Calculando...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      Calcular <Calculator size={15} strokeWidth={1.5} />
-                    </span>
-                  )}
-                </button>
                 <button className="btn-secondary flex-1 h-10 text-sm">
                   Salvar cotação
                 </button>
