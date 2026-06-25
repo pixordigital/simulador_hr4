@@ -125,6 +125,48 @@ export default function SimulacaoPage() {
       .catch(() => {})
   }, [])
 
+  // Load duplicated simulation from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('simulacao_duplicar')
+    if (saved) {
+      try {
+        const input = JSON.parse(saved)
+        localStorage.removeItem('simulacao_duplicar')
+
+        if (input.tipo) setTipo(input.tipo)
+        if (input.opcaoVeiculo) setOpcaoVeiculo(input.opcaoVeiculo)
+        if (input.numeroEntregas) setNumeroEntregas(String(input.numeroEntregas))
+        if (input.margem) setMargem(String(input.margem))
+        if (input.agendada !== undefined) setAgendada(input.agendada)
+        if (input.acrescimoAgendamento) setAcrescimoAgendamento(String(input.acrescimoAgendamento))
+
+        if (input.paradas && Array.isArray(input.paradas) && input.paradas.length > 0) {
+          setParadas(input.paradas.map((p: any) => ({
+            id: Math.random().toString(36).slice(2),
+            zona: p.zona || '',
+            pesoReal: p.pesoReal || 0,
+            comprimento: p.comprimento || '',
+            largura: p.largura || '',
+            altura: p.altura || '',
+            valorNF: p.valorNF || '',
+          })))
+        }
+
+        if (input.taxaFreelancer) setTaxaFreelancer(String(input.taxaFreelancer))
+        if (input.diasDedicada) setDiasDedicada(String(input.diasDedicada))
+        if (input.kmEstimadoDedicada) setKmEstimado(String(input.kmEstimadoDedicada))
+        if (input.ajudanteDedicada !== undefined) setAjudante(input.ajudanteDedicada)
+        if (input.dataHorarioAgendado) {
+          const [data, hora] = input.dataHorarioAgendado.split(' ')
+          if (data) setDataAgendamento(data)
+          if (hora) setHorarioAgendado(hora)
+        }
+
+        dispararToast('info', 'Simulação duplicada — ajuste os dados e calcule')
+      } catch {}
+    }
+  }, [])
+
   const adicionarParada = () => setParadas([...paradas, criarParada()])
   const removerParada = (id: string) => { if (paradas.length > 1) setParadas(paradas.filter(p => p.id !== id)) }
   const atualizarParada = (id: string, campo: keyof Parada, valor: string | number) =>
