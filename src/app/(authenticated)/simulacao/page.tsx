@@ -133,15 +133,6 @@ export default function SimulacaoPage() {
   const limpar = () => {
     setNomeCliente('')
     setParadas([criarParada()])
-
-  const adicionarParada = () => setParadas([...paradas, criarParada()])
-  const removerParada = (id: string) => { if (paradas.length > 1) setParadas(paradas.filter(p => p.id !== id)) }
-  const atualizarParada = (id: string, campo: keyof Parada, valor: string | number) =>
-    setParadas(paradas.map(p => (p.id === id ? { ...p, [campo]: valor } : p)))
-
-  const limpar = () => {
-    setNomeCliente('')
-    setParadas([criarParada()])
     setOpcoes([])
     setTotalGeral(0)
     setPrecoSugerido(0)
