@@ -67,9 +67,9 @@ export default function AppSidebar() {
                 `}
               >
                 {ativo && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-[var(--brand-orange)] shadow-sm" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 rounded-r-full bg-[var(--brand-orange)] shadow-[0_0_8px_var(--brand-orange-glow)]" />
                 )}
-                <Icon size={17} strokeWidth={ativo ? 2 : 1.5} className={ativo ? 'text-[var(--brand-orange)]' : 'group-hover:text-[var(--brand-orange)] transition-colors duration-150'} />
+                <Icon size={17} strokeWidth={ativo ? 2 : 1.5} className={ativo ? 'text-[var(--brand-orange)] drop-shadow-[0_0_4px_var(--brand-orange-glow)]' : 'group-hover:text-[var(--brand-orange)] transition-colors duration-150'} />
                 <span>{item.label}</span>
               </Link>
             )

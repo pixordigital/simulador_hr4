@@ -374,7 +374,7 @@ export default function HistoricoPage() {
           <p className="text-sm text-[var(--text-disabled)] mt-1">As simulações salvas aparecerão aqui.</p>
         </div>
       ) : agruparPor === 'none' ? (
-        <div className="card-premium overflow-hidden">
+        <div className="card-solid overflow-hidden">
           <table className="w-full text-[13px]">
             <thead>
               <tr className="border-b border-[var(--border)] bg-[var(--surface-sunken)]">
@@ -402,7 +402,7 @@ export default function HistoricoPage() {
             const subtotalCobrado = items.reduce((s, i) => s + (i.precoCobrado || 0), 0)
             const expandido = gruposExpandidos.has(chave)
             return (
-              <div key={chave} className="card-premium overflow-hidden">
+              <div key={chave} className="card-solid overflow-hidden">
                 <button
                   onClick={() => {
                     const next = new Set(gruposExpandidos)
