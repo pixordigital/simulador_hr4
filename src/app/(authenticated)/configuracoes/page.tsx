@@ -491,8 +491,8 @@ export default function ConfiguracoesPage() {
           </span>
         </button>
         {accordionAbertos.includes('taxas') && (
-          <div className="px-3 pb-2 pt-1.5 border-t border-[var(--border-subtle)] space-y-2">
-            <div className="flex items-center justify-between">
+          <div className="px-3 pb-2 pt-1.5 border-t border-[var(--border-subtle)] grid grid-cols-4 gap-2">
+            <div className="flex items-center justify-between col-span-4">
               <p className="text-xs text-text-secondary">Edite taxas mínimas e R$/kg por faixa de peso para cada zona.</p>
               <button
                 onClick={() => {
