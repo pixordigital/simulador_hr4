@@ -523,7 +523,11 @@ export default function ConfiguracoesPage() {
             {zonas.map((zona, zIdx) => (
               <div key={zona.zona} className="border border-[var(--border-subtle)] rounded-[4px] p-3">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-sm font-semibold text-text-primary">{zona.zona}</span>
+                  <input
+                    value={zona.zona}
+                    onChange={e => atualizarZona(zIdx, 'zona', e.target.value)}
+                    className="text-sm font-semibold text-text-primary bg-transparent border-b border-transparent hover:border-[var(--border-strong)] focus:border-[#F97316] focus:border-b-2 outline-none px-0.5 -ml-0.5 transition-colors w-28"
+                  />
                   <div className="flex gap-2">
                     <div>
                       <label className="text-[10px] text-text-secondary block">Taxa mínima (R$)</label>
