@@ -5,9 +5,12 @@ import {
   Calculator, Info, AlertTriangle, Plus, Trash2, Truck,
   CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight, Check,
   Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database, Search, UserPlus,
+  Download, FileText,
 } from 'lucide-react'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
 import { dispararToast } from '@/components/Toast'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 interface Cliente {
   id: string
@@ -116,6 +119,8 @@ export default function SimulacaoPage() {
   const [salvandoCotacao, setSalvandoCotacao] = useState(false)
   const [salvandoTemp, setSalvandoTemp] = useState(false)
   const [clientes, setClientes] = useState<Cliente[]>([])
+  const [exportandoPDF, setExportandoPDF] = useState(false)
+  const pdfRef = useRef<HTMLDivElement>(null)
   const margemInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -171,6 +176,13 @@ export default function SimulacaoPage() {
   const removerParada = (id: string) => { if (paradas.length > 1) setParadas(paradas.filter(p => p.id !== id)) }
   const atualizarParada = (id: string, campo: keyof Parada, valor: string | number) =>
     setParadas(paradas.map(p => (p.id === id ? { ...p, [campo]: valor } : p)))
+
+  // Auto-recalcular quando paradas mudam
+  useEffect(() => {
+    if (opcoes.length > 0 && tipo === 'regular' && paradas.some(p => p.zona && p.pesoReal > 0)) {
+      calcular()
+    }
+  }, [paradas])
 
   const limpar = () => {
     setNomeCliente('')
@@ -381,6 +393,47 @@ export default function SimulacaoPage() {
       dispararToast('sucesso', 'Template salvo!')
     } catch { dispararToast('erro', 'Erro ao salvar template') }
     setSalvandoTemp(false)
+  }
+
+  async function exportarPDF() {
+    const el = pdfRef.current
+    if (!el) return
+    setExportandoPDF(true)
+    dispararToast('info', 'Gerando PDF...')
+    try {
+      const canvas = await html2canvas(el, {
+        scale: 2,
+        backgroundColor: '#F5F5F4',
+        logging: false,
+        useCORS: true,
+      })
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const imgWidth = pageWidth - 20
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      let heightLeft = imgHeight
+      let position = 10
+
+      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+      heightLeft -= pdf.internal.pageSize.getHeight() - 20
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight + 10
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+        heightLeft -= pdf.internal.pageSize.getHeight() - 20
+      }
+
+      const filename = `cotacao_${nomeCliente || 'cliente'}_${new Date().toISOString().slice(0,10)}.pdf`
+      pdf.save(filename)
+      dispararToast('sucesso', 'PDF exportado!')
+    } catch (e) {
+      console.error(e)
+      dispararToast('erro', 'Erro ao gerar PDF')
+    } finally {
+      setExportandoPDF(false)
+    }
   }
 
   return (
@@ -741,7 +794,7 @@ export default function SimulacaoPage() {
         </div>
 
         {/* ===== RIGHT (42%) ===== */}
-        <div className="w-[42%] pl-5">
+        <div className="w-[42%] pl-5" ref={pdfRef}>
           {opcoes.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="w-14 h-14 rounded-full border-2 border-dashed border-[var(--border-strong)] flex items-center justify-center mb-3">
@@ -980,6 +1033,23 @@ export default function SimulacaoPage() {
                 <button onClick={salvarTemplate} disabled={salvandoTemp || opcoes.length === 0}
                   className="btn-secondary flex-1 h-9 text-xs disabled:opacity-40">
                   {salvandoTemp ? 'Salvando...' : 'Salvar template'}
+                </button>
+                <button
+                  onClick={exportarPDF}
+                  disabled={opcoes.length === 0 || exportandoPDF}
+                  className="btn-primary flex-1 h-9 text-xs disabled:opacity-40 flex items-center justify-center gap-1.5"
+                >
+                  {exportandoPDF ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Gerando...
+                    </>
+                  ) : (
+                    <>
+                      <FileText size={13} strokeWidth={1.5} />
+                      PDF
+                    </>
+                  )}
                 </button>
               </div>
             </div>

@@ -2,29 +2,22 @@
 
 ## Visão Geral do Projeto
 
-Aplicação web que ajuda uma empresa de logística/frete sediada em **João Pessoa, PB, Brasil**
-a calcular quanto cobrar por entrega — garantindo que nenhuma entrega seja
-**subcobrada** (prejuízo) ou **sobrecobrada** (perda de cliente).
+App web pra logística em **João Pessoa, PB, Brasil**. Calcula quanto cobrar por entrega — evita **subcobrar** (prejuízo) ou **sobrecobrar** (perde cliente).
 
-**Público**: equipe de escritório — dono + 2 a 5 pessoas, uso em desktop.
-**Idioma**: Português (pt-BR) em tudo — labels, erros, textos, configurações.
-Sem exceções, nem termos técnicos em inglês.
-**Tema visual**: suporte a modo claro e modo escuro, alternável pelo usuário.
-**Layout**: otimizado para desktop. Não é necessário responsividade mobile.
+**Público**: equipe escritório — dono + 2-5 pessoas, desktop.
+**Idioma**: Português (pt-BR) — labels, erros, textos, configs. Sem exceções, sem inglês.
+**Tema**: claro/escuro, alternável.
+**Layout**: desktop-only. Sem responsividade mobile.
 
 ### O negócio
 
-- Opera **exclusivamente em João Pessoa e Grande JP**.
+- Opera **só em João Pessoa e Grande JP**.
 - Frota própria: **KANGOO** (van leve) e **8-160** (caminhão leve).
-- Usa **motoristas freelancers** contratados por trabalho (taxa fixa por job).
-- A escolha entre KANGOO, 8-160 ou freelancer depende de peso e disponibilidade
-  — não há regra fixa. O simulador mostra os três custos lado a lado e o usuário
-  decide.
-- Oferece **entrega dedicada** (veículo exclusivo por dia + km) e **entrega
-  agendada** (horário garantido acordado com o cliente).
+- Usa **motoristas freelancers** contratados por job (taxa fixa).
+- Escolha entre KANGOO, 8-160 ou freelancer depende de peso e disponibilidade — sem regra fixa. Simulador mostra 3 custos lado a lado, usuário decide.
+- Oferece **dedicada** (veículo exclusivo por dia + km) e **agendada** (horário garantido).
 
-> **Nota sobre a Concept Cargo**: tabela estudada apenas para copiar a estrutura
-> de precificação (taxa mínima + faixas de peso). Não tem presença no app.
+> **Nota sobre Concept Cargo**: tabela estudada só pra copiar estrutura de precificação (taxa mínima + faixas de peso). Não tem presença no app.
 
 ---
 
@@ -32,14 +25,10 @@ Sem exceções, nem termos técnicos em inglês.
 
 - **Framework**: Next.js (App Router)
 - **Linguagem**: TypeScript
-- **Persistência**: JSON files only — sem banco de dados, sem auth, sem login.
-  Todos os dados (histórico, motoristas, pagamentos, templates, configurações)
-  são armazenados em arquivos JSON no sistema de arquivos via API Routes.
-- **Estilização**: Tailwind CSS com suporte a dark/light mode via `class` strategy
-- **Fontes**: Geist Sans (corpo e UI) + Geist Mono (valores numéricos, preços)
-  — ambas disponíveis nativamente no Next.js via `next/font/google`
-- **Sem autenticação**: o app abre diretamente sem login. Qualquer pessoa
-  com acesso à URL pode usar o app.
+- **Persistência**: JSON files only — sem banco, sem auth, sem login. Dados em JSON via API Routes.
+- **Estilização**: Tailwind CSS, dark/light mode via `class` strategy
+- **Fontes**: Geist Sans (corpo/UI) + Geist Mono (valores numéricos) — via `next/font/google`
+- **Sem autenticação**: app abre direto sem login.
 
 ---
 
@@ -47,32 +36,26 @@ Sem exceções, nem termos técnicos em inglês.
 
 ### Direção estética — "Precision Freight"
 
-O app não deve parecer um produto SaaS genérico. Ele deve parecer uma
-ferramenta construída especificamente para uma empresa de frete séria —
-com a seriedade visual de um painel de controle industrial e a precisão
-tipográfica de um software financeiro. Pesado onde precisa ser pesado,
-limpo onde precisa ser limpo.
+App não deve parecer SaaS genérico. Ferramenta pra empresa de frete séria — seriedade visual de painel industrial, precisão tipográfica de software financeiro.
 
-**Referências de tom visual** (não de layout):
-- A densidade informacional de terminais Bloomberg
-- A legibilidade de tabelas aduaneiras e CTe
-- A confiança cromática de marcas de logística premium (DHL, Maersk)
+**Referências visuais** (não layout):
+- Densidade informacional de terminais Bloomberg
+- Legibilidade de tabelas aduaneiras e CTe
+- Confiança cromática de marcas logísticas premium (DHL, Maersk)
 
-**O que evitar absolutamente:**
-- Cantos arredondados excessivos (parece app de delivery, não empresa séria)
-- Gradientes decorativos em botões ou cards
-- Ícones coloridos em cada item de menu
-- Cards com sombras suaves genéricas
-- Tipografia sans-serif leve demais (parece landing page de startup)
+**Evitar absolutamente:**
+- Cantos arredondados excessivos (parece delivery)
+- Gradientes decorativos
+- Ícones coloridos em cada menu
+- Sombras suaves genéricas
+- Tipografia sans-serif leve demais
 - Empty states com ilustrações fofas
 
 ---
 
 ### Paleta de cores — HR Cargo
 
-Paleta construída a partir das cores da marca (laranja/âmbar + navy escuro),
-mas aplicada com disciplina editorial — o laranja é usado com parcimônia,
-como uma ferramenta de hierarquia, não como decoração.
+Paleta das cores da marca (laranja/âmbar + navy escuro). Laranja usado com parcimônia — ferramenta de hierarquia, não decoração.
 
 ```css
 /* Brand */
@@ -111,10 +94,7 @@ como uma ferramenta de hierarquia, não como decoração.
 --semantic-info:    #1E40AF;   /* azul escuro — informação neutra */
 ```
 
-> Princípio: o laranja `--brand-orange` aparece em no máximo 3 lugares por
-> tela — botão primário principal, item ativo da sidebar, e um acento de dado
-> importante. Em todo o resto, a hierarquia é construída com peso tipográfico
-> e contraste de superfície, não com cor.
+> Princípio: laranja `--brand-orange` aparece em max 3 lugares por tela — botão primário, item ativo sidebar, acento de dado importante. Hierarquia construída com peso tipográfico e contraste de superfície, não cor.
 
 ---
 
@@ -186,22 +166,17 @@ Espaçamento interno:
 
 **Sidebar (240px, sempre visível)**
 - Fundo: `--brand-navy` (#0F1C2E) — imutável em light e dark mode
-- Topo: logo HR Cargo à esquerda, em branco. Abaixo, linha divisória
-  1px em navy-mid. Sem padding excessivo.
-- Item de navegação inativo: texto `#94A3B8` (slate-400), sem ícone colorido,
-  sem fundo. Hover: fundo `--brand-navy-mid`, texto branco.
-- Item ativo: barra vertical laranja de 3px na borda esquerda + texto branco
-  + fundo `--brand-navy-mid`. Não usar fundo laranja — muito pesado.
-- Rodapé da sidebar: toggle dark/light mode (ícone apenas, sem label),
-  separado do menu por linha divisória.
-- Sem animação de collapse — sidebar é fixa.
+- Topo: logo HR Cargo branca. Linha divisória 1px navy-mid abaixo.
+- Item inativo: texto `#94A3B8` (slate-400), sem ícone colorido, sem fundo. Hover: fundo `--brand-navy-mid`, texto branco.
+- Item ativo: barra laranja 3px borda esquerda + texto branco + fundo `--brand-navy-mid`. Sem fundo laranja.
+- Rodapé: toggle dark/light (ícone só), separado por linha divisória.
+- Sem collapse — sidebar fixa.
 
 **Botão primário**
 - Fundo: `--brand-orange` sólido
-- Texto: branco, Inter 600, 14px, letra maiúscula NÃO — sentence case
+- Texto: branco, Inter 600, 14px, sentence case
 - Hover: `--brand-orange-dim` — transição 120ms
-- Padding: 10px 18px
-- Border-radius: 6px
+- Padding: 10px 18px, border-radius: 6px
 - Sem sombra, sem gradiente, sem ícone obrigatório
 
 **Botão secundário**
@@ -211,104 +186,77 @@ Espaçamento interno:
 - Hover: fundo `--surface-sunken`
 
 **Cards de custo (KANGOO / 8-160 / Freelancer)**
-- Layout: três colunas de largura igual, alinhadas horizontalmente
+- Três colunas largura igual, alinhadas horizontalmente
 - Cada card: borda 1px `--border-subtle`, padding 20px, radius 6px
-- Header do card: nome do veículo/motorista em Inter 600 14px + um detalhe
-  técnico relevante em 12px cinza (ex: "10 km/L · diesel")
+- Header: nome veículo/motorista Inter 600 14px + detalhe técnico 12px cinza
 - Valor principal: JetBrains Mono 500 24px, `--text-primary`
-- Estado neutro: sem cor de fundo especial
-- Estado "mais barato": chip pequeno "↓ Menor custo" em verde escuro
-  (`--semantic-gain`), fundo verde-50, no canto superior direito. Borda
-  do card: 2px `--semantic-gain`.
-- Estado selecionado: borda 2px `--brand-orange`. Sem fundo colorido.
-- Estado com alerta: borda 2px `--semantic-loss`.
-- Hover em card não selecionado: fundo `--surface-sunken` sutil
+- Neutro: sem cor de fundo especial
+- "Mais barato": chip "↓ Menor custo" verde escuro, canto superior direito. Borda 2px `--semantic-gain`.
+- Selecionado: borda 2px `--brand-orange`. Sem fundo colorido.
+- Alerta: borda 2px `--semantic-loss`.
+- Hover não selecionado: fundo `--surface-sunken`
 
 **Inputs de formulário**
 - Label: Inter 500 13px, `--text-secondary`, margin-bottom 6px
-- Input: altura 38px, padding 0 12px, borda 1px `--border-strong`,
-  radius 4px, fundo `--surface-raised`
+- Input: altura 38px, padding 0 12px, borda 1px `--border-strong`, radius 4px, fundo `--surface-raised`
 - Focus: outline none, borda 2px `--brand-orange`
 - Placeholder: Inter 400, `--text-disabled`
-- Input com erro: borda `--semantic-loss` + mensagem 12px vermelho abaixo
-- Unidade de medida (kg, km, R$): texto à direita dentro do input,
-  Inter 400 14px `--text-secondary` — não como label separado
+- Erro: borda `--semantic-loss` + mensagem 12px vermelho
+- Unidade (kg, km, R$): texto à direita dentro do input, Inter 400 14px `--text-secondary`
 
 **Tabela de paradas (multi-stop)**
-- Não usar cards empilhados — usar uma tabela real com linhas
-- Header da tabela: Inter 500 12px uppercase com letter-spacing 0.05em,
-  `--text-secondary` — dá aparência de documento profissional
-- Linha de parada: borda inferior 1px `--border-subtle`
-- Coluna de valor: JetBrains Mono 500, alinhado à direita
-- Linha de total: Inter 700, separada por borda superior 2px `--border-strong`
+- Usar tabela real com linhas, não cards empilhados
+- Header: Inter 500 12px uppercase letter-spacing 0.05em, `--text-secondary`
+- Linha: borda inferior 1px `--border-subtle`
+- Valor: JetBrains Mono 500, alinhado à direita
+- Total: Inter 700, borda superior 2px `--border-strong`
 
 **Alertas financeiros**
-- Inline (opção mais cara): texto `--text-secondary` 13px com seta "↑ R$ X
-  a mais que a opção mais barata" — sem caixa, sem ícone, integrado ao card
-- Banner crítico (abaixo do break-even): faixa de largura total, fundo
-  `--semantic-loss` com opacidade 8%, borda esquerda 3px sólida
-  `--semantic-loss`, padding 12px 16px. Texto em `--semantic-loss` 14px
-  Inter 500. Sem ícone emoji — usar símbolo tipográfico "⚑" ou nenhum.
+- Inline (mais caro): texto `--text-secondary` 13px com seta "↑ R$ X a mais que a opção mais barata" — sem caixa, sem ícone
+- Banner crítico (abaixo break-even): faixa largura total, fundo `--semantic-loss` 8% opacidade, borda esquerda 3px `--semantic-loss`, padding 12px 16px. Texto `--semantic-loss` 14px Inter 500. Sem emoji — usar "⚑" ou nenhum.
 
 **KPI cards (dashboard)**
-- Layout: 4 cards em linha
-- Sem sombra, borda 1px `--border-subtle`
+- 4 cards em linha, sem sombra, borda 1px `--border-subtle`
 - Label: Inter 400 12px uppercase letter-spacing 0.08em, `--text-secondary`
 - Valor: JetBrains Mono 500 32px, `--text-primary`
-- Variação: Inter 500 13px, verde ou vermelho conforme direção
-- Sem ícones decorativos — os números falam por si
+- Variação: Inter 500 13px, verde/vermelho conforme direção
+- Sem ícones decorativos
 
 ---
 
-### Elemento de assinatura — a régua de peso
+### Elemento de assinatura — régua de peso
 
-O elemento visual único desta interface é uma **régua de peso horizontal**
-que aparece na tela de Nova Simulação, logo abaixo do campo de peso da parada.
+Barra horizontal fina (4px altura) abaixo do campo de peso na tela Nova Simulação. Marcações verticais nas transições de faixa (10kg, 20kg, 35kg, 50kg, 70kg, 100kg...). Indicador laranja move conforme usuário digita peso. Ao passar por marcação, faixa ativa muda e R$/kg aparece acima da barra.
 
-É uma barra fina (4px de altura) com marcações verticais nas transições de
-faixa (10kg, 20kg, 35kg, 50kg, 70kg, 100kg...), e um indicador laranja que
-se move conforme o usuário digita o peso. Ao passar por uma marcação, a faixa
-ativa muda e o R$/kg correspondente aparece discretamente acima da barra.
-
-Isso serve: informa visualmente em qual faixa de preço a carga está, e
-encoraja o usuário a entender a estrutura de preços. É específico para o
-domínio de frete — não existe em nenhum outro tipo de app.
-
-Implementar com um `<div>` simples e posicionamento CSS + JS para o cálculo
-da posição do indicador. Sem bibliotecas de gráficos.
+Implementar com `<div>` simples + CSS + JS pra posição do indicador. Sem bibliotecas de gráficos.
 
 ---
 
 ### Modo escuro
 
-- Default ao abrir: **light mode**
-- Toggle: ícone no rodapé da sidebar, persiste em localStorage
-- Implementação: Tailwind `dark:` + `class="dark"` no `<html>`
-- A sidebar permanece sempre em `--brand-navy` — não muda entre modos
-- No dark mode, `--surface-base-dk` (#0A0F1A) como fundo — mais escuro
-  que o convencional para dar mais contraste com os cards
+- Default: **light mode**
+- Toggle: ícone no rodapé sidebar, persiste em localStorage
+- Tailwind `dark:` + `class="dark"` no `<html>`
+- Sidebar: sempre `--brand-navy`, não muda entre modos
+- Dark mode fundo `--surface-base-dk` (#0A0F1A)
 
 ---
 
 ### Animações — cirúrgicas
 
 ```
-O que anima e por quê:
-  - Régua de peso: movimento do indicador em real-time (sem easing — linear,
-    parece instrumento de medição)
-  - Nova parada adicionada: a linha aparece com height 0→auto + opacity 0→1,
-    200ms ease-out. Dá sensação de construção progressiva da cotação.
-  - Banner de alerta crítico: a borda esquerda 3px aparece com um clip-path
-    que vai de altura 0 para 100% em 300ms — atenção sem agitação.
-  - Transição de tema: 150ms ease em background-color e color apenas.
-    Não animar transforms.
-  - Skeleton screens: pulse suave 1.5s em áreas de loading (listas, histórico)
+O que anima:
+  - Régua de peso: movimento do indicador linear (sem easing — parece instrumento)
+  - Nova parada: linha aparece height 0→auto + opacity 0→1, 200ms ease-out
+  - Banner crítico: borda esquerda 3px clip-path altura 0→100% em 300ms
+  - Transição tema: 150ms ease em background-color e color apenas. Não animar transforms.
+  - Skeleton screens: pulse 1.5s em loading
 
 O que NÃO anima:
   - Hover em botões (só color change)
-  - Abertura de dropdowns (instântaneo)
-  - Navegação entre telas (sem page transitions)
-  - Cards de custo ao selecionar (só borda muda — sem scale ou bounce)
+  - Dropdowns (instantâneo)
+  - Navegação entre telas
+  - Cards de custo ao selecionar (só borda muda)
 ```
 
 ---
@@ -316,173 +264,144 @@ O que NÃO anima:
 ## Estrutura de Navegação e Layout
 
 ### Layout geral
-- **Sidebar esquerda fixa** sempre visível — navegação principal do app
-- Área de conteúdo à direita ocupa o restante da tela
-- A sidebar nunca colapsa (desktop-only, espaço suficiente)
+- **Sidebar esquerda fixa** sempre visível
+- Conteúdo à direita ocupa resto da tela
+- Sidebar nunca colapsa (desktop-only)
 
-### Itens da sidebar (ordem de cima para baixo)
-1. **Nova Simulação** — item principal, destacado visualmente, primeiro da lista
-2. **Histórico** — lista de simulações passadas + dashboard de rentabilidade
-3. **Templates** — simulações salvas como modelo para reutilização
-4. **Motoristas** — cadastro de freelancers
-5. **Pagamentos** — registro de pagamentos a freelancers (totais mensais automáticos)
+### Itens da sidebar (cima pra baixo)
+1. **Nova Simulação** — item principal, destacado
+2. **Histórico** — lista simulações passadas + dashboard rentabilidade
+3. **Templates** — simulações salvas como modelo
+4. **Motoristas** — cadastro freelancers
+5. **Pagamentos** — registro pagamentos freelancers
 6. **Configurações** — parâmetros operacionais e tabela de preços
 7. *(separador)*
-8. **Tema** — toggle dark/light mode (ícone apenas, sem label de texto)
+8. **Tema** — toggle dark/light (ícone só, sem label)
 
-> Remover qualquer item "Sair" ou "Logout" — não há autenticação no app.
+> Remover "Sair" ou "Logout" — sem autenticação.
 
 ### Tela inicial (home)
-Depende do estado do app:
-- **Primeiro acesso** (tabela de preços vazia, sem freelancers cadastrados):
-  exibir **tela de boas-vindas com checklist de configuração inicial** antes
-  de qualquer outra coisa — ver seção "Primeiro Acesso" abaixo.
-- **Acessos subsequentes**: **Nova Simulação** abre automaticamente —
-  o usuário começa a cotar imediatamente sem cliques extras.
+- **Primeiro acesso** (tabela vazia, sem freelancers): tela de boas-vindas com checklist de configuração inicial.
+- **Acessos subsequentes**: **Nova Simulação** abre automaticamente.
 
-### Hierarquia de frequência de uso
-Claude Code deve refletir essa hierarquia no design visual:
-- **Alta frequência**: Nova Simulação, Histórico
-- **Média frequência**: Motoristas, Pagamentos, Templates
-- **Baixa frequência**: Configurações
+### Hierarquia de frequência
+- **Alta**: Nova Simulação, Histórico
+- **Média**: Motoristas, Pagamentos, Templates
+- **Baixa**: Configurações
 
 ---
 
 ## Primeiro Acesso — Tela de Boas-vindas
 
-Exibida automaticamente quando o app detecta que a tabela de preços está
-vazia (todos os valores `0` em `taxas-regioes.json`) ou que nenhum
-freelancer está cadastrado.
+Exibida quando tabela de preços vazia (todos `0` em `taxas-regioes.json`) ou nenhum freelancer cadastrado.
 
-**Layout**: tela de boas-vindas com checklist visual de tarefas de
-configuração inicial. Cada item tem um status (pendente/concluído) e
-um botão que leva diretamente à tela correspondente.
+**Layout**: checklist visual com status (pendente/concluído) e botão pra tela correspondente.
 
-**Itens do checklist:**
+**Itens:**
 1. ✅/⬜ **Configure o preço do combustível** → Configurações
-2. ✅/⬜ **Preencha sua tabela de preços** (taxas por zona e faixa de peso) → Configurações
+2. ✅/⬜ **Preencha sua tabela de preços** → Configurações
 3. ✅/⬜ **Cadastre seus motoristas freelancers** → Motoristas
 4. ✅/⬜ **Defina sua margem padrão** → Configurações
 5. ✅/⬜ **Defina o acréscimo de agendamento** → Configurações (opcional)
 
-- Itens concluídos ficam marcados com ✅ e ficam visualmente "completos"
-- O usuário pode ignorar a tela e ir direto a qualquer tela via sidebar
-- Após todos os itens críticos (1, 2, 3, 4) concluídos, a tela de
-  boas-vindas não aparece mais nos acessos seguintes
-- Um link "Ver novamente" fica disponível em Configurações caso o usuário
-  queira revisitar o checklist
+- Itens concluídos ficam ✅
+- Após itens críticos (1-4) concluídos, tela não aparece mais
+- Link "Ver novamente" em Configurações
 
 ---
 
 ## Tela Nova Simulação — Layout
 
 ### Proporção das colunas
-Divisão **58% / 42%** (coluna esquerda / coluna direita):
-- A esquerda é ligeiramente maior porque é onde o usuário trabalha
-- A direita é larga o suficiente para três cards de custo legíveis
-- As colunas são separadas por uma borda vertical 1px `--border-subtle` —
-  não por gap vazio, não por sombra. A linha é o divisor.
+**58% / 42%** (esquerda/direita). Separadas por borda vertical 1px `--border-subtle` — não por gap ou sombra.
 
-### Coluna esquerda — formulário de entrada
+### Coluna esquerda — formulário
 
 ```
 ┌─────────────────────────────────────┐
-│  NOVA SIMULAÇÃO          [Limpar]   │  ← título DM Sans 700 20px +
-│                                     │    botão "Limpar" secundário
+│  NOVA SIMULAÇÃO          [Limpar]   │
 ├─────────────────────────────────────┤
-│  Cliente                            │  ← label Inter 500 13px
-│  [________________________]         │  ← input 38px
+│  Cliente                            │
+│  [________________________]         │
 │                                     │
 │  Motorista / Veículo                │
-│  [KANGOO ▼] [8-160 ▼] [Freelancer▼]│  ← 3 chips selecionáveis, não dropdown
+│  [KANGOO ▼] [8-160 ▼] [Freelancer▼]│
 │                                     │
-│  Entregas do dia  [___8___]         │  ← número de entregas (aloca custo)
+│  Entregas do dia  [___8___]         │
 ├─────────────────────────────────────┤
-│  PARADAS                    [+ Add] │  ← eyebrow Inter 500 12px uppercase
+│  PARADAS                    [+ Add] │
 │                                     │
-│  Zona      Peso     Valor NF (opt.) │  ← mini-header da tabela de paradas
-│  [JP ▼]   [___kg]  [R$ _____]      │  ← linha de nova parada
+│  Zona      Peso     Valor NF (opt.) │
+│  [JP ▼]   [___kg]  [R$ _____]      │
 │                                     │
 │  ┌──────────────────────────────┐   │
-│  │ régua de peso ←————●————→   │   │  ← elemento de assinatura
-│  │     10  20  35  50  70  100  │   │    aparece só com peso > 0
+│  │ régua de peso ←————●————→   │   │
+│  │     10  20  35  50  70  100  │   │
 │  └──────────────────────────────┘   │
 │                                     │
-│  ─── Paradas adicionadas ──────     │  ← separador com label
-│  #1  Cabedelo  12kg  —      R$X.XX  │
-│  #2  JP        3kg   R$500  R$X.XX  │
+│  ─── Paradas adicionadas ──────     │
+│  #1  Cabedelo  12kg  —      R$X.XX │
+│  #2  JP        3kg   R$500  R$X.XX │
 │  [+ Adicionar outra parada]         │
 │                                     │
 ├─────────────────────────────────────┤
-│  ○ Entrega Agendada                 │  ← toggle (radio estilo switch)
-│    Data [___] Hora [___]  +R$[___]  │    expande quando ativo
+│  ○ Entrega Agendada                 │
+│    Data [___] Hora [___]  +R$[___]  │
 └─────────────────────────────────────┘
 ```
 
-**Detalhe crítico — seleção de motorista:**
-Não usar um dropdown para escolher KANGOO / 8-160 / Freelancer.
-Usar três **chips selecionáveis** em linha:
+**Seleção de motorista**: 3 chips selecionáveis em linha, não dropdown.
 - Chip: Inter 500 13px, padding 6px 14px, radius 4px, borda 1px
 - Inativo: borda `--border-strong`, texto `--text-secondary`
 - Ativo: borda 2px `--brand-orange`, texto `--brand-orange`, fundo laranja 5%
-- Quando "Freelancer" ativo: expande um selector abaixo com lista de freelancers
-  cadastrados + campo de valor editável
+- "Freelancer" ativo → expande selector com lista + campo valor editável
 
-### Coluna direita — painel de resultado ao vivo
+### Coluna direita — resultado ao vivo
 
-**Estado vazio** (antes de o usuário preencher qualquer campo):
+**Estado vazio** (sem dados):
 ```
 ┌──────────────────────────────────┐
-│                                  │
-│                                  │
 │      Preencha os dados da        │
-│      entrega para ver a          │  ← DM Sans 500 18px, --text-secondary
+│      entrega para ver a          │
 │      cotação em tempo real.      │
 │                                  │
 │      ─────────────────────       │
 │                                  │
 │      Custo do motorista,         │
-│      frete por faixa e           │  ← Inter 400 14px --text-disabled
+│      frete por faixa e           │
 │      margem calculados           │
 │      automaticamente.            │
-│                                  │
 └──────────────────────────────────┘
 ```
-Sem ilustração, sem ícone grande, sem botão. Só texto. A simplicidade é
-intencional — o painel direito é uma tela de resultado, não de onboarding.
+Sem ilustração, sem ícone, sem botão. Só texto.
 
-**Estado ativo** (com dados preenchidos):
+**Estado ativo**:
 ```
 ┌──────────────────────────────────┐
-│ KANGOO      8-160    Freelancer  │  ← tabs/cards de opção
+│ KANGOO      8-160    Freelancer  │
 │ ┌────────┐ ┌────────┐ ┌────────┐│
 │ │↓ Menor │ │        │ │        ││
-│ │R$47,20 │ │R$53,80 │ │R$60,00 ││  ← JetBrains Mono 500 24px
+│ │R$47,20 │ │R$53,80 │ │R$60,00 ││
 │ │        │ │        │ │        ││
 │ └────────┘ └────────┘ └────────┘│
 │                                  │
-│ ▼ Ver detalhamento               │  ← collapsible, Inter 500 13px
+│ ▼ Ver detalhamento               │
 │                                  │
 │ ──────────────────────────────   │
-│ Margem    [──────●──] 8%         │  ← slider + input numérico editável
+│ Margem    [──────●──] 8%         │
 │                                  │
 │ ┌──────────────────────────────┐ │
-│ │ PREÇO SUGERIDO               │ │  ← label 12px uppercase
-│ │ R$ 51,46                     │ │  ← JetBrains Mono 700 36px laranja
+│ │ PREÇO SUGERIDO               │ │
+│ │ R$ 51,46                     │ │
 │ └──────────────────────────────┘ │
 │                                  │
 │ [Salvar cotação] [Salvar template]│
 └──────────────────────────────────┘
 ```
 
-**Detalhe do slider de margem:**
-- Um slider HTML nativo estilizado + input numérico à direita que aceita
-  digitação direta. Os dois são sincronizados bidireccionalmente.
-- O preço sugerido recalcula em tempo real com debounce de 100ms.
-- Slider track: `--border-strong`, thumb: `--brand-orange` 16px círculo.
+**Slider margem**: HTML nativo estilizado + input numérico sincronizados bidireccionalmente. Preço sugerido recalcula com debounce 100ms. Track: `--border-strong`, thumb: `--brand-orange` 16px círculo.
 
-**Detalhamento colapsável:**
-Quando expandido, aparece uma mini-tabela entre os cards de custo e o slider:
+**Detalhamento colapsável**:
 ```
   Parcela do salário      R$ 28,44
   Vale alimentação        R$ 3,36
@@ -494,17 +413,15 @@ Quando expandido, aparece uma mini-tabela entre os cards de custo e o slider:
   ─────────────────────────────────
   Total custo             R$ 47,20
 ```
-Todos os valores em JetBrains Mono alinhados à direita. Labels Inter 400 13px.
-Linha de total: Inter 600, borda superior 1px `--border-strong`.
+Valores em JetBrains Mono direita. Labels Inter 400 13px. Total: Inter 600, borda superior 1px `--border-strong`.
 
 ---
 
 ## Tela de Histórico — Layout e Densidade
 
-A tela de histórico deve ter a densidade visual de uma planilha profissional,
-não de uma lista de cards. O usuário é alguém que lê dados rapidamente.
+Densidade visual de planilha profissional, não lista de cards.
 
-### Header da tela
+### Header
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ HISTÓRICO DE COTAÇÕES              [Período ▼] [Filtrar ▼]   │
@@ -516,8 +433,7 @@ não de uma lista de cards. O usuário é alguém que lê dados rapidamente.
 │ └──────────┘  └──────────┘  └──────────┘  └──────────┘      │
 └──────────────────────────────────────────────────────────────┘
 ```
-KPI cards sem borda individual — agrupados sob o header como uma unidade.
-Valores grandes em JetBrains Mono, labels em Inter 400 12px uppercase.
+KPI cards sem borda individual. Valores JetBrains Mono, labels Inter 400 12px uppercase.
 
 ### Tabela de simulações
 ```
@@ -525,122 +441,82 @@ DATA         CLIENTE          TIPO       PARADAS           VEÍCULO    CUSTO    
 ────────────────────────────────────────────────────────────────────────────────────────────────────────
 14/06 14:32  Farmácias ABC    Regular    JP 12kg · CB 8kg  KANGOO     R$47,20    8%    R$51,46   R$51,46
 14/06 11:15  Distribuidora X  Dedicada   Santa Rita        8-160     R$240,00   10%    R$264,00    —
-13/06 16:40  Cliente Y        Agendada   JP 3kg            Freelancer R$60,00    8%    R$64,80   R$70,00 ←negociado
+13/06 16:40  Cliente Y        Agendada   JP 3kg            Freelancer R$60,00    8%    R$64,80   R$70,00
 ```
-
-- Fonte da tabela: Inter 400 13px para texto, JetBrains Mono 13px para números
-- Linha hover: fundo `--surface-sunken`
-- Coluna "Cobrado": se vazia, mostrar "—" em `--text-disabled`. Se preenchida
-  e diferente do sugerido, mostrar em `--semantic-gain` (verde) se maior,
-  `--semantic-loss` (vermelho) se menor.
-- Coluna "PREÇO SUGERIDO" e "COBRADO": clique abre um inline edit mínimo
-  (apenas o campo "Cobrado" é editável — sugerido é imutável)
-- Header da tabela: Inter 500 11px uppercase letter-spacing 0.06em,
-  `--text-secondary`. Colunas numéricas com header alinhado à direita.
-- Sem paginação para até 500 linhas — virtualização se necessário acima disso.
+- Fonte: Inter 400 13px texto, JetBrains Mono 13px números
+- Hover: fundo `--surface-sunken`
+- "Cobrado" vazio: "—" em `--text-disabled`. Diferente do sugerido: verde (`--semantic-gain`) se maior, vermelho (`--semantic-loss`) se menor.
+- Header: Inter 500 11px uppercase letter-spacing 0.06em, `--text-secondary`. Colunas numéricas alinhadas à direita.
+- Sem paginação até 500 linhas — virtualização acima disso.
 
 ---
 
 ## Tela de Boas-vindas — Visual
 
-Não é uma tela genérica de "bem-vindo ao sistema". Tem caráter editorial.
+Tom editorial, não genérico.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                                                               │
-│  HR CARGO                                          Jun 2026  │  ← logo + data
+│  HR CARGO                                          Jun 2026  │
 │  ──────────────────────────────────────────────────────────  │
 │                                                               │
-│  Configure o simulador                                        │  ← DM Sans 700 28px
+│  Configure o simulador                                        │
 │  antes de começar.                                            │
 │                                                               │
 │  ──────────────────────────────────────────────────────────  │
 │                                                               │
-│  ○  Preço do combustível              Configurações →        │  ← tarefa
+│  ○  Preço do combustível              Configurações →        │
 │  ○  Tabela de preços por zona         Configurações →        │
 │  ○  Motoristas freelancers            Motoristas →           │
 │  ○  Margem padrão                     Configurações →        │
 │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   │
 │  ○  Acréscimo de agendamento (opcional)  Configurações →    │
 │                                                               │
-│                          [Começar assim mesmo →]             │  ← botão secundário
+│                          [Começar assim mesmo →]             │
 └──────────────────────────────────────────────────────────────┘
 ```
-
-- Fundo: `--surface-base` normal — não uma tela especial com cor diferente
-- O "○" vira "●" laranja quando a tarefa está concluída, com linha riscada
-  no texto
-- Tarefas concluídas ficam em `--text-secondary` (mais fracas)
-- Tarefas pendentes em `--text-primary` (fortes)
-- O link "→" é Inter 500 13px `--brand-orange`, sem sublinhado
-- Quando as 4 tarefas críticas estão concluídas, o botão muda para
-  "Ir para Nova Simulação →" (laranja, primário)
-- Layout centralizado horizontalmente, max-width 640px
+- Fundo: `--surface-base` normal
+- "○" vira "●" laranja quando concluído, texto riscado
+- Concluídas: `--text-secondary`. Pendentes: `--text-primary`.
+- Link "→": Inter 500 13px `--brand-orange`, sem sublinhado
+- 4 tarefas críticas concluídas → botão muda pra "Ir para Nova Simulação →" (laranja)
+- Layout centralizado, max-width 640px
 
 ---
 
-## Templates e Duplicação de Simulações
-
-Para clientes recorrentes, o app oferece dois mecanismos:
+## Templates e Duplicação
 
 ### 1. Salvar como template
-Após concluir qualquer simulação, o usuário pode salvá-la como template
-com um nome descritivo (ex: "Cliente X — entrega semanal Cabedelo").
-Templates são independentes do histórico — não aparecem na lista de
-simulações, apenas na tela de Templates.
+Após simulação, salvar como template com nome descritivo. Templates independentes do histórico — só na tela Templates.
 
 ### 2. Duplicar simulação
-Em qualquer linha do histórico, um botão "Duplicar" abre uma nova simulação
-pré-preenchida com todos os parâmetros da simulação original (cliente,
-paradas, zonas, pesos, motorista, margem). O usuário ajusta o que mudou.
+Botão "Duplicar" no histórico abre nova simulação pré-preenchida com parâmetros originais.
 
 ### Tela de Templates
-Design simples e sem restrição de quantidade — lista com busca por nome,
-sem paginação forçada. Cada item mostra: nome do template, tipo de entrega,
-cliente, data de criação. Ações: "Usar", "Editar", "Excluir".
-
-Templates armazenados em `data/dynamic/templates.json` (ver seção Armazenamento).
+Lista com busca por nome, sem paginação forçada. Cada item: nome, tipo entrega, cliente, data criação. Ações: "Usar", "Editar", "Excluir". Armazenado em `data/dynamic/templates.json`.
 
 ---
 
 ## Imutabilidade do Histórico
 
-**Histórico é imutável** — simulações salvas nunca recalculam com novos
-preços. Se o usuário atualizar a tabela de preços em Configurações, todas
-as simulações anteriores no histórico mantêm exatamente os números que
-tinham quando foram criadas.
+**Histórico é imutável** — simulações salvas nunca recalculam com novos preços. `resultado_json` armazena valores finais no momento da criação. `input_json` preservado intacto.
 
-Isso é garantido pela arquitetura: `resultado_json` armazena os valores
-calculados finais no momento da criação — o histórico nunca lê da tabela
-de preços atual para exibir resultados passados. O `input_json` também
-é preservado intacto para referência e duplicação.
-
-Esta regra se aplica a todos os campos: preço do combustível, salário,
-tabela de zonas, taxas de frete — qualquer mudança em Configurações é
-prospectiva, nunca retroativa.
+Mudanças em Configurações são prospectivas, nunca retroativas.
 
 ---
 
 ### 1. Simulação — Single vs. Multi-parada
 
-Cada simulação pode conter **uma ou múltiplas paradas** para o mesmo cliente.
-Um único motorista/veículo é selecionado para **toda a simulação** — não por
-parada individual.
+Cada simulação pode ter **uma ou várias paradas** pro mesmo cliente. Um motorista/veículo selecionado pra **toda simulação** — não por parada.
 
-**Fluxo de multi-parada:**
-1. Usuário seleciona o motorista/veículo para a simulação inteira (KANGOO,
-   8-160 ou freelancer) e informa quantas entregas o motorista fará no dia
-2. Usuário adiciona a primeira parada (zona + peso + valor NF opcional) →
-   o custo dessa parada é calculado e exibido **imediatamente**
-3. Usuário adiciona a segunda parada → calculada imediatamente, **total
-   geral atualizado em tempo real**
-4. Repete para N paradas — cada uma calculada ao ser adicionada
-5. O resultado final exibe: preço individual por parada + **total geral
-   destacado** (soma de todas as paradas × margem)
+**Fluxo multi-parada:**
+1. Usuário seleciona motorista/veículo (KANGOO, 8-160 ou freelancer) + nº entregas do dia
+2. Adiciona primeira parada (zona + peso + valor NF opcional) → custo calculado **imediatamente**
+3. Adiciona segunda parada → calculada imediatamente, **total atualizado em tempo real**
+4. Repete pra N paradas
+5. Resultado final: preço individual por parada + **total geral destacado**
 
-O custo fixo do motorista (salário + veículo) é dividido pelo número de
-entregas do dia informado no início — essa alocação se aplica igualmente
-a todas as paradas da simulação.
+Custo fixo do motorista dividido pelo nº de entregas do dia — alocação igual pra todas paradas.
 
 ---
 
@@ -650,81 +526,61 @@ a todas as paradas da simulação.
 
 Precificada por **zona + peso taxável** por parada.
 
-**Peso taxável** = `max(peso real, peso cúbico)`
-onde `peso cúbico = comprimento(m) × largura(m) × altura(m) × 167`
+**Peso taxável** = `max(peso real, peso cúbico)` onde `peso cúbico = comprimento(m) × largura(m) × altura(m) × 167`
 
-**Tabela de preços** (arquivo `taxas-regioes.json`):
-- Estruturada por zonas definidas pelo usuário (João Pessoa + Grande JP)
-- Cada zona tem: taxa mínima (cobre até o peso base, ex: 10kg) + faixas de
-  peso com R$/kg acima do mínimo
+**Tabela de preços** (`taxas-regioes.json`):
+- Zonas definidas pelo usuário (JP + Grande JP)
+- Cada zona: taxa mínima + faixas de peso com R$/kg acima do mínimo
 
-**Cobranças sobre valor da NF (aplicam-se às entregas próprias):**
-- **GRIS**: 0,10% do valor da NF, mínimo R$4,00
-- **Ad-Valorem**: 0,30% do valor da NF
-- O campo "Valor da NF" é **opcional** na simulação — o usuário nem sempre
-  sabe o valor no momento da cotação. Comportamento:
-  - Se informado: GRIS e Ad-Valorem são calculados e incluídos no custo
-  - Se não informado: GRIS e Ad-Valorem são omitidos do cálculo, e o
-    resultado exibe um aviso claro: "GRIS e Ad-Valorem não incluídos —
-    informe o valor da NF para cálculo completo"
-- Fórmula quando NF informada:
+**Cobranças sobre valor da NF (entregas próprias):**
+- **GRIS**: 0,10% do valor NF, mínimo R$4,00
+- **Ad-Valorem**: 0,30% do valor NF
+- "Valor NF" é **opcional**. Se informado: GRIS e Ad-Valorem incluídos. Se não: omitidos, resultado exibe aviso.
+- Fórmula:
   ```
   gris = max(valorNF × 0.001, 4.00)
   adValorem = valorNF × 0.003
   custoTotal = fretePeso + gris + adValorem
   ```
 
-**Um motorista/veículo por simulação** — selecionado no início e aplicado
-a todas as paradas. Opções:
+**Um motorista/veículo por simulação**. Opções:
 
 | Opção      | Base do custo |
 |------------|---------------|
-| KANGOO     | (salário diário + vale + custos operacionais diários KANGOO) ÷ nº entregas do dia |
-| 8-160      | (salário diário + vale + custos operacionais diários 8-160) ÷ nº entregas do dia |
-| Freelancer | taxa negociada para o trabalho inteiro (um valor único por simulação, independente do nº de paradas) |
+| KANGOO     | (salário diário + vale + custos operacionais diários KANGOO) ÷ n entregas dia |
+| 8-160      | (salário diário + vale + custos operacionais diários 8-160) ÷ n entregas dia |
+| Freelancer | taxa única negociada pro trabalho inteiro |
 
-Para freelancer em multi-parada: o usuário informa **um único valor negociado
-para o trabalho todo** (não multiplicado por parada). O campo de taxa do
-freelancer deve ser editável na simulação, independente do valor padrão
-salvo no cadastro — pois cada trabalho é negociado individualmente.
+Freelancer multi-parada: um valor único pro trabalho todo (não multiplicado por parada). Campo taxa freelancer editável na simulação.
 
-Na tela de simulação, exibir os três custos totais lado a lado antes de o
-usuário confirmar a escolha — assim ele vê a diferença de custo antes de
-decidir. A opção mais barata é destacada visualmente.
+Exibir 3 custos totais lado a lado antes de confirmar. Mais barato destacado.
 
 #### B. Entrega Dedicada
 
-Veículo exclusivo para um cliente, precificado por **dia(s) + km**, sem
-relação com peso ou valor da carga.
+Veículo exclusivo, precificado por **dia(s) + km**, sem relação com peso.
 
-Custo derivado dos insumos operacionais por veículo (KANGOO ou 8-160):
 ```
-diária base = (custo fixo diário do veículo + salário diário) × (1 + margem)
+diária base = (custo fixo diário veículo + salário diário) × (1 + margem)
 taxa km extra = (combustível/km + manutenção/km) × (1 + margem)
 custo total = diária base × dias + max(0, km estimado − km incluídos) × taxa km extra
 ```
 
-**Campos obrigatórios na simulação dedicada:**
-- Veículo (KANGOO ou 8-160)
-- Número de dias
-- **Km estimado da rota** — informado pelo usuário por simulação (estimativa
-  da distância total do trabalho). Não há valor padrão pré-configurado.
-- Km incluídos na diária — configurado por veículo na tela de Configurações
-- Ajudante/auxiliar opcional: taxa adicional por dia (configurável)
+**Campos obrigatórios:**
+- Veículo (KANGOO ou 8-160), nº dias, **km estimado da rota** (informado por simulação)
+- Km incluídos na diária (configurado por veículo em Configurações)
+- Ajudante opcional: taxa adicional por dia
 
 ---
 
-### 3. Entrega Agendada (serviço de horário garantido)
+### 3. Entrega Agendada
 
-Camada de serviço aplicável sobre **regular ou dedicada**. O cliente acorda
-um horário específico (ex: "10h de segunda-feira") e paga pela garantia.
+Camada sobre regular ou dedicada. Cliente acorda horário específico, paga pela garantia.
 
 ```
-preço sugerido = (custo da entrega + acréscimo de agendamento) × (1 + margem)
+preço sugerido = (custo entrega + acréscimo agendamento) × (1 + margem)
 ```
-
-- Apresentar na UI como serviço nomeado "Entrega Agendada" — não como checkbox
-- Campos: data, horário acordado, acréscimo em R$ (padrão R$0,00)
+- UI: serviço nomeado "Entrega Agendada" — não checkbox
+- Campos: data, horário, acréscimo R$ (padrão R$0,00)
 - Data/horário salvos no histórico
 
 ---
@@ -732,210 +588,129 @@ preço sugerido = (custo da entrega + acréscimo de agendamento) × (1 + margem)
 ### 4. Saída da Simulação
 
 **Por parada:**
-- Zona, peso taxável, custo calculado, opção selecionada (KANGOO/8-160/freelancer)
-- Detalhamento colapsável: mostra total por parada por padrão; ao expandir,
-  exibe cada componente separadamente:
-  - Parcela do salário (R$)
-  - Parcela do vale alimentação (R$)
-  - Parcela do combustível (R$)
-  - Parcela da manutenção (R$)
-  - Parcela do seguro (R$)
-  - Parcela da depreciação (R$)
-  - Taxa da faixa de peso (R$)
-  - GRIS (R$) — exibido apenas se valor da NF foi informado
-  - Ad-Valorem (R$) — exibido apenas se valor da NF foi informado
-  - Acréscimo de agendamento, se aplicável (R$)
+- Zona, peso taxável, custo, opção selecionada
+- Detalhamento colapsável: total por parada; expandido mostra:
+  - Parcela salário, vale alimentação, combustível, manutenção, seguro, depreciação
+  - Taxa faixa peso, GRIS (só se NF informada), Ad-Valorem (só se NF informada)
+  - Acréscimo agendamento se aplicável
 
 **Resumo geral:**
-- Total de custo (soma das paradas)
-- Margem % — pré-preenchida com o padrão, **ajustável livremente por simulação**,
-  recalcula em tempo real
-- **Preço sugerido ao cliente** (destacado, soma das paradas × margem)
-- **Preço cobrado (opcional)** — campo editável para registrar o valor real
-  negociado com o cliente, caso seja diferente do sugerido. Salvo no histórico
-  para comparação futura.
+- Total custo (soma paradas)
+- Margem % — pré-preenchida, **ajustável**, recalcula tempo real
+- **Preço sugerido** (destacado, soma paradas × margem)
+- **Preço cobrado (opcional)** — editável, salvo pra comparação futura
 
-**Alertas financeiros automáticos** — dois níveis de visibilidade:
+**Alertas financeiros automáticos:**
 
-1. **Alerta de opção mais cara selecionada** (nível discreto — inline):
-   - Exibido sutilmente logo abaixo da opção selecionada
+1. **Alerta opção mais cara** (discreto — inline):
    - "ℹ️ Existe uma opção R$ X mais barata disponível"
-   - Não interrompe o fluxo, apenas informa
 
-2. **Alerta de preço abaixo do break-even** (nível crítico — banner):
-   - Banner proeminente no topo da seção de resultado
-   - "⚠️ Atenção: o preço sugerido está abaixo do seu custo. Você terá
-     prejuízo de R$ X nesta entrega."
-   - Cor vermelha/laranja, impossível de ignorar
-   - Recalcula em tempo real conforme o usuário altera a margem
+2. **Alerta abaixo break-even** (crítico — banner):
+   - Banner proeminente no topo resultado
+   - "⚠️ Atenção: o preço sugerido está abaixo do seu custo. Você terá prejuízo de R$ X nesta entrega."
+   - Vermelho/laranja, impossível ignorar
 
-Ambos os alertas são **informativos** — nunca bloqueiam o usuário de prosseguir.
+Ambos **informativos** — nunca bloqueiam.
 
 ---
 
 ## Tela de Histórico e Dashboard de Rentabilidade
 
-A tela de histórico tem **três seções**:
+**Três seções:**
 
-### 1. Dashboard de rentabilidade (topo)
-Comparação entre custo operacional real e valor total cobrado no período:
+### 1. Dashboard rentabilidade (topo)
+Comparação custo operacional real vs. total cobrado no período:
 
-- **Custo operacional fixo do mês** — calculado automaticamente dos configs:
-  salário × motoristas + combustível + manutenção + seguro + depreciação +
-  vale alimentação (todos os valores de `motoristas-proprios.json`)
-- **Custo com freelancers do mês** — soma dos pagamentos registrados em
-  `pagamentos_freelancer` no período
-- **Custo operacional total** = fixo + freelancers
-- **Total sugerido** — soma dos preços sugeridos das simulações do período
-- **Total cobrado** — soma dos `preco_cobrado` das simulações onde foi
-  registrado (com indicação de quantas simulações têm preço cobrado vs. apenas
-  sugerido)
-- **Margem real estimada** = (total cobrado − custo operacional total) ÷ total cobrado
-- **Diferença sugerido vs. cobrado** — quanto foi perdido ou ganho na negociação
+- **Custo fixo do mês** — salário × motoristas + combustível + manutenção + seguro + depreciação + vale
+- **Custo freelancers do mês** — soma pagamentos no período
+- **Custo total** = fixo + freelancers
+- **Total sugerido** — soma preços sugeridos do período
+- **Total cobrado** — soma `preco_cobrado` das simulações com registro
+- **Margem real estimada** = (total cobrado − custo total) ÷ total cobrado
+- **Diferença sugerido vs. cobrado**
 
-> Este dashboard responde: "meus custos reais estão sendo cobertos? Estou
-> ganhando ou perdendo na negociação com clientes?"
+### 2. Métricas simulações
+Total, valor cotado, margem média, custo médio por entrega.
 
-### 2. Métricas de simulações
-- Total de simulações no período
-- Valor total cotado
-- Margem média aplicada nas simulações
-- Custo médio por entrega simulada
+### 3. Lista simulações
+Cada linha: data/hora, cliente, tipo, paradas, veículo, custo total, margem, sugerido, cobrado.
 
-### 3. Lista de simulações
-Cada linha exibe diretamente (sem precisar abrir):
-- Data e hora
-- Nome do cliente
-- Tipo de entrega (Regular / Dedicada / Agendada)
-- Paradas: zonas e pesos de cada parada
-- Motorista/veículo utilizado
-- Custo total
-- Margem aplicada (%)
-- Preço sugerido total
-- Preço cobrado (se registrado) — destacado diferente do sugerido se divergir
-
-Filtros: nome do cliente, tipo de entrega, período (data início/fim).
-Histórico é **somente leitura** — sem status de aceite/recusa. O preço
-cobrado pode ser adicionado/editado diretamente na linha da lista.
+Filtros: nome cliente, tipo entrega, período. Histórico **somente leitura**. Preço cobrado editável inline.
 
 ---
 
 ## Tela de Configurações
 
-A tela de Configurações substitui a edição manual de arquivos JSON.
-Ela escreve nos arquivos via API Route (`/api/configuracoes`).
-Todas as seções e labels em **Português (pt-BR)**.
+Substitui edição manual de JSON. Escreve via API Route (`/api/configuracoes`). Todas labels em **pt-BR**.
 
-**Tratamento de erros obrigatório**: se a escrita no arquivo falhar, a UI
-deve exibir mensagem de erro clara — nunca falhar silenciosamente.
+**Erro obrigatório**: se escrita falhar, UI exibe erro — nunca falhar silenciosamente.
 
-**Hierarquia visual das seções** — campos alterados com frequência diferente
-devem ter peso visual diferente:
+**Hierarquia visual:**
+- **Alterado mensalmente** → destaque, fácil acesso: combustível, agendamento
+- **Alterado raramente** → colapsáveis: salário, vale, dias úteis, manutenção, seguro, depreciação, dedicada, tabela por zona
 
-- **Alterado mensalmente** → destaque visual, fácil acesso:
-  - Preço do litro de combustível (KANGOO e 8-160)
-  - Acréscimo de agendamento
-
-- **Alterado raramente** → seções secundárias, podem ser colapsáveis:
-  - Salário, vale alimentação, dias úteis
-  - Manutenção, seguro, depreciação
-  - Parâmetros de entrega dedicada
-  - Tabela de preços por zona
-
-Sugestão de layout: colocar "Combustível" e "Agendamento" no topo da tela
-de Configurações, com as demais seções abaixo em accordions colapsados.
-
-### Seções da tela de Configurações:
-
-**Geral**
-- Margem padrão (%)
-- Número padrão de entregas por dia
-- Acréscimo de agendamento (R$)
-
-**Motoristas Próprios**
-- Salário mensal bruto (R$)
-- Dias úteis por mês
-- Vale alimentação por motorista (R$/mês)
-
-**Veículo: KANGOO**
-- Combustível mensal (R$)
-- Manutenção mensal (R$)
-- Seguro mensal (R$)
-- Depreciação mensal (R$)
-- Preço do litro de combustível (R$)
-- Consumo (km por litro)
-
-**Veículo: 8-160**
-- Mesmos campos do KANGOO
-
-**Entrega Dedicada — KANGOO**
-- Km incluídos na diária
-- Custo fixo mensal (R$)
-- Preço do litro (R$)
-- Consumo (km por litro)
-- Manutenção por km (R$)
-
-**Entrega Dedicada — 8-160**
-- Mesmos campos
+**Seções:**
+- **Geral** — margem padrão (%), nº padrão entregas/dia, acréscimo agendamento (R$)
+- **Motoristas Próprios** — salário mensal, dias úteis, vale alimentação
+- **KANGOO** — combustível, manutenção, seguro, depreciação, preço litro, consumo km/L
+- **8-160** — mesmos campos
+- **Dedicada KANGOO** — km incluídos diária, custo fixo, preço litro, consumo, manutenção/km
+- **Dedicada 8-160** — mesmos campos
 
 ---
 
-## Cadastro de Motoristas Freelancers
+## Cadastro Motoristas Freelancers
 
-CRUD simples: nome, taxa padrão por trabalho (R$), observações.
-Na simulação: selecionar do cadastro (taxa pré-preenchida, ajustável por simulação).
+CRUD: nome, taxa padrão (R$), observações. Na simulação: selecionar do cadastro, taxa ajustável.
 
-**Seed inicial** (extraído dos lançamentos de abril/2026):
+**Seed inicial** (abril/2026):
 - DANIELLA NOBREGA HENRIQUES GAMA
 - MARCIO JOAO DE OLIVEIRA SANTOS
 - HAYRON LEITE COUTINHO RAMOS
 - DAVID HENRICH MEDEIROS DE SANTANA
 
-> `default_fee` de cada um a ser confirmada pelo usuário — os totais mensais
-> não revelam o valor por trabalho individual.
+> `default_fee` a confirmar.
 
 ---
 
 ## Acesso ao App
 
-- **Sem autenticação** — o app abre diretamente na tela de Nova Simulação
-- Sem login, sem senha, sem sessão
-- Qualquer pessoa com acesso à URL pode usar todas as funcionalidades
-- Motoristas não acessam o app (uso interno de escritório apenas)
+- **Sem autenticação** — abre direto em Nova Simulação
+- Qualquer pessoa com URL usa tudo
+- Motoristas não acessam (uso interno escritório)
 
 ---
 
 ## Armazenamento de Dados
 
-### Arquivos JSON (escritos via `/api/configuracoes`)
+### JSON (via `/api/configuracoes`)
 
 ```
 data/
   rates/
     taxas-regioes.json       # tabela de preços por zona
   config/
-    geral.json               # margem padrão: 8%, entregas/dia padrão: 8,
-                             # acréscimo agendamento: R$0,00 (a definir pelo usuário)
-    motoristas-proprios.json # salário, vale, dias úteis, custos por veículo
-    dedicada.json            # insumos de custo dedicado por veículo
+    geral.json               # margem padrão, entregas/dia, acréscimo
+    motoristas-proprios.json # salário, vale, dias úteis, custos veículo
+    dedicada.json            # custos dedicados por veículo
 ```
 
 **`taxas-regioes.json`:**
 ```ts
 interface FaixaPreco {
-  origem: string;        // "JOAO PESSOA/PB"
-  zona: string;          // nome da zona
-  taxaMinima: number;    // R$ — cobre até pesoBase kg
-  pesoBase: number;      // kg cobertos pela taxaMinima
+  origem: string;
+  zona: string;
+  taxaMinima: number;
+  pesoBase: number;
   faixas: {
-    min: number;         // kg
-    max: number;         // kg (99999.99 para última faixa)
-    precoPorKg: number;  // R$/kg nesta faixa
+    min: number;
+    max: number;
+    precoPorKg: number;
   }[];
 }
 ```
 
-**Zonas confirmadas pelo usuário — seed inicial do arquivo:**
+**Zonas seed:**
 ```json
 [
   {
@@ -1036,10 +811,7 @@ interface FaixaPreco {
   }
 ]
 ```
-> Todos os valores em `0` — preencher via tela de Configurações após o app
-> ser construído. As faixas de peso espelham a estrutura da Concept Cargo
-> (referência de mercado). O usuário pode adicionar ou remover faixas conforme
-> sua estratégia de preços.
+> Valores em `0` — preencher via Configurações após construção. Faixas espelham Concept Cargo.
 
 **`motoristas-proprios.json`:**
 ```ts
@@ -1048,7 +820,7 @@ interface ConfigMotoristaProprio {
   diasUteisporMes: number;
   valeAlimentacao: number;
   veiculos: {
-    [nome: string]: {        // "KANGOO" | "8-160"
+    [nome: string]: {
       combustivelMensal: number;
       manutencaoMensal: number;
       seguroMensal: number;
@@ -1058,27 +830,23 @@ interface ConfigMotoristaProprio {
     }
   }
 }
-// custo diário por veículo =
-//   (salário + vale + combustível + manutenção + seguro + depreciação) ÷ dias úteis
-// custo por entrega = custo diário ÷ nº de entregas do dia
+// custo diário = (salário + vale + combustível + manutenção + seguro + depreciação) ÷ dias úteis
+// custo por entrega = custo diário ÷ nº entregas dia
 ```
 
-### Persistência de dados dinâmicos (JSON via API Routes)
+### Persistência dinâmica (JSON via API Routes)
 
-Sem banco de dados. Todos os dados são armazenados em arquivos JSON no
-servidor, lidos e escritos via API Routes do Next.js.
-
-Arquivos em `data/dynamic/`:
-- `motoristas-freelancer.json` — cadastro de motoristas freelancers
-- `pagamentos-freelancer.json` — log de pagamentos a freelancers
-- `simulacoes.json` — histórico de simulações
-- `templates.json` — templates salvos
+`data/dynamic/`:
+- `motoristas-freelancer.json`
+- `pagamentos-freelancer.json`
+- `simulacoes.json`
+- `templates.json`
 
 ```ts
-// simulacoes.json — array de:
+// simulacoes.json
 interface Simulacao {
-  id: string;                  // uuid gerado no cliente
-  criadoEm: string;            // ISO datetime
+  id: string;
+  criadoEm: string;
   nomeCliente: string;
   tipoEntrega: 'regular' | 'dedicada';
   agendada: boolean;
@@ -1090,11 +858,11 @@ interface Simulacao {
   adValoremIncluido: boolean;
   inputJson: object;
   resultadoJson: object;
-  precoCobrado?: number;       // editável após a simulação
+  precoCobrado?: number;
   observacoes?: string;
 }
 
-// motoristas-freelancer.json — array de:
+// motoristas-freelancer.json
 interface MotoristaFreelancer {
   id: string;
   nome: string;
@@ -1103,17 +871,17 @@ interface MotoristaFreelancer {
   criadoEm: string;
 }
 
-// pagamentos-freelancer.json — array de:
+// pagamentos-freelancer.json
 interface PagamentoFreelancer {
   id: string;
   motoristaId: string;
   valor: number;
-  dataPagamento: string;   // YYYY-MM-DD
+  dataPagamento: string;
   descricao?: string;
   criadoEm: string;
 }
 
-// templates.json — array de:
+// templates.json
 interface Template {
   id: string;
   nome: string;
@@ -1126,28 +894,25 @@ interface Template {
 
 ---
 
-## Estrutura do Módulo de Cálculo
+## Estrutura Módulo Cálculo
 
-Todo em `lib/precificacao/` — funções puras, sem I/O, testáveis independentemente.
+`lib/precificacao/` — funções puras, sem I/O.
 
 ```
 lib/precificacao/
-  tipos.ts            # FaixaPreco, ConfigMotoristaProprio, EntradaSimulacao,
-                      # ResultadoSimulacao, DetalhamentoCusto, OpcaoEntrega, Parada
-  peso.ts             # peso taxável: max(peso real, peso cúbico com fator 167)
-  regular.ts          # lookup de zona + faixas, custo KANGOO / 8-160 / freelancer
-                      # por parada, retorna três opções para exibição lado a lado
-  dedicada.ts         # deriva diária + km extra dos insumos, por veículo
-  agendada.ts         # aplica acréscimo antes da margem
-  simular.ts          # entrada unificada → despacha para motor correto →
-                      # agrega paradas → retorna resultado completo com detalhamento
+  tipos.ts
+  peso.ts             # peso taxável: max(peso real, peso cúbico × 167)
+  regular.ts          # lookup zona + faixas, custos lado a lado
+  dedicada.ts         # diária + km extra
+  agendada.ts         # acréscimo antes da margem
+  simular.ts          # entrada unificada → despacha → agrega → resultado completo
 ```
 
 ---
 
 ## Dados Reais de Custo (Abril/2026)
 
-Extraídos do `lancamentos_financeiro.xls` — 01/04 a 30/04/2026, todos LIQUIDADO.
+Extraído de `lancamentos_financeiro.xls` — 01/04 a 30/04/2026, todos LIQUIDADO.
 
 ### Resumo operacional
 | Centro de Custo        | Total abril/2026 |
@@ -1175,19 +940,19 @@ Extraídos do `lancamentos_financeiro.xls` — 01/04 a 30/04/2026, todos LIQUIDA
 | Sem identificação | R$ 2.102,00   |
 
 ### Salários
-- Salário de referência: **R$ 1.964,63/mês** (motorista principal — NILSON)
+- Referência: **R$ 1.964,63/mês** (NILSON)
 - Vale alimentação: **R$ 738,00–R$ 774,90/mês** por colaborador
-- Diária padrão identificada: **R$ 240,00/dia**
+- Diária padrão: **R$ 240,00/dia**
 
-### Motoristas freelancers ativos
-| Nome                              | Total abril  | Pagamentos |
-|-----------------------------------|--------------|------------|
+### Freelancers ativos
+| Nome                              | Total abril | Pagamentos |
+|-----------------------------------|-------------|------------|
 | HAYRON LEITE COUTINHO RAMOS       | R$ 11.582,00 | 1          |
 | MARCIO JOAO DE OLIVEIRA SANTOS    | R$ 6.150,00  | 2          |
 | DANIELLA NOBREGA HENRIQUES GAMA   | R$ 2.150,00  | 3          |
 | DAVID HENRICH MEDEIROS DE SANTANA | R$ 1.850,00  | 2          |
 
-### Valores iniciais para `motoristas-proprios.json`
+### Valores iniciais `motoristas-proprios.json`
 ```json
 {
   "salarioMensal": 1964.63,
@@ -1213,87 +978,54 @@ Extraídos do `lancamentos_financeiro.xls` — 01/04 a 30/04/2026, todos LIQUIDA
   }
 }
 ```
-> Seguro proporcional: R$ 2.356,61 total ÷ 2 veículos.
-> Depreciação e consumo real (km/L) a confirmar com o usuário.
+> Seguro proporcional: R$ 2.356,61 ÷ 2. Depreciação e consumo real a confirmar.
 
 ---
 
-## Escopo do MVP (construir nesta ordem)
+## Escopo MVP (ordem)
 
-1. **Layout base + navegação** — sidebar fixa com 6 itens (Nova Simulação,
-   Histórico, Templates, Motoristas, Pagamentos, Configurações), lógica de
-   primeiro acesso vs. acesso subsequente.
-2. **Tela de boas-vindas (primeiro acesso)** — checklist de 5 itens de
-   configuração inicial, cada um linkando para a tela correspondente,
-   status automático pendente/concluído. Desaparece após itens críticos
-   concluídos.
-3. **Entrega regular (parada única)** — layout dois painéis (esquerda: form,
-   direita: resultado ao vivo), seleção de motorista/veículo, lookup de zona
-   + faixas de peso, GRIS/Ad-Valorem opcionais, três custos lado a lado,
-   margem ajustável em tempo real, alertas em dois níveis (inline discreto
-   + banner crítico), detalhamento colapsável por componente.
-4. **Multi-parada** — adicionar N paradas sequencialmente, cada uma calculada
-   imediatamente, painel direito atualizado em tempo real, freelancer com
-   taxa negociada por trabalho inteiro.
-5. **Cadastro de motoristas freelancers (Motoristas)** — CRUD com seed dos
-   4 motoristas, estado vazio orientativo.
-6. **Registro de pagamentos (Pagamentos)** — tela própria na sidebar, log
-   individual com totais mensais automáticos.
-7. **Entrega agendada** — camada de serviço sobre regular, campo data/horário,
-   acréscimo somado antes da margem, serviço nomeado na UI.
-8. **Entrega dedicada** — calculadora por veículo, km estimado por simulação,
-   multi-dia e km excedentes.
-9. **Entrega dedicada agendada** — combinação dos dois serviços.
-10. **Templates e duplicação** — salvar como template nomeado, duplicar do
-    histórico, tela de Templates com busca por nome, sem paginação forçada.
-11. **Tela de Configurações** — combustível e agendamento no topo destacados,
-    demais seções colapsáveis, escrita via API Route com erro explícito,
-    nunca falhar silenciosamente.
-12. **Histórico + Dashboard de Rentabilidade** — persistência em JSON via
-    API Route, cada simulação salva com resultado imutável, campo preço
-    cobrado opcional editável inline, dashboard com custo fixo + freelancers
-    + sugerido vs. cobrado + margem real estimada, lista filtrável.
+1. **Layout + navegação** — sidebar fixa 6 itens, lógica primeiro acesso
+2. **Boas-vindas (primeiro acesso)** — checklist 5 itens, link p/ tela, some após críticos
+3. **Regular parada única** — dois painéis, seleção motorista, lookup zona + peso, GRIS/Ad-Valorem, 3 custos lado a lado, margem ajustável, alertas 2 níveis, detalhamento colapsável
+4. **Multi-parada** — N paradas sequenciais, cada calculada imediatamente
+5. **Cadastro freelancers** — CRUD com seed
+6. **Pagamentos** — log com totais mensais
+7. **Agendada** — sobre regular, data/horário, acréscimo
+8. **Dedicada** — calculadora por veículo, km por simulação
+9. **Dedicada agendada** — combinação
+10. **Templates + duplicação** — salvar, duplicar do histórico, busca
+11. **Configurações** — combustível/agendamento topo destacado, demais colapsáveis
+12. **Histórico + Dashboard** — imutável, preço cobrado editável, dashboard custo fixo + freelancers + sugerido vs cobrado + margem real
 
 ---
 
-## Itens em Aberto / Confirmar com o Usuário
+## Itens em Aberto
 
-**Não há mais itens bloqueantes.** O app pode ser construído integralmente.
+**Sem bloqueios.** App pode ser construído integralmente.
 
-Os únicos valores que faltam são os **preços da tabela de frete** — taxas
-mínimas e R$/kg por faixa de peso para cada uma das 6 zonas. As zonas já
-estão definidas no JSON com valores `0`. O usuário preenche os preços reais
-via tela de Configurações após o app ser construído.
+Faltam só **preços da tabela de frete** — taxas mínimas e R$/kg por faixa pra 6 zonas (valores `0`). Usuário preenche via Configurações após construção.
 
-Todos os outros itens foram resolvidos:
+Resolvidos:
 - ✅ Zonas: **João Pessoa, Cabedelo, Conde, Santa Rita, Bayeux, Alhandra**
 - ✅ Margem padrão: **8%**
-- ✅ Entregas padrão por dia: **8**
-- ✅ Acréscimo de agendamento: **R$0,00** (usuário define depois no app)
-- ✅ GRIS e Ad-Valorem: **aplicam-se** — campo valor da NF opcional
+- ✅ Entregas/dia: **8**
+- ✅ Acréscimo agendamento: **R$0,00**
+- ✅ GRIS/Ad-Valorem: aplicam-se, valor NF opcional
 - ✅ Consumo KANGOO: **10 km/L** | 8-160: **7 km/L**
-- ✅ Depreciação: **R$0,00** inicial (usuário insere depois no app)
-- ✅ Taxa padrão freelancers: usuário define no cadastro após construção
+- ✅ Depreciação: **R$0,00** inicial
+- ✅ Taxa freelancers: usuário define no cadastro
 
 ---
 
 ## Convenções
 
-- Todos os valores em BRL (R$) — armazenados como números, formatados só na UI.
-- Peso em kg, distância em km, volume em m³.
-- Todo preço exibido deve ser rastreável até seus componentes — sem totais
-  "caixa preta". Detalhamento sempre disponível via expansão.
-- A empresa opera apenas em João Pessoa e Grande JP. Não modelar outras regiões.
-- Interface 100% em **Português (pt-BR)** — sem exceções, sem termos técnicos
-  em inglês, nem mesmo em labels de configuração.
-- App otimizado para **desktop**. Não é necessário layout responsivo.
-- Suporte a **modo claro e modo escuro**, alternável pelo usuário.
-- Arquivos JSON de configuração escritos via API Route — nunca editados
-  manualmente pelo usuário final.
-- **Histórico é imutável** — simulações salvas nunca recalculam com novos
-  preços. O `resultado_json` gravado no momento da simulação é permanente.
-  Alterações na tabela de preços ou nos custos operacionais afetam apenas
-  simulações futuras, nunca as passadas.
-- **Estado vazio sempre orientativo** — qualquer tela sem dados (sem
-  freelancers, sem templates, sem simulações) deve exibir uma mensagem
-  clara explicando o que fazer, nunca uma tela em branco.
+- Valores em BRL (R$) — números, formatados só na UI
+- Peso em kg, distância em km, volume em m³
+- Todo preço rastreável até componentes — sem "caixa preta"
+- Apenas João Pessoa e Grande JP
+- Interface 100% **Português (pt-BR)** — sem exceções
+- **Desktop** — sem responsivo
+- **Claro/escuro**, alternável
+- JSON via API Route — nunca editado manualmente
+- **Histórico imutável** — `resultado_json` permanente. Alterações afetam só simulações futuras
+- **Estado vazio orientativo** — nunca tela em branco
