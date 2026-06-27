@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy, Download, FileDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { dispararToast } from '@/components/Toast'
@@ -38,6 +38,8 @@ export default function HistoricoPage() {
   const [dataFim, setDataFim] = useState('')
   const [editandoCobrado, setEditandoCobrado] = useState<string | null>(null)
   const [cobradoEdit, setCobradoEdit] = useState('')
+  const [agruparPor, setAgruparPor] = useState<'none' | 'cliente' | 'data' | 'mes'>('none')
+  const [gruposExpandidos, setGruposExpandidos] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     carregarDados()
@@ -87,12 +89,104 @@ export default function HistoricoPage() {
   const custoFreelancers = pagamentos.reduce((s, p) => s + p.valor, 0)
   const margemReal = totalCobrado > 0 ? ((totalCobrado - custoFreelancers) / totalCobrado) * 100 : 0
 
+  const grupos = useMemo(() => {
+    if (agruparPor === 'none') return null
+    const map = new Map<string, Simulacao[]>()
+    for (const sim of filtradas) {
+      let chave: string
+      if (agruparPor === 'cliente') {
+        chave = sim.nomeCliente || 'Sem Cliente'
+      } else if (agruparPor === 'data') {
+        chave = new Date(sim.criadoEm).toLocaleDateString('pt-BR')
+      } else { // mes
+        const d = new Date(sim.criadoEm)
+        chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+      }
+      if (!map.has(chave)) map.set(chave, [])
+      map.get(chave)!.push(sim)
+    }
+    const entries = Array.from(map.entries())
+    if (agruparPor === 'cliente') entries.sort((a, b) => a[0].localeCompare(b[0]))
+    else entries.sort((a, b) => b[0].localeCompare(a[0]))
+    return entries
+  }, [filtradas, agruparPor])
+
+  function labelGrupo(chave: string): string {
+    if (agruparPor === 'mes') {
+      const [ano, mes] = chave.split('-')
+      return new Date(parseInt(ano), parseInt(mes) - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+    }
+    return chave
+  }
+
   function formatarMoeda(v: number) {
     return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
   }
 
   function formatarData(iso: string) {
     return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+  }
+
+  function renderSimRow(sim: Simulacao) {
+    const custoTotal = sim.resultadoJson?.totalGeral || 0
+    const precoSugerido = sim.resultadoJson?.precoSugerido || 0
+    const paradasStr = sim.inputJson?.paradas
+      ? sim.inputJson.paradas.map((p: any) => `${p.zona || '?'} ${p.pesoReal || 0}kg`).join(' · ')
+      : sim.tipoEntrega === 'dedicada' ? `Dedicada ${sim.inputJson?.kmEstimadoDedicada || 0}km` : '—'
+    const isDiferente = sim.precoCobrado && Math.abs(sim.precoCobrado - precoSugerido) > 0.01
+
+    return (
+      <tr key={sim.id} className="hover:bg-[color-mix(in_srgb,var(--surface-sunken)_40%,transparent)] transition-colors">
+        <td className="px-4 py-3 text-[var(--text-secondary)]">{formatarData(sim.criadoEm)}</td>
+        <td className="px-4 py-3 text-[var(--text-primary)] font-medium">{sim.nomeCliente || '—'}</td>
+        <td className="px-4 py-3">
+          <span className="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-[3px] bg-[var(--surface-sunken)] text-[var(--text-secondary)] uppercase tracking-[0.04em]">
+            {sim.tipoEntrega === 'dedicada' ? 'Dedicada' : sim.agendada ? 'Agendada' : 'Regular'}
+          </span>
+        </td>
+        <td className="px-4 py-3 text-[var(--text-secondary)] max-w-[200px] truncate">{paradasStr}</td>
+        <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{formatarMoeda(custoTotal)}</td>
+        <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{sim.margemPct}%</td>
+        <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{formatarMoeda(precoSugerido)}</td>
+        <td className="px-4 py-3 text-right">
+          {editandoCobrado === sim.id ? (
+            <div className="flex items-center gap-1 justify-end">
+              <input type="number" value={cobradoEdit} onChange={e => setCobradoEdit(e.target.value)} step="0.01"
+                className="w-24 h-[30px] input-premium text-right font-num text-sm" autoFocus />
+              <button onClick={() => salvarPrecoCobrado(sim)}
+                className="text-[11px] font-medium text-[var(--semantic-gain)] hover:underline px-1">OK</button>
+              <button onClick={() => setEditandoCobrado(null)}
+                className="text-[11px] font-medium text-[var(--text-secondary)] hover:underline px-1">X</button>
+            </div>
+          ) : (
+            <button onClick={() => { setEditandoCobrado(sim.id); setCobradoEdit(String(sim.precoCobrado || '')) }}
+              className={`font-num cursor-pointer hover:underline ${
+                sim.precoCobrado
+                  ? isDiferente
+                    ? sim.precoCobrado! > precoSugerido
+                      ? 'text-[var(--semantic-gain)]'
+                      : 'text-[var(--semantic-loss)]'
+                    : 'text-[var(--text-primary)]'
+                  : 'text-[var(--text-disabled)]'
+              }`}>
+              {sim.precoCobrado ? formatarMoeda(sim.precoCobrado) : '—'}
+            </button>
+          )}
+        </td>
+        <td className="px-2 py-3 text-center">
+          <button
+            onClick={() => {
+              localStorage.setItem('simulacao_duplicar', JSON.stringify(sim.inputJson))
+              router.push('/simulacao')
+            }}
+            className="text-[var(--text-secondary)] hover:text-[var(--brand-orange)] transition-colors"
+            title="Duplicar simulação"
+          >
+            <Copy size={14} strokeWidth={1.5} />
+          </button>
+        </td>
+      </tr>
+    )
   }
 
   function exportarCSV() {
@@ -270,6 +364,25 @@ export default function HistoricoPage() {
             <input type="date" value={dataFim} onChange={e => setDataFim(e.target.value)} className="input-premium h-[34px]" />
           </div>
         </div>
+        {/* Group toggle */}
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--text-secondary)]">Agrupar por</span>
+          <div className="flex gap-1">
+            {([['none', 'Nenhum'], ['cliente', 'Cliente'], ['data', 'Data'], ['mes', 'Mês']] as const).map(([valor, label]) => (
+              <button
+                key={valor}
+                onClick={() => setAgruparPor(valor)}
+                className={`px-3 py-1.5 text-[11px] font-medium rounded-[4px] transition-colors ${
+                  agruparPor === valor
+                    ? 'bg-[var(--brand-orange)] text-white'
+                    : 'bg-[var(--surface-sunken)] text-[var(--text-secondary)] hover:bg-[color-mix(in_srgb,var(--surface-sunken)_80%,black)]'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Tabela */}
@@ -281,7 +394,7 @@ export default function HistoricoPage() {
           <p className="text-[var(--text-secondary)] font-medium">Nenhuma simulação encontrada</p>
           <p className="text-sm text-[var(--text-disabled)] mt-1">As simulações salvas aparecerão aqui.</p>
         </div>
-      ) : (
+      ) : agruparPor === 'none' ? (
         <div className="card-premium overflow-hidden">
           <table className="w-full text-[13px]">
             <thead>
@@ -298,69 +411,63 @@ export default function HistoricoPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">
-              {filtradas.map(sim => {
-                const custoTotal = sim.resultadoJson?.totalGeral || 0
-                const precoSugerido = sim.resultadoJson?.precoSugerido || 0
-                const paradasStr = sim.inputJson?.paradas
-                  ? sim.inputJson.paradas.map((p: any) => `${p.zona || '?'} ${p.pesoReal || 0}kg`).join(' · ')
-                  : sim.tipoEntrega === 'dedicada' ? `Dedicada ${sim.inputJson?.kmEstimadoDedicada || 0}km` : '—'
-                const isDiferente = sim.precoCobrado && Math.abs(sim.precoCobrado - precoSugerido) > 0.01
-
-                return (
-                  <tr key={sim.id} className="hover:bg-[color-mix(in_srgb,var(--surface-sunken)_40%,transparent)] transition-colors">
-                    <td className="px-4 py-3 text-[var(--text-secondary)]">{formatarData(sim.criadoEm)}</td>
-                    <td className="px-4 py-3 text-[var(--text-primary)] font-medium">{sim.nomeCliente || '—'}</td>
-                    <td className="px-4 py-3">
-                      <span className="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-[3px] bg-[var(--surface-sunken)] text-[var(--text-secondary)] uppercase tracking-[0.04em]">
-                        {sim.tipoEntrega === 'dedicada' ? 'Dedicada' : sim.agendada ? 'Agendada' : 'Regular'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-[var(--text-secondary)] max-w-[200px] truncate">{paradasStr}</td>
-                    <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{formatarMoeda(custoTotal)}</td>
-                    <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{sim.margemPct}%</td>
-                    <td className="px-4 py-3 text-right font-num text-[var(--text-primary)]">{formatarMoeda(precoSugerido)}</td>
-                    <td className="px-4 py-3 text-right">
-                      {editandoCobrado === sim.id ? (
-                        <div className="flex items-center gap-1 justify-end">
-                          <input type="number" value={cobradoEdit} onChange={e => setCobradoEdit(e.target.value)} step="0.01"
-                            className="w-24 h-[30px] input-premium text-right font-num text-sm" autoFocus />
-                          <button onClick={() => salvarPrecoCobrado(sim)}
-                            className="text-[11px] font-medium text-[var(--semantic-gain)] hover:underline px-1">OK</button>
-                          <button onClick={() => setEditandoCobrado(null)}
-                            className="text-[11px] font-medium text-[var(--text-secondary)] hover:underline px-1">X</button>
-                        </div>
-                      ) : (
-                        <button onClick={() => { setEditandoCobrado(sim.id); setCobradoEdit(String(sim.precoCobrado || '')) }}
-                          className={`font-num cursor-pointer hover:underline ${
-                            sim.precoCobrado
-                              ? isDiferente
-                                ? sim.precoCobrado! > precoSugerido
-                                  ? 'text-[var(--semantic-gain)]'
-                                  : 'text-[var(--semantic-loss)]'
-                                : 'text-[var(--text-primary)]'
-                              : 'text-[var(--text-disabled)]'
-                          }`}>
-                          {sim.precoCobrado ? formatarMoeda(sim.precoCobrado) : '—'}
-                        </button>
-                      )}
-                    </td>
-                    <td className="px-2 py-3 text-center">
-                      <button
-                        onClick={() => {
-                          localStorage.setItem('simulacao_duplicar', JSON.stringify(sim.inputJson))
-                          router.push('/simulacao')
-                        }}
-                        className="text-[var(--text-secondary)] hover:text-[var(--brand-orange)] transition-colors"
-                        title="Duplicar simulação"
-                      >
-                        <Copy size={14} strokeWidth={1.5} />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
+              {filtradas.map(sim => renderSimRow(sim))}
             </tbody>
           </table>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {grupos!.map(([chave, items]) => {
+            const subtotalCusto = items.reduce((s, i) => s + (i.resultadoJson?.totalGeral || 0), 0)
+            const subtotalSugerido = items.reduce((s, i) => s + (i.resultadoJson?.precoSugerido || 0), 0)
+            const subtotalCobrado = items.reduce((s, i) => s + (i.precoCobrado || 0), 0)
+            const expandido = gruposExpandidos.has(chave)
+            return (
+              <div key={chave} className="card-premium overflow-hidden">
+                <button
+                  onClick={() => {
+                    const next = new Set(gruposExpandidos)
+                    expandido ? next.delete(chave) : next.add(chave)
+                    setGruposExpandidos(next)
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-3 bg-[var(--surface-sunken)] hover:bg-[color-mix(in_srgb,var(--surface-sunken)_80%,black)] transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`transition-transform duration-150 ${expandido ? 'rotate-90' : ''} text-[10px] text-[var(--text-secondary)]`}>▶</span>
+                    <span className="text-sm font-semibold text-[var(--text-primary)]">{labelGrupo(chave)}</span>
+                    <span className="text-[11px] text-[var(--text-secondary)]">({items.length})</span>
+                  </div>
+                  <div className="flex items-center gap-5 text-[13px] font-num">
+                    <span className="text-[var(--text-secondary)]">Custo: {formatarMoeda(subtotalCusto)}</span>
+                    <span className="text-[var(--text-primary)] font-medium">Sugerido: {formatarMoeda(subtotalSugerido)}</span>
+                    {subtotalCobrado > 0 && <span className="text-[var(--semantic-gain)] font-medium">Cobrado: {formatarMoeda(subtotalCobrado)}</span>}
+                  </div>
+                </button>
+                {expandido && (
+                  <div>
+                    <table className="w-full text-[13px]">
+                      <thead>
+                        <tr className="border-b border-[var(--border)] bg-[var(--surface-sunken)]">
+                          <th className="table-header-cell text-left px-4 py-3">Data</th>
+                          <th className="table-header-cell text-left px-4 py-3">Cliente</th>
+                          <th className="table-header-cell text-left px-4 py-3">Tipo</th>
+                          <th className="table-header-cell text-left px-4 py-3">Paradas</th>
+                          <th className="table-header-cell text-right px-4 py-3">Custo</th>
+                          <th className="table-header-cell text-right px-4 py-3">Margem</th>
+                          <th className="table-header-cell text-right px-4 py-3">Sugerido</th>
+                          <th className="table-header-cell text-right px-4 py-3">Cobrado</th>
+                          <th className="table-header-cell text-center px-2 py-3 w-16">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[var(--border)]">
+                        {items.map(sim => renderSimRow(sim))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
