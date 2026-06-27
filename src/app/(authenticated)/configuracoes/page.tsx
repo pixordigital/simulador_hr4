@@ -491,8 +491,8 @@ export default function ConfiguracoesPage() {
           </span>
         </button>
         {accordionAbertos.includes('taxas') && (
-          <div className="px-3 pb-2 pt-1.5 border-t border-[var(--border-subtle)] grid grid-cols-4 gap-2">
-            <div className="flex items-center justify-between col-span-4">
+          <div className="px-3 pb-2 pt-1.5 border-t border-[var(--border-subtle)] grid grid-cols-3 gap-2">
+            <div className="flex items-center justify-between col-span-3">
               <p className="text-xs text-text-secondary">Edite taxas mínimas e R$/kg por faixa de peso para cada zona.</p>
               <button
                 onClick={() => {
@@ -532,23 +532,23 @@ export default function ConfiguracoesPage() {
                     <div>
                       <label className="text-[10px] text-text-secondary block">Taxa mínima (R$)</label>
                       <input type="number" value={zona.taxaMinima} onChange={e => atualizarZona(zIdx, 'taxaMinima', e.target.value)} step="0.01" min="0"
-                        className="w-24 h-[30px] px-2 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                        className="w-[68px] h-[30px] px-1.5 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
                     </div>
                     <div>
                       <label className="text-[10px] text-text-secondary block">Peso base (kg)</label>
                       <input type="number" value={zona.pesoBase} onChange={e => atualizarZona(zIdx, 'pesoBase', e.target.value)} min="0"
-                        className="w-24 h-[30px] px-2 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
+                        className="w-[68px] h-[30px] px-1.5 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2" />
                     </div>
                   </div>
                 </div>
                 <div className="space-y-1">
                   {zona.faixas.map((faixa, fIdx) => (
                     <div key={fIdx} className="flex items-center gap-2 text-[13px]">
-                      <span className="text-text-secondary w-24">
+                      <span className="text-text-secondary w-20 flex-shrink-0">
                         {faixa.min}-{faixa.max > 999 ? `${faixa.max}kg` : `${faixa.max}kg`}
                       </span>
                       <input type="number" value={faixa.precoPorKg} onChange={e => atualizarFaixa(zIdx, fIdx, 'precoPorKg', e.target.value)} step="0.01" min="0"
-                        className="w-24 h-[28px] px-2 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2 font-num" />
+                        className="w-[72px] h-[28px] px-1.5 border border-[var(--border-strong)] rounded-[4px] bg-surface-raised text-sm outline-none focus:border-[#F97316] focus:border-2 font-num" />
                       <span className="text-text-secondary">R$/kg</span>
                     </div>
                   ))}
