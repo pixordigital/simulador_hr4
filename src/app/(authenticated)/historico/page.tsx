@@ -40,12 +40,14 @@ export default function HistoricoPage() {
   const [cobradoEdit, setCobradoEdit] = useState('')
   const [agruparPor, setAgruparPor] = useState<'none' | 'cliente' | 'data' | 'mes'>('none')
   const [gruposExpandidos, setGruposExpandidos] = useState<Set<string>>(new Set())
+  const [carregando, setCarregando] = useState(true)
 
   useEffect(() => {
     carregarDados()
   }, [])
 
   async function carregarDados() {
+    setCarregando(true)
     try {
       const [simRes, pagRes] = await Promise.all([
         fetch('/api/dinamico?tipo=simulacoes'),
@@ -54,6 +56,7 @@ export default function HistoricoPage() {
       if (simRes.ok) setSimulacoes(await simRes.json())
       if (pagRes.ok) setPagamentos(await pagRes.json())
     } catch {}
+    setCarregando(false)
   }
 
   async function salvarPrecoCobrado(sim: Simulacao) {
@@ -67,7 +70,9 @@ export default function HistoricoPage() {
         setSimulacoes(simulacoes.map(s => (s.id === sim.id ? { ...s, precoCobrado: parseFloat(cobradoEdit) || 0 } : s)))
         setEditandoCobrado(null)
       }
-    } catch {}
+    } catch {
+      toast.error('Erro ao salvar preço cobrado')
+    }
   }
 
   const filtradas = simulacoes.filter(s => {
@@ -263,53 +268,65 @@ export default function HistoricoPage() {
         </div>
       </div>
 
-      {/* Dashboard KPIs */}
-      <div className="grid grid-cols-4 gap-4">
-        <div className="kpi-card text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
-            Total Sugerido
-          </p>
-          <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
-            {formatarMoeda(totalSugerido)}
-          </p>
-          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
-            Soma dos preços sugeridos
-          </p>
+      {/* Dashboard KPIs — skeleton */}
+      {carregando ? (
+        <div className="grid grid-cols-4 gap-4">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="kpi-card text-center">
+              <div className="h-3 w-20 bg-[var(--border-subtle)] rounded mx-auto animate-pulse mb-3" />
+              <div className="h-8 w-28 bg-[var(--border-subtle)] rounded mx-auto animate-pulse mb-3" />
+              <div className="h-3 w-24 bg-[var(--border-subtle)] rounded mx-auto animate-pulse" />
+            </div>
+          ))}
         </div>
-        <div className="kpi-card text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
-            Total Cobrado
-          </p>
-          <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
-            {formatarMoeda(totalCobrado)}
-          </p>
-          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
-            {totalCobradoArr.length} de {simulacoes.length} registrados
-          </p>
+      ) : (
+        <div className="grid grid-cols-4 gap-4">
+          <div className="kpi-card text-center">
+            <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+              Total Sugerido
+            </p>
+            <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
+              {formatarMoeda(totalSugerido)}
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+              Soma dos preços sugeridos
+            </p>
+          </div>
+          <div className="kpi-card text-center">
+            <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+              Total Cobrado
+            </p>
+            <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
+              {formatarMoeda(totalCobrado)}
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+              {totalCobradoArr.length} de {simulacoes.length} registrados
+            </p>
+          </div>
+          <div className="kpi-card text-center">
+            <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+              Custo Freelancers
+            </p>
+            <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
+              {formatarMoeda(custoFreelancers)}
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+              Total de pagamentos
+            </p>
+          </div>
+          <div className="kpi-card text-center">
+            <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
+              Margem Real
+            </p>
+            <p className={`text-[28px] font-num font-medium ${margemReal >= 0 ? 'text-[var(--semantic-gain)]' : 'text-[var(--semantic-loss)]'}`}>
+              {simulacoes.length > 0 ? `${margemReal.toFixed(1)}%` : '—'}
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
+              (Cobrado − Custo) ÷ Cobrado
+            </p>
+          </div>
         </div>
-        <div className="kpi-card text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
-            Custo Freelancers
-          </p>
-          <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
-            {formatarMoeda(custoFreelancers)}
-          </p>
-          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
-            Total de pagamentos
-          </p>
-        </div>
-        <div className="kpi-card text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
-            Margem Real
-          </p>
-          <p className={`text-[28px] font-num font-medium ${margemReal >= 0 ? 'text-[var(--semantic-gain)]' : 'text-[var(--semantic-loss)]'}`}>
-            {simulacoes.length > 0 ? `${margemReal.toFixed(1)}%` : '—'}
-          </p>
-          <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
-            (Cobrado − Custo) ÷ Cobrado
-          </p>
-        </div>
-      </div>
+      )}
 
       {/* Filtros */}
       <div className="card-premium p-5 space-y-4 mt-5">

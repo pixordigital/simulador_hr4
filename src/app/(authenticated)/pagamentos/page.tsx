@@ -70,6 +70,7 @@ export default function PagamentosPage() {
   }
 
   async function excluir(id: string) {
+    if (!confirm('Excluir este pagamento?')) return
     try {
       const res = await fetch(`/api/dinamico?tipo=pagamentos&id=${id}`, { method: 'DELETE' })
       if (res.ok) setPagamentos(pagamentos.filter(p => p.id !== id))

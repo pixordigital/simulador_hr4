@@ -53,6 +53,7 @@ export default function MotoristasPage() {
   }
 
   async function excluirMotorista(id: string) {
+    if (!confirm('Excluir este motorista?')) return
     try {
       const res = await fetch(`/api/dinamico?tipo=motoristas&id=${id}`, { method: 'DELETE' })
       if (res.ok) setMotoristas(motoristas.filter(m => m.id !== id))

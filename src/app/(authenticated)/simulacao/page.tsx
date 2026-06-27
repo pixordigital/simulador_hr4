@@ -337,6 +337,22 @@ export default function SimulacaoPage() {
     }
   }, [tipo, paradas, opcaoVeiculo, numeroEntregas, margem, taxaFreelancer, agendada, acrescimoAgendamento, kmEstimado, diasDedicada, ajudante])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        calcular()
+      }
+      if (e.key === 'Escape') {
+        const editing = document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'SELECT'
+        if (!editing) limpar()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [calcular])
+
   const opcaoMaisBarata = opcoes.length > 0 ? Math.min(...opcoes.map(o => o.custoTotal)) : 0
   const margemNum = parseFloat(margem) || 0
   const opcaoSelecionada = opcoes.length > 0 ? (opcoes.find(o => o.rotulo === opcaoVeiculo) || opcoes[0]) : undefined
