@@ -515,7 +515,7 @@ export default function ConfiguracoesPage() {
                     ],
                   }])
                 }}
-                className="h-[28px] px-3 rounded-[4px] bg-[#F97316] hover:bg-[#C2590A] text-white text-[11px] font-medium transition-colors flex items-center gap-1"
+                className="h-[28px] px-3 rounded-[4px] bg-[var(--brand-orange)] hover:bg-[var(--brand-orange-dim)] text-white text-[11px] font-medium transition-colors flex items-center gap-1"
               >
                 <Plus size={12} /> Adicionar Zona
               </button>
@@ -562,7 +562,7 @@ export default function ConfiguracoesPage() {
       <button
         onClick={salvarTudo}
         disabled={salvando}
-        className="w-full h-9 flex-shrink-0 bg-[#F97316] hover:bg-[#C2590A] text-white font-semibold text-xs rounded-[6px] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+        className="w-full h-9 flex-shrink-0 bg-[var(--brand-orange)] hover:bg-[var(--brand-orange-dim)] text-white font-semibold text-xs rounded-[6px] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
       >
         <Save size={14} />
         {salvando ? 'Salvando...' : 'Salvar Todas as Configurações'}

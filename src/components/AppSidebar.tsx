@@ -25,22 +25,22 @@ export default function AppSidebar() {
   }
 
   return (
-    <aside className="w-60 flex-shrink-0 flex flex-col h-full bg-[#0F1C2E] select-none">
+    <aside className="w-60 flex-shrink-0 flex flex-col h-full bg-[var(--sidebar)] select-none">
       {/* Logo + Toggle */}
-      <div className="px-4 py-3 border-b border-[#1A2E45]">
+      <div className="px-4 py-3 border-b border-[var(--sidebar-border)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-[4px] bg-gradient-to-br from-[#F97316] to-[#C2590A] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-[4px] bg-gradient-to-br from-[var(--brand-orange)] to-[var(--brand-orange-dim)] flex items-center justify-center">
               <span className="text-white font-bold text-[10px]">HR</span>
             </div>
             <div>
               <span className="text-white font-bold text-xs tracking-tight block leading-tight">HR CARGO</span>
-              <p className="text-[9px] text-slate-500 tracking-wide">João Pessoa / PB</p>
+              <p className="text-[9px] text-[var(--sidebar-foreground)] tracking-wide">João Pessoa / PB</p>
             </div>
           </div>
           <button
             onClick={toggleTheme}
-            className="w-7 h-7 flex items-center justify-center rounded-[3px] text-slate-500 hover:text-white hover:bg-[#1A2E45] transition-all duration-100"
+            className="w-7 h-7 flex items-center justify-center rounded-[3px] text-[var(--sidebar-foreground)] hover:text-white hover:bg-[var(--sidebar-accent)] transition-all duration-100"
             title={theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
           >
             {theme === 'dark' ? <Sun size={14} strokeWidth={1.5} /> : <Moon size={14} strokeWidth={1.5} />}
@@ -62,13 +62,13 @@ export default function AppSidebar() {
                   flex items-center gap-3 px-3 py-1.5 text-sm rounded-[4px] transition-all duration-100 relative
                   ${ativo
                     ? 'text-white font-medium'
-                    : 'text-slate-400 hover:text-white hover:bg-[#1A2E45]'
+                    : 'text-slate-400 hover:text-white hover:bg-[var(--sidebar-accent)]'
                   }
                 `}
                 style={ativo ? { background: 'linear-gradient(90deg, rgba(249,115,22,0.08) 0%, rgba(249,115,22,0.02) 100%)' } : {}}
               >
                 {ativo && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-[#F97316]" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-[var(--brand-orange)]" />
                 )}
                 <Icon size={17} strokeWidth={ativo ? 2 : 1.5} />
                 <span>{item.label}</span>
@@ -78,7 +78,7 @@ export default function AppSidebar() {
         </div>
 
         <div className="px-2">
-          <div className="h-px bg-[#1A2E45] mx-4 my-1.5" />
+          <div className="h-px bg-[var(--sidebar-border)] mx-4 my-1.5" />
         </div>
       </nav>
     </aside>
