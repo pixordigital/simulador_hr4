@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     const clientes = await readClientes()
     const novoCliente: Cliente = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2, 12),
       nome: nome.trim(),
       documento: documento?.trim(),
       endereco: endereco?.trim(),

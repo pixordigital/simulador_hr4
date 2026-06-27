@@ -2,15 +2,14 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  Calculator, Info, AlertTriangle, Plus, Trash2, Truck,
-  CalendarClock, MapPin, Scale, Receipt, Clock, CheckCircle2, ArrowRight, Check,
-  Gauge, TrendingUp, DollarSign, Zap, Sun, Moon, Database, Search, UserPlus,
-  Download, FileText,
+  Calculator, Info, AlertTriangle, Plus, Trash2,
+  Clock, TrendingUp, DollarSign, Database, Search, UserPlus,
+  FileText,
 } from 'lucide-react'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
 import { dispararToast } from '@/components/Toast'
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import { exportarPDF as exportarPDFBase } from '@/lib/pdf'
+import { formatarMoeda } from '@/lib/format'
 
 interface Cliente {
   id: string
@@ -86,10 +85,6 @@ function criarParada(): Parada {
     altura: '',
     valorNF: '',
   }
-}
-
-function formatarMoeda(v: number) {
-  return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
 export default function SimulacaoPage() {
@@ -226,7 +221,7 @@ export default function SimulacaoPage() {
       return
     }
 
-    let configs: any
+    let configs: { geral: any; motoristas: any; taxas: any; dedicada: any }
     try {
       const [geralRes, motoristasRes, taxasRes, dedicadaRes] = await Promise.all([
         fetch('/api/configuracoes?tipo=geral'),
@@ -401,35 +396,10 @@ export default function SimulacaoPage() {
     setExportandoPDF(true)
     dispararToast('info', 'Gerando PDF...')
     try {
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        backgroundColor: '#F5F5F4',
-        logging: false,
-        useCORS: true,
-      })
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      const pageWidth = pdf.internal.pageSize.getWidth()
-      const imgWidth = pageWidth - 20
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
-      let heightLeft = imgHeight
-      let position = 10
-
-      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
-      heightLeft -= pdf.internal.pageSize.getHeight() - 20
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight + 10
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
-        heightLeft -= pdf.internal.pageSize.getHeight() - 20
-      }
-
       const filename = `cotacao_${nomeCliente || 'cliente'}_${new Date().toISOString().slice(0,10)}.pdf`
-      pdf.save(filename)
+      await exportarPDFBase(el, filename)
       dispararToast('sucesso', 'PDF exportado!')
-    } catch (e) {
-      console.error(e)
+    } catch {
       dispararToast('erro', 'Erro ao gerar PDF')
     } finally {
       setExportandoPDF(false)

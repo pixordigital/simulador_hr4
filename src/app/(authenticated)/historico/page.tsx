@@ -4,8 +4,8 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy, Download, FileDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { dispararToast } from '@/components/Toast'
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import { exportarPDF as exportarPDFBase } from '@/lib/pdf'
+import { formatarMoeda } from '@/lib/format'
 
 type Simulacao = {
   id: string
@@ -119,9 +119,6 @@ export default function HistoricoPage() {
     return chave
   }
 
-  function formatarMoeda(v: number) {
-    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-  }
 
   function formatarData(iso: string) {
     return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
@@ -189,6 +186,11 @@ export default function HistoricoPage() {
     )
   }
 
+  function escCsv(v: string): string {
+    if (/^[=+\-@]/.test(v)) return `'${v}`
+    return v
+  }
+
   function exportarCSV() {
     const linhas = [['Data', 'Cliente', 'Tipo', 'Custo', 'Margem', 'Sugerido', 'Cobrado'].join(';')]
     for (const sim of filtradas) {
@@ -196,7 +198,7 @@ export default function HistoricoPage() {
       const sugerido = sim.resultadoJson?.precoSugerido || 0
       linhas.push([
         formatarData(sim.criadoEm),
-        sim.nomeCliente || '',
+        escCsv(sim.nomeCliente || ''),
         sim.tipoEntrega,
         custo.toFixed(2),
         sim.margemPct + '%',
@@ -226,30 +228,7 @@ export default function HistoricoPage() {
     if (!el) return
     dispararToast('info', 'Gerando PDF...')
     try {
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        backgroundColor: '#F5F5F4',
-        logging: false,
-      })
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      const pageWidth = pdf.internal.pageSize.getWidth()
-      const imgWidth = pageWidth - 20
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
-      let heightLeft = imgHeight
-      let position = 10
-
-      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
-      heightLeft -= pdf.internal.pageSize.getHeight() - 20
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight + 10
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
-        heightLeft -= pdf.internal.pageSize.getHeight() - 20
-      }
-
-      pdf.save(`simulacoes_${new Date().toISOString().slice(0,10)}.pdf`)
+      await exportarPDFBase(el, `simulacoes_${new Date().toISOString().slice(0,10)}.pdf`)
       dispararToast('sucesso', 'PDF exportado!')
     } catch {
       dispararToast('erro', 'Erro ao gerar PDF')

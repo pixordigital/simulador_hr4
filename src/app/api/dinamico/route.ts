@@ -35,6 +35,52 @@ function salvarDados(tipo: string, dados: any[]) {
   fs.writeFileSync(getFilePath(tipo), JSON.stringify(dados, null, 2), 'utf-8')
 }
 
+// Field allowlists per tipo — only these fields are accepted on write
+function pickSimulacao(body: any) {
+  const { nomeCliente, tipoEntrega, agendada, dataHorarioAgendado, acrescimoAgendamento, margemPct, opcaoVeiculo, resultadoJson, inputJson, precoCobrado, observacoes } = body
+  return { nomeCliente, tipoEntrega, agendada, dataHorarioAgendado, acrescimoAgendamento, margemPct, opcaoVeiculo, resultadoJson, inputJson, precoCobrado, observacoes }
+}
+function pickTemplate(body: any) {
+  const { nome, descricao, inputJson } = body
+  return { nome, descricao, inputJson }
+}
+function pickMotorista(body: any) {
+  const { nome, taxaPadrao, observacoes } = body
+  return { nome, taxaPadrao: taxaPadrao || 0, observacoes }
+}
+function pickPagamento(body: any) {
+  const { motoristaId, valor, dataPagamento, descricao } = body
+  return { motoristaId, valor: valor || 0, dataPagamento, descricao }
+}
+
+const PICK_FN: Record<string, (body: any) => any> = {
+  simulacoes: pickSimulacao,
+  templates: pickTemplate,
+  motoristas: pickMotorista,
+  pagamentos: pickPagamento,
+}
+
+// Allowed fields on update per tipo
+function pickUpdate(tipo: string, body: any): any {
+  if (tipo === 'simulacoes') {
+    const { precoCobrado, observacoes } = body
+    return { precoCobrado, observacoes }
+  }
+  if (tipo === 'motoristas') {
+    const { nome, taxaPadrao, observacoes } = body
+    return { nome, taxaPadrao, observacoes }
+  }
+  if (tipo === 'pagamentos') {
+    const { valor, dataPagamento, descricao } = body
+    return { valor, dataPagamento, descricao }
+  }
+  if (tipo === 'templates') {
+    const { nome, descricao, inputJson } = body
+    return { nome, descricao, inputJson }
+  }
+  return {}
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -58,10 +104,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ erro: 'Parâmetro "tipo" obrigatório' }, { status: 400 })
     }
     const body = await request.json()
+    const pickFn = PICK_FN[tipo]
     const dados = lerDados(tipo)
     const novo = {
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2, 12),
-      ...body,
+      id: crypto.randomUUID(),
+      ...(pickFn ? pickFn(body) : body),
       criadoEm: new Date().toISOString(),
     }
     dados.push(novo)
@@ -87,7 +134,8 @@ export async function PUT(request: NextRequest) {
     if (idx === -1) {
       return NextResponse.json({ erro: 'Registro não encontrado' }, { status: 404 })
     }
-    dados[idx] = { ...dados[idx], ...body, atualizadoEm: new Date().toISOString() }
+    const allowed = pickUpdate(tipo, body)
+    dados[idx] = { ...dados[idx], ...allowed, atualizadoEm: new Date().toISOString() }
     salvarDados(tipo, dados)
     return NextResponse.json(dados[idx])
   } catch (error) {
