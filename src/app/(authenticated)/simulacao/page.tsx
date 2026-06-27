@@ -6,8 +6,8 @@ import {
   Clock, TrendingUp, DollarSign, Database, Search, UserPlus,
   FileText,
 } from 'lucide-react'
+import { toast } from 'sonner'
 import BrudamImportPanel from '@/components/BrudamImportPanel'
-import { dispararToast } from '@/components/Toast'
 import { exportarPDF as exportarPDFBase } from '@/lib/pdf'
 import { formatarMoeda } from '@/lib/format'
 
@@ -162,7 +162,7 @@ export default function SimulacaoPage() {
           if (hora) setHorarioAgendado(hora)
         }
 
-        dispararToast('info', 'Simulação duplicada — ajuste os dados e calcule')
+        toast.info('Simulação duplicada — ajuste os dados e calcule')
       } catch {}
     }
   }, [])
@@ -366,8 +366,8 @@ export default function SimulacaoPage() {
         }),
       })
       if (!res.ok) throw new Error()
-      dispararToast('sucesso', 'Cotação salva!')
-    } catch { dispararToast('erro', 'Erro ao salvar cotação') }
+      toast.success( 'Cotação salva!')
+    } catch { toast.error('Erro ao salvar cotação') }
     setSalvandoCotacao(false)
   }
 
@@ -385,8 +385,8 @@ export default function SimulacaoPage() {
           inputJson: { tipo, paradas, opcaoVeiculo, numeroEntregas, margem, agendada },
         }),
       })
-      dispararToast('sucesso', 'Template salvo!')
-    } catch { dispararToast('erro', 'Erro ao salvar template') }
+      toast.success( 'Template salvo!')
+    } catch { toast.error('Erro ao salvar template') }
     setSalvandoTemp(false)
   }
 
@@ -394,13 +394,13 @@ export default function SimulacaoPage() {
     const el = pdfRef.current
     if (!el) return
     setExportandoPDF(true)
-    dispararToast('info', 'Gerando PDF...')
+    toast.info('Gerando PDF...')
     try {
       const filename = `cotacao_${nomeCliente || 'cliente'}_${new Date().toISOString().slice(0,10)}.pdf`
       await exportarPDFBase(el, filename)
-      dispararToast('sucesso', 'PDF exportado!')
+      toast.success( 'PDF exportado!')
     } catch {
-      dispararToast('erro', 'Erro ao gerar PDF')
+      toast.error('Erro ao gerar PDF')
     } finally {
       setExportandoPDF(false)
     }

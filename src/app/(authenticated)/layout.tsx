@@ -1,6 +1,6 @@
 import AppSidebar from '@/components/AppSidebar'
 import { ThemeProvider } from '@/contexts/ThemeContext'
-import Toast from '@/components/Toast'
+import { Toaster } from '@/components/ui/sonner'
 
 export default function AuthenticatedLayout({
   children,
@@ -17,7 +17,7 @@ export default function AuthenticatedLayout({
           </div>
         </main>
       </div>
-      <Toast />
+      <Toaster richColors closeButton position="bottom-right" />
     </ThemeProvider>
   )
 }

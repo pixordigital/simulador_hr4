@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { Search, TrendingUp, DollarSign, Truck, BarChart3, Clock, Filter, Copy, Download, FileDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { dispararToast } from '@/components/Toast'
+import { toast } from 'sonner'
 import { exportarPDF as exportarPDFBase } from '@/lib/pdf'
 import { formatarMoeda } from '@/lib/format'
 
@@ -211,7 +211,7 @@ export default function HistoricoPage() {
     const a = document.createElement('a')
     a.href = url; a.download = `simulacoes_${new Date().toISOString().slice(0,10)}.csv`
     a.click(); URL.revokeObjectURL(url)
-    dispararToast('sucesso', 'CSV exportado!')
+    toast.success( 'CSV exportado!')
   }
 
   function exportarJSON() {
@@ -220,18 +220,18 @@ export default function HistoricoPage() {
     const a = document.createElement('a')
     a.href = url; a.download = `simulacoes_${new Date().toISOString().slice(0,10)}.json`
     a.click(); URL.revokeObjectURL(url)
-    dispararToast('sucesso', 'JSON exportado!')
+    toast.success( 'JSON exportado!')
   }
 
   async function exportarPDF() {
     const el = relatorioRef.current
     if (!el) return
-    dispararToast('info', 'Gerando PDF...')
+    toast.info( 'Gerando PDF...')
     try {
       await exportarPDFBase(el, `simulacoes_${new Date().toISOString().slice(0,10)}.pdf`)
-      dispararToast('sucesso', 'PDF exportado!')
+      toast.success( 'PDF exportado!')
     } catch {
-      dispararToast('erro', 'Erro ao gerar PDF')
+      toast.error( 'Erro ao gerar PDF')
     }
   }
 

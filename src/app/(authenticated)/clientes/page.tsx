@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, Search, Edit, Trash2, X, Loader2 } from 'lucide-react'
-import { dispararToast } from '@/components/Toast'
+import { toast } from 'sonner'
 
 interface Cliente {
   id: string
@@ -44,7 +44,7 @@ export default function ClientesPage() {
         setClientes(data)
       }
     } catch (e) {
-      dispararToast('erro', 'Erro ao carregar clientes')
+      toast.error( 'Erro ao carregar clientes')
     } finally {
       setCarregando(false)
     }
@@ -83,7 +83,7 @@ export default function ClientesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.nome.trim()) {
-      dispararToast('erro', 'Nome é obrigatório')
+      toast.error( 'Nome é obrigatório')
       return
     }
 
@@ -104,11 +104,11 @@ export default function ClientesPage() {
         throw new Error(err.erro || 'Erro ao salvar')
       }
 
-      dispararToast('sucesso', editando ? 'Cliente atualizado!' : 'Cliente criado!')
+      toast.success( editando ? 'Cliente atualizado!' : 'Cliente criado!')
       fecharModal()
       carregarClientes()
     } catch (e: any) {
-      dispararToast('erro', e.message || 'Erro ao salvar cliente')
+      toast.error( e.message || 'Erro ao salvar cliente')
     } finally {
       setSalvando(false)
     }
@@ -119,10 +119,10 @@ export default function ClientesPage() {
     try {
       const res = await fetch(`/api/dinamico/clientes?id=${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
-      dispararToast('sucesso', 'Cliente excluído!')
+      toast.success( 'Cliente excluído!')
       carregarClientes()
     } catch {
-      dispararToast('erro', 'Erro ao excluir cliente')
+      toast.error( 'Erro ao excluir cliente')
     }
   }
 
