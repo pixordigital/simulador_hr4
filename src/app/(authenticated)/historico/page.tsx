@@ -290,7 +290,7 @@ export default function HistoricoPage() {
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Total Sugerido
           </p>
-          <p className="text-[28px] font-num font-medium text-[var(--text-primary)]">
+          <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
             {formatarMoeda(totalSugerido)}
           </p>
           <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
@@ -301,7 +301,7 @@ export default function HistoricoPage() {
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Total Cobrado
           </p>
-          <p className="text-[28px] font-num font-medium text-[var(--text-primary)]">
+          <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
             {formatarMoeda(totalCobrado)}
           </p>
           <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
@@ -312,7 +312,7 @@ export default function HistoricoPage() {
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Custo Freelancers
           </p>
-          <p className="text-[28px] font-num font-medium text-[var(--text-primary)]">
+          <p className="text-[28px] font-num font-medium text-[var(--text-primary)] leading-none tracking-tight">
             {formatarMoeda(custoFreelancers)}
           </p>
           <p className="text-[11px] text-[var(--text-secondary)] mt-1.5">
