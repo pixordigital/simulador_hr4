@@ -333,7 +333,7 @@ export default function HistoricoPage() {
       </div>
 
       {/* Filtros */}
-      <div className="card-premium p-5 space-y-4">
+      <div className="card-premium p-5 space-y-4 mt-5">
         <div className="flex items-center gap-2">
           <Filter size={15} className="text-[var(--text-secondary)]" strokeWidth={1.5} />
           <span className="text-[13px] font-medium text-[var(--text-primary)]">Filtros</span>
