@@ -1012,7 +1012,7 @@ export default function SimulacaoPage() {
               </div>
 
               {/* Preço Sugerido */}
-              <div className="card-premium p-3">
+              <div className="preco-card">
                 <p className="text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-0.5">
                   Preço Sugerido
                 </p>
