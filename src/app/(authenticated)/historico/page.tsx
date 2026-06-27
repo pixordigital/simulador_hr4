@@ -286,7 +286,7 @@ export default function HistoricoPage() {
 
       {/* Dashboard KPIs */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="card-premium p-4">
+        <div className="card-premium p-4 text-center">
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Total Sugerido
           </p>
@@ -297,7 +297,7 @@ export default function HistoricoPage() {
             Soma dos preços sugeridos
           </p>
         </div>
-        <div className="card-premium p-4">
+        <div className="card-premium p-4 text-center">
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Total Cobrado
           </p>
@@ -308,7 +308,7 @@ export default function HistoricoPage() {
             {totalCobradoArr.length} de {simulacoes.length} registrados
           </p>
         </div>
-        <div className="card-premium p-4">
+        <div className="card-premium p-4 text-center">
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Custo Freelancers
           </p>
@@ -319,7 +319,7 @@ export default function HistoricoPage() {
             Total de pagamentos
           </p>
         </div>
-        <div className="card-premium p-4">
+        <div className="card-premium p-4 text-center">
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-1.5">
             Margem Real
           </p>
